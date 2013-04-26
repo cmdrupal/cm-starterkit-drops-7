@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Media: Cloudcast module.
+ */
+
+/**
+ * Implement hook_install().
+ */
+function media_cloudcast_install() {
+  
+  //take over the management of all media_pegtv files
+  $files = db_query("SELECT fid, uri FROM {file_managed} WHERE filemime  = 'video/pegtv'");
+  
+  foreach($files as $file) {
+	  
+	$new_uri = str_replace("pegtv://", "cloudcast://", $file->uri);
+	
+	db_update('file_managed') // Table name no longer needs {}
+    ->fields(array(
+    'uri' => $new_uri,
+    'filemime' => 'video/cloudcast',
+    ))
+    ->condition('fid', $file->fid, '=')
+    ->execute();
+  }
+  
+  return array();
+}
+
+/**
+ * Implement hook_uninstall().
+ */
+function media_cloudcast_uninstall() {
+  drupal_load('module', 'media_cloudcast');
+
+  foreach (media_cloudcast_variable_default() as $variable => $value) {
+    media_cloudcast_variable_del($variable);
+  }
+  return array(array('success' => TRUE, 'query' => "Deleted all variables in the Media: Cloudcast namespace."));
+}
+
+

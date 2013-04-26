@@ -1,0 +1,97 @@
+/** Skills Section of Profile **/
+
+ul#MySkills {
+  padding: 0;
+}
+
+#MySkills li.MySkill {
+  border: 1px solid #7e8083;
+  display: block;
+  clear: both;
+  margin-bottom: 1em;
+  padding: 0;
+  width: 165px;  
+  padding-bottom: 4px;
+  height: 15px;
+}
+
+#MySkills span {
+  display: block;
+  float: left;
+  line-height: 20px;
+}
+
+#MySkills .MySkill-name {
+  float: left;
+  font-weight: bold;
+  padding-left: 5px;
+  width: 60px;
+}
+
+#MySkills .MySkill-level {
+  background-color: #cb726b;
+  color: #ffffff;
+  display: block;
+  font-size: 0.9em;
+  height: 20px;
+  position: relative;
+  width: 100px;
+}
+#MySkills.G-Skills .MySkill-level {
+  background-color: #7e8083;
+}
+
+#MySkills .MySkill-level .l-name,
+#MySkills .MySkill-level .l-graph {
+  position: absolute;
+  height: 20px;
+  left: 0;
+  top: 0;
+}
+
+#MySkills .MySkill-level .l-name {
+  color: #eecccc;
+  padding-left: 6px;
+  text-align: center;
+  width: 100px;
+}
+#MySkills.G-Skills .MySkill-level .l-name {
+  color: #565759;
+  color: #b3b4b7;
+}
+#MySkills .MySkill-level .l-graph {
+  background-color: #a3d17d; /* Standard Site Red */
+  background-color: #660000; /* a darker red for the graph? */
+  display: block;
+}
+#MySkills.G-Skills .MySkill-level .l-graph {
+  background-color: #3d3d3f;
+}
+#MySkills.G-Skills .skill-level-1 .l-graph {
+  background-color: transparent;
+}
+#MySkills .skill-level-1 .l-graph {
+  background-color: transparent;
+  color: #000000;
+  padding-left: 0.5em;
+}
+#MySkills .skill-level-2 .l-graph {
+  padding-left: 0.5em;
+  width: 40px;
+}
+#MySkills .skill-level-3 .l-graph {
+  padding-left: 0.5em;
+  width: 60px;
+}
+#MySkills .skill-level-4 .l-graph {
+  padding-left: 0.5em;
+  width: 80px;
+}
+#MySkills .skill-level-5 .l-graph {
+  padding-left: 0.5em;
+  width: 100px;
+}
+
+.MySkill {
+  background-color: #fff;
+}

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Show VOD feature.
+ */
+
+include_once('cm_show_vod.features.inc');
