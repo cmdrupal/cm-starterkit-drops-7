@@ -30,6 +30,8 @@ else {
 
 // set installation type - drupal
 if (!session_id()) {
+  // setting save_handler as files required for Pantheon
+  ini_set('session.save_handler', 'files');
   session_start();
 }
 
@@ -116,6 +118,38 @@ if ($installType == 'drupal') {
       "username" => "drupal",
       "password" => "",
       "database" => "drupal",
+    );
+  }
+}
+
+/**
+ * Pantheon Systems:
+ *
+ * Repopulate needed variables based on the Pantheon environment if applicable.
+ * http://www.kalamuna.com/news/civicrm-pantheon
+ *
+ */
+if (!empty($_SERVER['PRESSFLOW_SETTINGS'])) {
+  $env = json_decode($_SERVER['PRESSFLOW_SETTINGS'], TRUE);
+  if (!empty($env['conf']['pantheon_binding'])) {
+    $pantheon_db = $env['databases']['default']['default'];
+    $pantheon_conf = $env['conf'];
+    
+    //server w/ port
+    $server = 'dbserver.' . $pantheon_conf['pantheon_environment'] . '.' . $pantheon_conf['pantheon_site_uuid'] . '.drush.in' . ':' . $pantheon_db['port'];
+    
+    $databaseConfig = array(
+      "server" => $server,
+      "username" => $pantheon_db['username'],
+      "password" => $pantheon_db['password'],
+      "database" => $pantheon_db['database'],
+    );
+    
+    $drupalConfig = array(
+      "server" => $server,
+      "username" => $pantheon_db['username'],
+      "password" => $pantheon_db['password'],
+      "database" => $pantheon_db['database'],
     );
   }
 }
@@ -266,6 +300,9 @@ else {
 class InstallRequirements {
   var $errors, $warnings, $tests;
 
+  // @see CRM_Upgrade_Form::MINIMUM_THREAD_STACK
+  const MINIMUM_THREAD_STACK = 192;
+
   /**
    * Just check that the database configuration is okay
    */
@@ -309,6 +346,17 @@ class InstallRequirements {
             "MySQL $dbName Configuration",
             "Is auto_increment_increment set to 1",
             "An auto_increment_increment value greater than 1 is not currently supported. Please see issue CRM-7923 for further details and potential workaround.",
+          )
+        );
+        $this->requireMySQLThreadStack($databaseConfig['server'],
+          $databaseConfig['username'],
+          $databaseConfig['password'],
+          $databaseConfig['database'],
+          self::MINIMUM_THREAD_STACK,
+          array(
+            "MySQL $dbName Configuration",
+            "Does MySQL thread_stack meet minimum (" . self::MINIMUM_THREAD_STACK . "k)",
+            "", // "The MySQL thread_stack does not meet minimum " . CRM_Upgrade_Form::MINIMUM_THREAD_STACK . "k. Please update thread_stack in my.cnf.",
           )
         );
       }
@@ -356,6 +404,16 @@ class InstallRequirements {
             'Unable to lock tables. This MySQL user is missing the LOCK TABLES privilege.',
           )
         );
+        $this->requireMySQLTrigger($databaseConfig['server'],
+          $databaseConfig['username'],
+          $databaseConfig['password'],
+          $databaseConfig['database'],
+          array(
+            "MySQL $dbName Configuration",
+            'Can I create triggers in the database',
+            'Unable to create triggers. This MySQL user is missing the CREATE TRIGGERS  privilege.',
+          )
+        );
       }
     }
   }
@@ -368,7 +426,7 @@ class InstallRequirements {
 
     $this->errors = NULL;
 
-    $this->requirePHPVersion('5.3.0', array("PHP Configuration", "PHP5 installed", NULL, "PHP version " . phpversion()));
+    $this->requirePHPVersion('5.3.3', array("PHP Configuration", "PHP5 installed", NULL, "PHP version " . phpversion()));
 
     // Check that we can identify the root folder successfully
     $this->requireFile($crmPath . CIVICRM_DIRECTORY_SEPARATOR . 'README.txt',
@@ -757,10 +815,45 @@ class InstallRequirements {
 
     $result = mysql_query('CREATE TEMPORARY TABLE civicrm_install_temp_table_test (test text)', $conn);
     if (!$result) {
+      $testDetails[2] = 'Could not create a temp table.';
       $this->error($testDetails);
     }
     $result = mysql_query('DROP TEMPORARY TABLE civicrm_install_temp_table_test');
   }
+
+  function requireMySQLTrigger($server, $username, $password, $database, $testDetails) {
+    $this->testing($testDetails);
+    $conn = @mysql_connect($server, $username, $password);
+    if (!$conn) {
+      $testDetails[2] = 'Could not login to the database.';
+      $this->error($testDetails);
+      return;
+    }
+
+    if (!@mysql_select_db($database, $conn)) {
+      $testDetails[2] = 'Could not select the database.';
+      $this->error($testDetails);
+      return;
+    }
+
+    $result = mysql_query('CREATE TABLE civicrm_install_temp_table_test (test text)', $conn);
+    if (!$result) {
+      $testDetails[2] = 'Could not create a table.';
+      $this->error($testDetails);
+    }
+
+    $result = mysql_query('CREATE TRIGGER civicrm_install_temp_table_test_trigger BEFORE INSERT ON civicrm_install_temp_table_test FOR EACH ROW BEGIN END');
+    if (!$result) {
+      mysql_query('DROP TABLE civicrm_install_temp_table_test');
+      $testDetails[2] = 'Could not create a trigger.';
+      $this->error($testDetails);
+    }
+
+
+    mysql_query('DROP TRIGGER civicrm_install_temp_table_test_trigger');
+    mysql_query('DROP TABLE civicrm_install_temp_table_test');
+  }
+
 
   function requireMySQLLockTables($server, $username, $password, $database, $testDetails) {
     $this->testing($testDetails);
@@ -825,6 +918,34 @@ class InstallRequirements {
         $testDetails[3] = 'MySQL server auto_increment_increment is 1';
       }
       else {
+        $this->error($testDetails);
+      }
+    }
+  }
+
+  function requireMySQLThreadStack($server, $username, $password, $database, $minValueKB, $testDetails) {
+    $this->testing($testDetails);
+    $conn = @mysql_connect($server, $username, $password);
+    if (!$conn) {
+      $testDetails[2] = 'Could not login to the database.';
+      $this->error($testDetails);
+      return;
+    }
+
+    if (!@mysql_select_db($database, $conn)) {
+      $testDetails[2] = 'Could not select the database.';
+      $this->error($testDetails);
+      return;
+    }
+
+    $result = mysql_query("SHOW VARIABLES LIKE 'thread_stack'", $conn); // bytes => kb
+    if (!$result) {
+      $testDetails[2] = 'Could not query thread_stack.';
+      $this->error($testDetails);
+    } else {
+      $values = mysql_fetch_row($result);
+      if ($values[1] < (1024*$minValueKB)) {
+        $testDetails[2] = 'MySQL "thread_stack" is ' . ($values[1]/1024) . 'k';
         $this->error($testDetails);
       }
     }
@@ -975,87 +1096,16 @@ class Installer extends InstallRequirements {
       global $installType, $installURLPath;
 
       $output = NULL;
-      
-      if ($installType == 'drupal' &&
+      if (
+        $installType == 'drupal' &&
         version_compare(VERSION, '7.0-rc1') >= 0
       ) {
 
-        // clean output
-        @ob_clean();
-
-        $output .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
-        $output .= '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">';
-        $output .= '<head>';
-        $output .= '<title>CiviCRM Installed</title>';
-        $output .= '<link rel="stylesheet" type="text/css" href="template.css" />';
-        $output .= '</head>';
-        $output .= '<body>';
-        $output .= '<div style="padding: 1em;"><p class="good">CiviCRM has been successfully installed</p>';
-        $output .= '<ul>';
-        $docLinkConfig = CRM_Utils_System::docURL2('Configuring a New Site', FALSE, 'here',NULL,NULL,"wiki");
-        if (!function_exists('ts')) {
-          $docLinkConfig = "<a href=\"{$docLinkConfig}\">here</a>";
-        }
-        $drupalURL = civicrm_cms_base();
-        $drupalPermissionsURL = "{$drupalURL}index.php?q=admin/people/permissions";
-        $drupalURL .= "index.php?q=civicrm/admin/configtask&reset=1";
-        $registerSiteURL = "http://civicrm.org/civicrm/profile/create?reset=1&gid=15";
-
-        $output .= "<li>Drupal user permissions have been automatically set - giving anonymous and authenticated users access to public CiviCRM forms and features. We recommend that you <a target='_blank' href={$drupalPermissionsURL}>review these permissions</a> to ensure that they are appropriate for your requirements (<a target='_blank' href='http://wiki.civicrm.org/confluence/display/CRMDOC/Default+Permissions+and+Roles'>learn more...</a>)</li>
-                      <li>Use the <a target='_blank' href=\"$drupalURL\">Configuration Checklist</a> to review and configure settings for your new site</li>
-                      <li> Have you registered this site at CiviCRM.org? If not, please help strengthen the CiviCRM ecosystem by taking a few minutes to <a href='$registerSiteURL' target='_blank'>fill out the site registration form</a>. The information collected will help us prioritize improvements, target our communications and build the community. If you have a technical role for this site, be sure to check Keep in Touch to receive technical updates (a low volume  mailing list).</li>
-                      <li>We have integrated KCFinder with CKEditor and TinyMCE, which enables user to upload images. Note that all the images uploaded using KCFinder will be public.</li>";
-
-        // automatically enable CiviCRM module once it is installed successfully.
-        // so we need to Bootstrap Drupal, so that we can call drupal hooks.
-        global $cmsPath, $crmPath;
-
-        // relative / abosolute paths are not working for drupal, hence using chdir()
-        chdir($cmsPath);
-
-        include_once "./includes/bootstrap.inc";
-        include_once "./includes/unicode.inc";
-
-        drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
-
-        // prevent session information from being saved.
-        drupal_save_session(FALSE);
+        // send back to the install with profile and locale variables
+        // this allows the user to pick up where they left off in the install
+        $URL_to_continue_Drupal_install = civicrm_cms_base() . 'install.php?profile=' . $_GET['profile'] . '&locale=' . $_GET['locale'];;
+        header('Location: '. $URL_to_continue_Drupal_install);
         
-        //install.php?profile=cm_starterkit_moderate&locale=en
-        //header("Location: $my_url");
-        drupal_goto('install.php', array('query'=>array(
-          'profile'=>'cm_starterkit_moderate',
-          'locale'=>'en',
-        )));
-      
-        // Force the current user to anonymous.
-        $original_user = $GLOBALS['user'];
-        $GLOBALS['user'] = drupal_anonymous_user();
-
-        // explicitly setting error reporting, since we cannot handle drupal related notices
-        error_reporting(1);
-
-        // rebuild modules, so that civicrm is added
-        system_rebuild_module_data();
-
-        // now enable civicrm module.
-        module_enable(array('civicrm', 'civicrmtheme'));
-
-        // clear block and page cache, to make sure civicrm link is present in navigation block
-        cache_clear_all();
-
-        //add basic drupal permissions
-        civicrm_install_set_drupal_perms();
-
-        // restore the user.
-        $GLOBALS['user'] = $original_user;
-        drupal_save_session(TRUE);
-
-        $output .= '</ul>';
-        $output .= '</div>';
-        $output .= '</body>';
-        $output .= '</html>';
-        echo $output;
       }
       elseif ($installType == 'drupal' && version_compare(VERSION, '6.0') >= 0) {
         // clean output
@@ -1103,8 +1153,8 @@ class Installer extends InstallRequirements {
         // now enable civicrm module.
         module_enable(array('civicrm'));
 
-        // clear block and page cache, to make sure civicrm link is present in navigation block
-        cache_clear_all();
+        // clear block, page, theme, and hook caches
+        drupal_flush_all_caches();
 
         //add basic drupal permissions
         db_query('UPDATE {permission} SET perm = CONCAT( perm, \', access CiviMail subscribe/unsubscribe pages, access all custom data, access uploaded files, make online contributions, profile create, profile edit, profile view, register for events, view event info\') WHERE rid IN (1, 2)');

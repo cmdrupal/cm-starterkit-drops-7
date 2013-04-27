@@ -29,3 +29,10 @@ dependencies[] = civicrm
 dependencies[] = civicrmtheme
 dependencies[] = cm_checklist
 
+
+; Information added by drupal.org packaging script on 2013-04-27
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "cm_starterkit_moderate"
+datestamp = "1367023188"
+

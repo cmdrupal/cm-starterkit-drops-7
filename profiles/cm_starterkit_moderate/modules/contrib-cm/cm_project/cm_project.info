@@ -4,6 +4,7 @@ package = Community Media
 dependencies[] = taxonomy
 dependencies[] = og
 dependencies[] = og_ui
+dependencies[] = og_extras
 dependencies[] = field_ui
 
 core = 7.x
@@ -15,8 +16,8 @@ configure = admin/config/communitymedia/project
 
 
 ; Information added by drupal.org packaging script on 2012-09-24
-version = "7.x-1.0-beta1+6-dev"
+version = "7.x-2.x-dev"
 core = "7.x"
 project = "cm_project"
-datestamp = "1348445537"
+datestamp = "1348445535"
 

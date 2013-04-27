@@ -8,7 +8,11 @@
 class FileEntityTestHelper extends DrupalWebTestCase {
   protected $files = array();
 
-  function setUp($modules = array()) {
+  function setUp() {
+    $modules = func_get_args();
+    if (isset($modules[0]) && is_array($modules[0])) {
+      $modules = $modules[0];
+    }
     $modules[] = 'file_entity';
     parent::setUp($modules);
   }
@@ -28,7 +32,6 @@ class FileEntityTestHelper extends DrupalWebTestCase {
     $type->label = "Test";
     $type->description = '';
     $type->mimetypes = array('image/jpeg', 'image/gif', 'image/png', 'image/tiff');
-    $type->streams = array('public', 'private');
 
     foreach ($overrides as $k => $v) {
       $type->$k = $v;
@@ -36,6 +39,55 @@ class FileEntityTestHelper extends DrupalWebTestCase {
 
     file_type_save($type);
     return $type;
+  }
+
+  /**
+   * Helper for testFileEntityPrivateDownloadAccess() test.
+   *
+   * Defines several cases for accesing private files.
+   *
+   * @return array
+   *   Array of associative arrays, each one having the next keys:
+   *   - "message" string with the assertion message.
+   *   - "permissions" array of permissions or NULL for anonymous user.
+   *   - "expect" expected HTTP response code.
+   *   - "owner" Optional boolean indicating if the user is a file owner.
+   */
+  protected function getPrivateDownloadAccessCases() {
+    return array(
+      array(
+        'message' => "File owners cannot download their own files unless they are granted the 'view own private files' permission.",
+        'permissions' => array(),
+        'expect' => 403,
+        'owner' => TRUE,
+      ),
+      array(
+        'message' => "File owners can download their own files as they have been granted the 'view own private files' permission.",
+        'permissions' => array('view own private files'),
+        'expect' => 200,
+        'owner' => TRUE,
+      ),
+      array(
+        'message' => "Anonymous users cannot download private files.",
+        'permissions' => NULL,
+        'expect' => 403,
+      ),
+      array(
+        'message' => "Authenticated users cannot download each other's private files.",
+        'permissions' => array(),
+        'expect' => 403,
+      ),
+      array(
+        'message' => "Users who can view public files are not able to download private files.",
+        'permissions' => array('view files'),
+        'expect' => 403,
+      ),
+      array(
+        'message' => "Users who bypass file access can download any file.",
+        'permissions' => array('bypass file access'),
+        'expect' => 200,
+      ),
+    );
   }
 
   /**
@@ -125,7 +177,7 @@ class FileEntityUnitTestCase extends FileEntityTestHelper {
   public static function getInfo() {
     return array(
       'name' => 'File entity unit tests',
-      'description' => 'Test basic file entity funcitonality.',
+      'description' => 'Test basic file entity functionality.',
       'group' => 'File entity',
     );
   }
@@ -164,12 +216,12 @@ class FileEntityUnitTestCase extends FileEntityTestHelper {
   }
 
   function testImageDimensions() {
-    $images_dimensions = array();
+    $files = array();
     $text_fids = array();
     // Test hook_file_insert().
     // Files have been saved as part of setup (in FileEntityTestHelper::setUpFiles).
     foreach ($this->files['image'] as $file) {
-      $images_dimensions[$file->fid] = $file->image_dimensions;
+      $files[$file->fid] = $file->image_dimensions;
       $this->assertTrue(isset($file->image_dimensions), 'Image dimensions retrieved on file_save() for an image file.');
     }
     foreach ($this->files['text'] as $file) {
@@ -180,10 +232,10 @@ class FileEntityUnitTestCase extends FileEntityTestHelper {
     // Test hook_file_load().
     // Clear the cache and load fresh files objects to test file_load behavior.
     entity_get_controller('file')->resetCache();
-    foreach (file_load_multiple(array_keys($images_dimensions)) as $file) {
+    foreach (file_load_multiple(array_keys($files)) as $file) {
       $this->assertTrue(isset($file->image_dimensions), 'Image dimensions retrieved on file_load() for an image file.');
-      $this->assertEqual($file->image_dimensions['height'], $images_dimensions[$file->fid]['height'], 'Loaded image height is equal to saved image height.');
-      $this->assertEqual($file->image_dimensions['width'], $images_dimensions[$file->fid]['width'], 'Loaded image width is equal to saved image width.');
+      $this->assertEqual($file->image_dimensions['height'], $files[$file->fid]['height'], 'Loaded image height is equal to saved image height.');
+      $this->assertEqual($file->image_dimensions['width'], $files[$file->fid]['width'], 'Loaded image width is equal to saved image width.');
     }
     foreach (file_load_multiple($text_fids) as $file) {
       $this->assertFalse(isset($file->image_dimensions), 'No image dimensions retrieved on file_load() for an text file.');
@@ -191,18 +243,19 @@ class FileEntityUnitTestCase extends FileEntityTestHelper {
 
     // Test hook_file_update().
     // Load the first image file and resize it.
-    $file = file_load(reset(array_keys($images_dimensions)));
+    $image_files = array_keys($files);
+    $file = file_load(reset($image_files));
     $image = image_load($file->uri);
     image_resize($image, $file->image_dimensions['width'] / 2, $file->image_dimensions['height'] / 2);
     image_save($image);
     file_save($file);
-    $this->assertEqual($file->image_dimensions['height'], $images_dimensions[$file->fid]['height'] / 2, 'Image file height updated by file_save().');
-    $this->assertEqual($file->image_dimensions['width'], $images_dimensions[$file->fid]['width'] / 2, 'Image file width updated by file_save().');
+    $this->assertEqual($file->image_dimensions['height'], $files[$file->fid]['height'] / 2, 'Image file height updated by file_save().');
+    $this->assertEqual($file->image_dimensions['width'], $files[$file->fid]['width'] / 2, 'Image file width updated by file_save().');
     // Clear the cache and reload the file.
     entity_get_controller('file')->resetCache();
     $file = file_load($file->fid);
-    $this->assertEqual($file->image_dimensions['height'], $images_dimensions[$file->fid]['height'] / 2, 'Updated image height retrieved by file_load().');
-    $this->assertEqual($file->image_dimensions['width'], $images_dimensions[$file->fid]['width'] / 2, 'Updated image width retrieved by file_load().');
+    $this->assertEqual($file->image_dimensions['height'], $files[$file->fid]['height'] / 2, 'Updated image height retrieved by file_load().');
+    $this->assertEqual($file->image_dimensions['width'], $files[$file->fid]['width'] / 2, 'Updated image width retrieved by file_load().');
 
     //Test hook_file_delete().
     file_delete($file, TRUE);
@@ -225,7 +278,7 @@ class FileEntityEditTestCase extends FileEntityTestHelper {
   function setUp() {
     parent::setUp();
 
-    $this->web_user = $this->drupalCreateUser(array('edit own files', 'create files'));
+    $this->web_user = $this->drupalCreateUser(array('edit own document files', 'create files'));
     $this->admin_user = $this->drupalCreateUser(array('bypass file access', 'administer files'));
   }
 
@@ -237,10 +290,14 @@ class FileEntityEditTestCase extends FileEntityTestHelper {
 
     $test_file = $this->getTestFile('text');
     $name_key = "filename";
+
     // Create file to edit.
     $edit = array();
     $edit['files[upload]'] = drupal_realpath($test_file->uri);
     $this->drupalPost('file/add', $edit, t('Next'));
+    if ($this->xpath('//input[@name="scheme"]')) {
+      $this->drupalPost(NULL, array(), t('Next'));
+    }
 
     // Check that the file exists in the database.
     $file = $this->getFileByFilename($test_file->filename);
@@ -328,7 +385,7 @@ class FileEntityCreationTestCase extends FileEntityTestHelper {
   function setUp() {
     parent::setUp();
 
-    $web_user = $this->drupalCreateUser(array('create files', 'edit own files'));
+    $web_user = $this->drupalCreateUser(array('create files', 'edit own document files'));
     $this->drupalLogin($web_user);
   }
 
@@ -341,6 +398,11 @@ class FileEntityCreationTestCase extends FileEntityTestHelper {
     $edit = array();
     $edit['files[upload]'] = drupal_realpath($test_file->uri);
     $this->drupalPost('file/add', $edit, t('Next'));
+
+    // Step 2: Scheme selection
+    if ($this->xpath('//input[@name="scheme"]')) {
+      $this->drupalPost(NULL, array(), t('Next'));
+    }
 
     // Check that the document file has been uploaded.
     $this->assertRaw(t('!type %name was uploaded.', array('!type' => 'Document', '%name' => $test_file->filename)), t('Document file uploaded.'));
@@ -378,7 +440,7 @@ class FileEntityAdminTestCase extends FileEntityTestHelper {
     $this->base_user_1 = $this->drupalCreateUser(array('administer files'));
     $this->base_user_2 = $this->drupalCreateUser(array('administer files', 'view own private files'));
     $this->base_user_3 = $this->drupalCreateUser(array('administer files', 'view private files'));
-    $this->base_user_4 = $this->drupalCreateUser(array('administer files', 'edit any files', 'delete any files'));
+    $this->base_user_4 = $this->drupalCreateUser(array('administer files', 'edit any document files', 'delete any document files', 'edit any image files', 'delete any image files'));
   }
 
   /**
@@ -534,7 +596,7 @@ class FileEntityReplaceTestCase extends FileEntityTestHelper {
     $file = reset($this->files['text']);
 
     // Create a user with file edit permissions.
-    $user = $this->drupalCreateUser(array('edit any files'));
+    $user = $this->drupalCreateUser(array('edit any document files'));
     $this->drupalLogin($user);
 
     // Test that the Upload widget appears for a local file.
@@ -750,13 +812,20 @@ class FileEntityTypeTestCase extends FileEntityTestHelper {
     $this->drupalPost('file/add', $edit, t('Next'));
 
     // Step 2: Select file type candidate
-    $this->assertText('Image 1', 'File candidate list item found.');
-    $this->assertText('Image 2', 'File candidate list item found.');
+    $this->assertText('Image 1', 'File type candidate list item found.');
+    $this->assertText('Image 2', 'File type candidate list item found.');
     $edit = array();
     $edit['type'] = 'image2';
     $this->drupalPost(NULL, $edit, t('Next'));
 
-    // Step 3: Complete field widgets
+    // Step 3: Select file scheme candidate
+    $this->assertText('Public local files served by the webserver.', 'File scheme candidate list item found.');
+    $this->assertText('Private local files served by Drupal.', 'File scheme candidate list item found.');
+    $edit = array();
+    $edit['scheme'] = 'public';
+    $this->drupalPost(NULL, $edit, t('Next'));
+
+    // Step 4: Complete field widgets
     $langcode = LANGUAGE_NONE;
     $edit = array();
     $edit["{$field['field_name']}[$langcode][0][value]"] = $this->randomName();
@@ -804,7 +873,12 @@ class FileEntityTypeTestCase extends FileEntityTestHelper {
     $edit['files[upload]'] = drupal_realpath($file->uri);
     $this->drupalPost('file/add', $edit, t('Next'));
 
-    // Step 2: Complete field widgets
+    // Step 2: Scheme selection
+    if ($this->xpath('//input[@name="scheme"]')) {
+      $this->drupalPost(NULL, array(), t('Next'));
+    }
+
+    // Step 3: Complete field widgets
     $langcode = LANGUAGE_NONE;
     $edit = array();
     $edit["{$field['field_name']}[$langcode][0][value]"] = $this->randomName();
@@ -832,7 +906,6 @@ class FileEntityTypeTestCase extends FileEntityTestHelper {
       'type' => 'test_type',
       'description' => t('This is dummy file type used just for testing.'),
       'mimetypes' => 'image/png',
-      'streams[public]' => TRUE,
     );
     $this->drupalGet('admin/structure/file-types/add');
     $this->drupalPost(NULL, $edit, t('Save'));
@@ -853,8 +926,6 @@ class FileEntityTypeTestCase extends FileEntityTestHelper {
     $this->assertText($edit['description'], 'Description found on file type edit page');
     $this->assertText($edit['mimetypes'], 'Mime-type configuration found on file type edit page');
     $this->assertText(t('Mimetype List'), 'Mimetype list present on edit form.');
-    $this->assertFieldChecked('edit-streams-public', 'File type configured to use public files.');
-    $this->assertNoFieldChecked('edit-streams-private', 'File type configured not to use private files.');
 
     // Modify file type.
     $edit['label'] = t('New type label');
@@ -888,8 +959,6 @@ class FileEntityTypeTestCase extends FileEntityTestHelper {
     $this->drupalGet('admin/structure/file-types/manage/image/edit');
     $this->assertRaw(t('Image'), 'Label found on file type edit page');
     $this->assertText("image/*", 'Mime-type configuration found on file type edit page');
-    $this->assertFieldChecked('edit-streams-public', 'File type configured to use public files.');
-    $this->assertNoFieldChecked('edit-streams-private', 'File type configured not to use private files.');
     $this->drupalPost(NULL, array('label' => t('Funky images')), t('Save'));
     $this->assertText(t('The file type @type has been updated.', array('@type' => t('Funky images'))), 'File type was modified.');
     $this->assertText(t('Funky image'), 'Modified label found on file types list.');
@@ -943,6 +1012,10 @@ class FileEntityAccessTestCase extends FileEntityTestHelper {
     $this->assertFileEntityAccess(array('create' => TRUE), NULL, $web_user);
     $this->assertFileEntityAccess(array('view' => TRUE, 'download' => TRUE, 'update' => TRUE, 'delete' => TRUE), $file, $web_user);
 
+    // A user with 'administer files' should not access CRUD operations.
+    $web_user = $this->drupalCreateUser(array('administer files'));
+    $this->assertFileEntityAccess(array('view' => FALSE, 'download' => FALSE, 'update' => FALSE, 'delete' => FALSE), $file, $web_user);
+
     // User cannot 'view files'.
     $web_user = $this->drupalCreateUser(array('create files'));
     $this->assertFileEntityAccess(array('view' => FALSE), $file, $web_user);
@@ -958,7 +1031,7 @@ class FileEntityAccessTestCase extends FileEntityTestHelper {
     $this->assertFileEntityAccess(array('view' => TRUE), $file, $web_user);
 
     // User can download own files but no other files.
-    $web_user = $this->drupalCreateUser(array('create files', 'download own files'));
+    $web_user = $this->drupalCreateUser(array('create files', 'download own image files'));
     $this->assertFileEntityAccess(array('download' => FALSE), $file, $web_user);
     $file->uid = $web_user->uid;
     $file->status = FILE_STATUS_PERMANENT;
@@ -966,7 +1039,7 @@ class FileEntityAccessTestCase extends FileEntityTestHelper {
     $this->assertFileEntityAccess(array('download' => TRUE), $file, $web_user);
 
     // User can update own files but no other files.
-    $web_user = $this->drupalCreateUser(array('create files', 'view own files', 'edit own files'));
+    $web_user = $this->drupalCreateUser(array('create files', 'view own files', 'edit own image files'));
     $this->assertFileEntityAccess(array('update' => FALSE), $file, $web_user);
     $file->uid = $web_user->uid;
     $file->status = FILE_STATUS_PERMANENT;
@@ -974,7 +1047,7 @@ class FileEntityAccessTestCase extends FileEntityTestHelper {
     $this->assertFileEntityAccess(array('update' => TRUE), $file, $web_user);
 
     // User can delete own files but no other files.
-    $web_user = $this->drupalCreateUser(array('create files', 'view own files', 'edit own files', 'delete own files'));
+    $web_user = $this->drupalCreateUser(array('create files', 'view own files', 'edit own image files', 'delete own image files'));
     $this->assertFileEntityAccess(array('delete' => FALSE), $file, $web_user);
     $file->uid = $web_user->uid;
     $file->status = FILE_STATUS_PERMANENT;
@@ -986,15 +1059,15 @@ class FileEntityAccessTestCase extends FileEntityTestHelper {
     $this->assertFileEntityAccess(array('view' => TRUE), $file, $web_user);
 
     // User can download any file.
-    $web_user = $this->drupalCreateUser(array('create files', 'download any files'));
+    $web_user = $this->drupalCreateUser(array('create files', 'download any image files'));
     $this->assertFileEntityAccess(array('download' => TRUE), $file, $web_user);
 
     // User can edit any file.
-    $web_user = $this->drupalCreateUser(array('create files', 'view files', 'edit any files'));
+    $web_user = $this->drupalCreateUser(array('create files', 'view files', 'edit any image files'));
     $this->assertFileEntityAccess(array('update' => TRUE), $file, $web_user);
 
     // User can delete any file.
-    $web_user = $this->drupalCreateUser(array('create files', 'view files', 'edit any files', 'delete any files'));
+    $web_user = $this->drupalCreateUser(array('create files', 'view files', 'edit any image files', 'delete any image files'));
     $this->assertFileEntityAccess(array('delete' => TRUE), $file, $web_user);
   }
 
@@ -1035,7 +1108,7 @@ class FileEntityAccessTestCase extends FileEntityTestHelper {
     $this->drupalLogin($web_user);
     $this->drupalGet("file/{$file->fid}/download");
     $this->assertResponse(403, 'Users without access can not download the file');
-    $web_user = $this->drupalCreateUser(array('download any files'));
+    $web_user = $this->drupalCreateUser(array('download any document files'));
     $this->drupalLogin($web_user);
     $this->drupalGet("file/{$file->fid}/download");
     $this->assertResponse(200, 'Users with access can download the file');
@@ -1044,7 +1117,7 @@ class FileEntityAccessTestCase extends FileEntityTestHelper {
     $this->drupalLogin($web_user);
     $this->drupalGet("file/{$file->fid}/edit");
     $this->assertResponse(403, 'Users without access can not access the file edit page');
-    $web_user = $this->drupalCreateUser(array('edit any files'));
+    $web_user = $this->drupalCreateUser(array('edit any document files'));
     $this->drupalLogin($web_user);
     $this->drupalGet("file/{$file->fid}/edit");
     $this->assertResponse(200, 'Users with access can access the file add page');
@@ -1053,9 +1126,47 @@ class FileEntityAccessTestCase extends FileEntityTestHelper {
     $this->drupalLogin($web_user);
     $this->drupalGet("file/{$file->fid}/delete");
     $this->assertResponse(403, 'Users without access can not access the file view page');
-    $web_user = $this->drupalCreateUser(array('delete any files'));
+    $web_user = $this->drupalCreateUser(array('delete any document files'));
     $this->drupalLogin($web_user);
     $this->drupalGet("file/{$file->fid}/delete");
     $this->assertResponse(200, 'Users with access can access the file add page');
+  }
+
+  /**
+   * Test to see if we have access to download private files when granted the permissions.
+   */
+  function testFileEntityPrivateDownloadAccess() {
+    foreach ($this->getPrivateDownloadAccessCases() as $case) {
+      // Create users and login only if non-anonymous.
+      $authenticated_user = !is_null($case['permissions']);
+      if ($authenticated_user) {
+        $account = $this->drupalCreateUser($case['permissions']);
+        $this->drupalLogin($account);
+      }
+
+      // Create private, permanent files owned by this user only he's an owner.
+      if (!empty($case['owner'])) {
+        $file = next($this->files['text']);
+        $file->status = FILE_STATUS_PERMANENT;
+        $file->uid = $account->uid;
+        file_save($file);
+        $file = file_move($file, 'private://');
+
+        // Check if the physical file is there.
+        $arguments = array('%name' => $file->filename, '%username' => $account->name, '%uri' => $file->uri);
+        $this->assertTrue(is_file($file->uri), format_string('File %name owned by %username successfully created at %uri.', $arguments));
+        $url = file_create_url($file->uri);
+        $message_file_info = ' ' . format_string('File %uri was checked.', array('%uri' => $file->uri));
+      }
+
+      // Try to download the file.
+      $this->drupalGet($url);
+      $this->assertResponse($case['expect'], $case['message'] . $message_file_info);
+
+      // Logout authenticated users.
+      if ($authenticated_user) {
+        $this->drupalLogout();
+      }
+    }
   }
 }

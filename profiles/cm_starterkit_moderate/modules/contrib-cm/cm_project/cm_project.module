@@ -78,32 +78,59 @@ function cm_project_menu() {
     'access arguments' => array('access administration pages'),
     'type' => MENU_NORMAL_ITEM,
   );
-
-  $items['node/%node/shows'] = array(
-    'title' => 'Shows',
+  
+  if (module_exists('cm_show')) {
+    $items['node/%node/shows'] = array(
+      'title' => 'Shows',
+      'description' => 'Takes node object and returns shows',
+      'page callback' => 'cm_project_shows',
+      'page arguments' => array(1),
+      'access callback' => 'cm_project_display_show_tab',
+      'access arguments' => array(1),  
+      'type' => MENU_LOCAL_TASK,
+      'weight' => 12,
+    );
+  }
+  if (module_exists('reservations')) {
+    $items['node/%node/reservations'] = array(
+      'title' => 'Reservations',
+      'description' => 'Takes node object and returns reservations',
+      'page callback' => 'cm_project_reservations',
+      'page arguments' => array(1),
+      'access callback' => 'cm_project_display_reservations_tab',
+      'access arguments' => array(1),
+      'type' => MENU_LOCAL_TASK,
+      'weight' => 13,
+    );
+  }
+  
+  $items['project/add/show'] = array(
+    'title' => 'Add Show',
     'description' => 'Takes node object and returns shows',
-    'page callback' => 'cm_project_shows',
-    'page arguments' => array(1),
-    'access callback' => 'cm_project_display_show_tab',
-    'access arguments' => array(1),  
-    'type' => MENU_LOCAL_TASK,
+    'page callback' => 'cm_project_add_show',
+    'access callback' => 'cm_project_add_show_access',
+    'type' => MENU_NORMAL_ITEM,
     'weight' => 12,
   );
     
-  $items['node/%node/reservations'] = array(
-    'title' => 'Reservations',
-    'description' => 'Takes node object and returns reservations',
-    'page callback' => 'cm_project_reservations',
-    'page arguments' => array(1),
-    'access callback' => 'cm_project_display_reservations_tab',
-    'access arguments' => array(1),
-    'type' => MENU_LOCAL_TASK,
-    'weight' => 13,
-  );
-
   return $items;
 
 }
+
+function cm_project_add_show() {
+
+  //load active projects the user is a member of
+  $groups = og_get_entity_groups();
+  //add the most recently added active project to the path
+  drupal_goto('node/add/cm-show', array('query'=>array('gid'=> end($groups))));
+  
+}
+
+function cm_project_add_show_access() {
+  return TRUE;
+}
+
+
 
 /**
  * Builds the cm_project admininstration settings form.
@@ -125,12 +152,25 @@ function cm_project_admin_settings($form, &$form_state) {
     '#markup' => $status,
   );
   
-  $form['cm_project_reservations_require_project'] = array(
+  /*
+
+  $form['cm_project_alphabetize_projects'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Reservations Require Project'),
-    '#default_value' => variable_get('cm_project_reservations_require_project', 0),
-    '#description' => t('This option will eventually be deprecated, but Organic Groups fails to correctly interpret the Required setting on the groups_groups field.'),
+    '#title' => t('Alphabetize '),
+    '#default_value' => variable_get('cm_project_alphabetize_projects', 0),
+    '#description' => t('This option will be removed when this is fixed in Organic Groups.'),
   );
+  
+  */
+
+  if (module_exists('reservations')) {
+    $form['cm_project_reservations_require_project'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Reservations Require Project'),
+      '#default_value' => variable_get('cm_project_reservations_require_project', 0),
+      '#description' => t('This option will eventually be deprecated, but Organic Groups fails to correctly interpret the Required setting on the groups_groups field.'),
+    );
+  }
   
   if (module_exists('cm_show')) {
     $form['cm_project_shows_require_project'] = array(
@@ -175,15 +215,16 @@ function cm_project_display_show_tab($node) {
 function cm_project_shows($node) {
   
   //only works while group is active
-  $group = og_get_group('node', $node->nid);
+  //$group = og_get_group('node', $node->nid);
+  $gid = $node->group_group[LANGUAGE_NONE][0]['value'];
   
   //For some reason you this function can only return active or pending... not both
   //http://drupalcontrib.org/api/drupal/contributions--og--og.module/function/og_get_group_ids/7
-  if (!isset($group->gid)) {
-    $group = og_get_group('node', $node->nid, FALSE, array(OG_STATE_PENDING));
-  }
+  //if (!isset($group->gid)) {
+  //  $group = og_get_group('node', $node->nid, FALSE, array(OG_STATE_PENDING));
+  //}
 
-  $query = isset($group->gid) ? array('gid' => $group->gid) : NULL;
+  $query = isset($gid) ? array('gid' => $gid) : NULL;
   // check to see if the current user is a member of the project
   // AND has permission to create Show
   // OR has permission to manage Show
@@ -194,9 +235,8 @@ function cm_project_shows($node) {
     $output .= '</li>';
   $output .= '</ul>';
   
-  $args = array($group->gid);
   $view = views_get_view('cm_project_shows');
-  $output .= $view->execute_display('default', $args);
+  $output .= $view->execute_display('default');
 
   return $output;
 }
@@ -220,22 +260,21 @@ function cm_project_display_reservations_tab($node) {
  * if criteria from cm_project_display_reservations_tab returns TRUE
  */
 function cm_project_reservations($node) {
-  
-  $group = og_get_group('node', $node->nid);
-    
+
+  //$group = og_get_group('node', $node->nid);
+  $gid = $node->group_group[LANGUAGE_NONE][0]['value'];
   // check to see if the current user is a member of the project
   // AND has permission to create Reservations
   // OR has permission to manage Reservations
   
   $output = '<ul class="action-links">';
     $output .= '<li>';
-    $output .= l('Add Reservation', 'node/add/reservations-reservation', array('query' => array('gid' => $group->gid)));
+    $output .= l('Add Reservation', 'node/add/reservations-reservation', array('query' => array('gid' => $gid)));
     $output .= '</li>';
   $output .= '</ul>';
   
-  $args = array($group->gid);
   $view = views_get_view('cm_project_reservations');
-  $output .= $view->execute_display('default', $args);
+  $output .= $view->execute_display('default');
 
   return $output;
 }
@@ -259,14 +298,28 @@ function cm_project_form_alter(&$form, &$form_state, $form_id) {
   // http://drupal.org/node/1342496
   if ($form_id == 'cm_show_node_form') {
           
-    if (isset($form['group_audience']) && !$form['group_audience']['und']['#input']) {
+    if (isset($form['group_audience']) && !$form['group_audience'][LANGUAGE_NONE]['#input']) {
       unset($form['actions']['submit']);
       unset($form['actions']['preview']);
       drupal_set_message('You cannot submit a Show until you have an approved Project.', 'error');
     } 
     
+    if (variable_get('cm_project_alphabetize_projects', 0)) {
+      //krsort($form['group_audience'][LANGUAGE_NONE]['#options']['Other groups']);
+      
+      $array = $form['group_audience'][LANGUAGE_NONE]['#options']['Other groups'];
+      asort($array);
+      #options['Other groups'];
+      dsm($array);
+    }
+    // http://stackoverflow.com/questions/6670041/sort-options-in-a-select-list-with-javascript-jquery-but-not-alphabetically
+    
+    
+
     if (isset($_REQUEST['gid'])) {
-      $form['group_audience']['und']['#default_value'] = $_REQUEST['gid'];
+      
+            
+      $form['group_audience'][LANGUAGE_NONE]['#default_value'] = $_REQUEST['gid'];
       
       if (variable_get('cm_project_autopopulate_show_fields', 0)) {
         
@@ -324,14 +377,14 @@ function cm_project_form_alter(&$form, &$form_state, $form_id) {
   }
   
   if (isset($form['group_audience']) && $form_id == 'reservations_reservation_node_form') {
-    if (!isset($form['group_audience']['und']['#input'])) {
+    if (!isset($form['group_audience'][LANGUAGE_NONE]['#input'])) {
       unset($form['actions']['submit']);
       unset($form['actions']['preview']);
       drupal_set_message('You cannot make a Reservation until you have an approved Project.', 'error');
     }
     
     if (isset($_REQUEST['gid'])) {
-      $form['group_audience']['und']['#default_value'] = $_REQUEST['gid'];
+      $form['group_audience'][LANGUAGE_NONE]['#default_value'] = $_REQUEST['gid'];
     }    
   } 
    
@@ -379,4 +432,193 @@ function cm_project_status() {
       'description' => 'Projects is configured correctly.',
       'severity' => 0,);
   return $status;
+}
+
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function cm_project_field_widget_form_alter(&$element, &$form_state, $context) {
+  
+  //RESERVATIONS
+  if (module_exists('reservations_staff')) {
+	if ($context['instance']['bundle'] == 'reservations_reservation' && $context['instance']['field_name'] == 'group_audience') {
+
+	  if (!user_access('manage reservations')) {
+		return;
+	  }
+            
+      //@TODO: MOVE TO REUSABLE FUNCTION
+      $form = $context['form'];
+	  $field = $context['field'];
+	  $instance = $context['instance'];
+	  $langcode = $context['langcode'];
+	  $items = $context['items'];
+	  $delta = $context['delta'];
+	  
+	  if (isset($form_state['values'])) {
+		$node = (array)$form_state['values'] + (array)$form['#node'];
+	  } else {
+		$node = $form['#node'];
+	  }
+	  $node = (object) $node;
+	  drupal_static_reset('og_field_audience_options');
+	  unset($element['#input']);
+	  unset($element['#type']); 
+	  unset($element['#options']); 
+	  unset($element['#default_value']);
+	  unset($element['#attributes']);
+	  unset($element['#disabled']);
+	  // Re-use options widget element validation, to correctly transform
+	  // submitted values from field => delta to delta => field.
+	  // @see options_field_widget().
+	  unset($element['#value_key']);
+	  unset($element['#element_validate']);
+	  unset($element['#properties']);
+	  // Add OG specific context.
+	  unset($element['#opt_group']);
+	  unset($element['#audience']);
+	  unset($element['#hidden_selected_gids']);
+  
+	  $base = $element;
+	  // Recreate the groups and choices based on the submitted name.
+	  cm_project_load_user((array) $node);
+	  global $user;
+  
+	  $return = og_field_widget_form($form, $form_state, $field, $instance, $langcode, $items, $delta, $base);
+	  cm_project_load_user();
+	  $element = $return;
+	}
+  }
+  
+  //SHOW
+  
+  if (module_exists('cm_show_staff')) {
+	if ($context['instance']['bundle'] == 'cm_show' && $context['instance']['field_name'] == 'group_audience') {
+      
+      //Show: Edit any content
+	  if (!user_access('edit any cm_show content')) {
+		return;
+	  }
+      
+      //@TODO: MOVE TO REUSABLE FUNCTION
+      $form = $context['form'];
+	  $field = $context['field'];
+	  $instance = $context['instance'];
+	  $langcode = $context['langcode'];
+	  $items = $context['items'];
+	  $delta = $context['delta'];
+	  
+	  if (isset($form_state['values'])) {
+		$node = (array)$form_state['values'] + (array)$form['#node'];
+	  } else {
+		$node = $form['#node'];
+	  }
+	  $node = (object) $node;
+	  
+	  drupal_static_reset('og_field_audience_options');
+	  unset($element['#input']);
+	  unset($element['#type']); 
+	  unset($element['#options']); 
+	  unset($element['#default_value']);
+	  unset($element['#attributes']);
+	  unset($element['#disabled']);
+	  // Re-use options widget element validation, to correctly transform
+	  // submitted values from field => delta to delta => field.
+	  // @see options_field_widget().
+	  unset($element['#value_key']);
+	  unset($element['#element_validate']);
+	  unset($element['#properties']);
+	  // Add OG specific context.
+	  unset($element['#opt_group']);
+	  unset($element['#audience']);
+	  unset($element['#hidden_selected_gids']);
+  
+	  $base = $element;
+	  // Recreate the groups and choices based on the submitted name.
+	  cm_project_load_user((array) $node);
+	  global $user;
+  
+	  $return = og_field_widget_form($form, $form_state, $field, $instance, $langcode, $items, $delta, $base);
+	  cm_project_load_user();
+	  $element = $return;
+	}
+  }
+
+}
+
+/**
+ * Implements hook_load_user().
+ */
+function cm_project_load_user($post = NULL) {
+  static $admin_user;
+  global $user;
+  if (empty($admin_user)) {
+    $admin_user = $user;
+  }
+  if ($post and isset($post['override']) and !$post['override'] and ($newuser = array_shift(user_load_multiple(array(), array('name' => $post['name']))))) {
+    $user = $newuser;
+  }
+  else {
+    $user = $admin_user;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function cm_project_form_reservations_reservation_node_form_alter(&$form, &$form_state) {
+ 
+  if (user_access('manage reservations') && module_exists('reservations_staff')) {
+
+    if (module_exists('civicrm_user_reference')) {
+      $form['name']['#autocomplete_path'] = 'civicrm_user_reference/autocomplete-nouid';
+    }
+    
+    $form['name']['#ajax'] = array(
+      'callback' => 'cm_project_update_name',
+      'wrapper' => 'reservations-staff-edit-form-wrapper',
+      'method' => 'replace',
+      'effect' => 'fade',
+    );
+    
+    $form['override']['#ajax'] = array(
+      'callback' => 'cm_project_update_name',
+      'wrapper' => 'reservations-staff-edit-form-wrapper',
+      'method' => 'replace',
+      'effect' => 'fade',
+    );
+    
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function cm_project_form_cm_show_node_form_alter(&$form, &$form_state) {
+ 
+  if (user_access('edit any cm_show content') && module_exists('cm_show_staff')) {
+   
+   
+    if (module_exists('civicrm_user_reference')) {
+      $form['name']['#autocomplete_path'] = 'civicrm_user_reference/autocomplete-nouid';
+    }
+    
+    $form['name']['#ajax'] = array(
+      'callback' => 'cm_project_update_name',
+      'wrapper' => 'cm-show-staff-edit-form-wrapper',
+      'method' => 'replace',
+      'effect' => 'fade',
+    );
+        
+  }
+  
+   dsm($form);
+}
+
+/**
+ * Menu callback that reprocesses the form with the new author
+ */
+function cm_project_update_name($form, $form_state) {
+  return $form;
 }

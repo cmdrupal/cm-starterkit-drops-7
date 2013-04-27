@@ -158,97 +158,107 @@ function cm_project_views_default_views() {
   
   $view = new view;
   $view->name = 'cm_project_reservations';
-  $view->description = '';
-  $view->tag = 'default';
+  $view->description = 'Show the content from all the group the current user belongs to';
+  $view->tag = 'og';
   $view->base_table = 'node';
   $view->human_name = 'Project: Reservations';
   $view->core = 7;
-  $view->api_version = '3.0-alpha1';
+  $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Project: Reservations';
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['query']['options']['query_comment'] = FALSE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'full';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '10';
   $handler->display->display_options['style_plugin'] = 'table';
+  $handler->display->display_options['style_options']['columns'] = array(
+	'title_1' => 'title_1',
+	'title' => 'title',
+  );
+  $handler->display->display_options['style_options']['default'] = '-1';
+  $handler->display->display_options['style_options']['info'] = array(
+	'title_1' => array(
+	  'sortable' => 0,
+	  'default_sort_order' => 'asc',
+	  'align' => '',
+	  'separator' => '',
+	  'empty_column' => 0,
+	),
+	'title' => array(
+	  'sortable' => 0,
+	  'default_sort_order' => 'asc',
+	  'align' => '',
+	  'separator' => '',
+	  'empty_column' => 0,
+	),
+  );
+  $handler->display->display_options['style_options']['override'] = 1;
+  $handler->display->display_options['style_options']['sticky'] = 0;
+  $handler->display->display_options['style_options']['empty_table'] = 0;
   /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
   $handler->display->display_options['empty']['area']['table'] = 'views';
   $handler->display->display_options['empty']['area']['field'] = 'area';
   $handler->display->display_options['empty']['area']['empty'] = FALSE;
-  $handler->display->display_options['empty']['area']['content'] = '<div class="messages warning">There are currently no Reservations associated with this Project.</div>';
+  $handler->display->display_options['empty']['area']['content'] = '<div class="messages warning">No Reservations found for this Project</div>';
   $handler->display->display_options['empty']['area']['format'] = 'full_html';
   $handler->display->display_options['empty']['area']['tokenize'] = 0;
-  /* Relationship: Reservations: Reservation nid */
-  $handler->display->display_options['relationships']['nid']['id'] = 'nid';
-  $handler->display->display_options['relationships']['nid']['table'] = 'reservations_reservation_detail2';
-  $handler->display->display_options['relationships']['nid']['field'] = 'nid';
-  $handler->display->display_options['relationships']['nid']['required'] = 0;
-  /* Relationship: Group membership: Node group membership */
+  /* Relationship: OG membership: OG membership from Node */
   $handler->display->display_options['relationships']['og_membership_rel']['id'] = 'og_membership_rel';
   $handler->display->display_options['relationships']['og_membership_rel']['table'] = 'node';
   $handler->display->display_options['relationships']['og_membership_rel']['field'] = 'og_membership_rel';
   $handler->display->display_options['relationships']['og_membership_rel']['required'] = 0;
-  /* Field: Content: Nid */
-  $handler->display->display_options['fields']['nid']['id'] = 'nid';
-  $handler->display->display_options['fields']['nid']['table'] = 'node';
-  $handler->display->display_options['fields']['nid']['field'] = 'nid';
-  $handler->display->display_options['fields']['nid']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['nid']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['nid']['alter']['make_link'] = 0;
-  $handler->display->display_options['fields']['nid']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['nid']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['nid']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['nid']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['nid']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['nid']['alter']['word_boundary'] = 1;
-  $handler->display->display_options['fields']['nid']['alter']['ellipsis'] = 1;
-  $handler->display->display_options['fields']['nid']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['nid']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['nid']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['nid']['element_label_colon'] = 1;
-  $handler->display->display_options['fields']['nid']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['nid']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['nid']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['nid']['hide_alter_empty'] = 0;
-  $handler->display->display_options['fields']['nid']['link_to_node'] = 0;
-  /* Field: Content: Reservation Dates */
-  $handler->display->display_options['fields']['field_reservations_date']['id'] = 'field_reservations_date';
-  $handler->display->display_options['fields']['field_reservations_date']['table'] = 'field_data_field_reservations_date';
-  $handler->display->display_options['fields']['field_reservations_date']['field'] = 'field_reservations_date';
-  $handler->display->display_options['fields']['field_reservations_date']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['field_reservations_date']['alter']['make_link'] = 1;
-  $handler->display->display_options['fields']['field_reservations_date']['alter']['path'] = 'node/[nid]';
-  $handler->display->display_options['fields']['field_reservations_date']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['field_reservations_date']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['field_reservations_date']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['field_reservations_date']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['field_reservations_date']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['field_reservations_date']['alter']['word_boundary'] = 1;
-  $handler->display->display_options['fields']['field_reservations_date']['alter']['ellipsis'] = 1;
-  $handler->display->display_options['fields']['field_reservations_date']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['field_reservations_date']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['field_reservations_date']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['field_reservations_date']['element_label_colon'] = 1;
-  $handler->display->display_options['fields']['field_reservations_date']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['field_reservations_date']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['field_reservations_date']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['field_reservations_date']['hide_alter_empty'] = 0;
-  $handler->display->display_options['fields']['field_reservations_date']['settings'] = array(
-	'format_type' => 'short',
-	'fromto' => 'both',
-	'multiple_number' => '',
-	'multiple_from' => '',
-	'multiple_to' => '',
-	'show_repeat_rule' => 'show',
-  );
-  $handler->display->display_options['fields']['field_reservations_date']['field_api_classes'] = 0;
+  /* Relationship: OG membership: Group Node from OG membership */
+  $handler->display->display_options['relationships']['og_membership_related_node_group']['id'] = 'og_membership_related_node_group';
+  $handler->display->display_options['relationships']['og_membership_related_node_group']['table'] = 'og_membership';
+  $handler->display->display_options['relationships']['og_membership_related_node_group']['field'] = 'og_membership_related_node_group';
+  $handler->display->display_options['relationships']['og_membership_related_node_group']['relationship'] = 'og_membership_rel';
+  $handler->display->display_options['relationships']['og_membership_related_node_group']['required'] = 0;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title_1']['id'] = 'title_1';
+  $handler->display->display_options['fields']['title_1']['table'] = 'node';
+  $handler->display->display_options['fields']['title_1']['field'] = 'title';
+  $handler->display->display_options['fields']['title_1']['relationship'] = 'og_membership_related_node_group';
+  $handler->display->display_options['fields']['title_1']['label'] = '';
+  $handler->display->display_options['fields']['title_1']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['title_1']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['title_1']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['title_1']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['title_1']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['title_1']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['title_1']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['title_1']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['title_1']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['title_1']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['title_1']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['title_1']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['title_1']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['title_1']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['title_1']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['title_1']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['title_1']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['title_1']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['title_1']['link_to_node'] = 1;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['title']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['title']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['title']['link_to_node'] = 1;
   /* Field: Reservations: Reserved items */
   $handler->display->display_options['fields']['item_nid2']['id'] = 'item_nid2';
   $handler->display->display_options['fields']['item_nid2']['table'] = 'reservations_reservation_detail';
@@ -262,6 +272,7 @@ function cm_project_views_default_views() {
   $handler->display->display_options['fields']['item_nid2']['alter']['nl2br'] = 0;
   $handler->display->display_options['fields']['item_nid2']['alter']['word_boundary'] = 1;
   $handler->display->display_options['fields']['item_nid2']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['item_nid2']['alter']['more_link'] = 0;
   $handler->display->display_options['fields']['item_nid2']['alter']['strip_tags'] = 0;
   $handler->display->display_options['fields']['item_nid2']['alter']['trim'] = 0;
   $handler->display->display_options['fields']['item_nid2']['alter']['html'] = 0;
@@ -269,25 +280,52 @@ function cm_project_views_default_views() {
   $handler->display->display_options['fields']['item_nid2']['element_default_classes'] = 1;
   $handler->display->display_options['fields']['item_nid2']['hide_empty'] = 0;
   $handler->display->display_options['fields']['item_nid2']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['item_nid2']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['item_nid2']['hide_alter_empty'] = 1;
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Contextual filter: OG membership: Group gid */
-  $handler->display->display_options['arguments']['group']['id'] = 'group';
-  $handler->display->display_options['arguments']['group']['table'] = 'og_membership';
-  $handler->display->display_options['arguments']['group']['field'] = 'group';
-  $handler->display->display_options['arguments']['group']['relationship'] = 'og_membership_rel';
-  $handler->display->display_options['arguments']['group']['default_action'] = 'default';
-  $handler->display->display_options['arguments']['group']['default_argument_type'] = 'node';
-  $handler->display->display_options['arguments']['group']['default_argument_skip_url'] = 0;
-  $handler->display->display_options['arguments']['group']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['group']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['group']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['group']['break_phrase'] = 0;
-  $handler->display->display_options['arguments']['group']['not'] = 0;
+  /* Sort criterion: Content: Title */
+  $handler->display->display_options['sorts']['title']['id'] = 'title';
+  $handler->display->display_options['sorts']['title']['table'] = 'node';
+  $handler->display->display_options['sorts']['title']['field'] = 'title';
+  /* Contextual filter: OG membership: Group ID */
+  $handler->display->display_options['arguments']['gid']['id'] = 'gid';
+  $handler->display->display_options['arguments']['gid']['table'] = 'og_membership';
+  $handler->display->display_options['arguments']['gid']['field'] = 'gid';
+  $handler->display->display_options['arguments']['gid']['relationship'] = 'og_membership_rel';
+  $handler->display->display_options['arguments']['gid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['gid']['default_argument_type'] = 'og_user_groups';
+  $handler->display->display_options['arguments']['gid']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['gid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['gid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['gid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['gid']['break_phrase'] = 1;
+  $handler->display->display_options['arguments']['gid']['not'] = 0;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['group'] = 0;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: OG membership: State */
+  $handler->display->display_options['filters']['state']['id'] = 'state';
+  $handler->display->display_options['filters']['state']['table'] = 'og_membership';
+  $handler->display->display_options['filters']['state']['field'] = 'state';
+  $handler->display->display_options['filters']['state']['relationship'] = 'og_membership_rel';
+  $handler->display->display_options['filters']['state']['value'] = array(
+	1 => '1',
+  );
+  /* Filter criterion: OG membership: Group_type */
+  $handler->display->display_options['filters']['group_type']['id'] = 'group_type';
+  $handler->display->display_options['filters']['group_type']['table'] = 'og_membership';
+  $handler->display->display_options['filters']['group_type']['field'] = 'group_type';
+  $handler->display->display_options['filters']['group_type']['relationship'] = 'og_membership_rel';
+  $handler->display->display_options['filters']['group_type']['value'] = array(
+	'node' => 'node',
+  );
   /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
@@ -455,7 +493,7 @@ function cm_project_views_default_views() {
   
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Project: Unapproved Projects';
+  $handler->display->display_options['title'] = 'Project: List Projects';
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['access']['perm'] = 'edit any cm_project content';
   $handler->display->display_options['cache']['type'] = 'none';
@@ -567,7 +605,7 @@ function cm_project_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['path'] = 'admin/projects/manage';
   $handler->display->display_options['menu']['type'] = 'normal';
-  $handler->display->display_options['menu']['title'] = 'Manage Projects';
+  $handler->display->display_options['menu']['title'] = 'Projects';
   $handler->display->display_options['menu']['weight'] = '-18';
   $handler->display->display_options['menu']['name'] = 'management';
 

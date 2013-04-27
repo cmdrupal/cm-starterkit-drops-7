@@ -276,8 +276,6 @@ function file_entity_admin_file($form, $form_state) {
  * Form builder: Builds the file administration overview.
  */
 function file_entity_admin_files() {
-  global $user;
-
   $admin_access = user_access('administer files');
 
   // Build the 'Update options' form.
@@ -318,48 +316,15 @@ function file_entity_admin_files() {
   $query = db_select('file_managed', 'fm')->extend('PagerDefault')->extend('TableSort');
   file_entity_build_filter_query($query);
 
-  if (user_access('bypass file access')) {
-    // Administrators don't need to be restricted to only permanent files.
-    $query->condition('fm.status', FILE_STATUS_PERMANENT);
-  }
-  elseif (user_access('view files')) {
-    // For non-private files, users can view if they have the 'view files'
-    // permission.
-    $query->condition('fm.status', FILE_STATUS_PERMANENT);
-  }
-  elseif (user_access('view private files') && user_is_logged_in()) {
-    // For private files, users can view private files if the
-    // user is not anonymous, and has the 'view private files' permission.
-    $query->condition('fm.uri', db_like('private://') . '%', 'LIKE');
-    $query->condition('fm.status', FILE_STATUS_PERMANENT);
-  }
-  elseif (user_access('view own files')) {
-    // For non-private files, allow to see if user owns the file.
-    $query->condition('fm.uid', $user->uid, '=');
-    $query->condition('fm.status', FILE_STATUS_PERMANENT);
-  }
-  elseif (user_access('view own private files') && user_is_logged_in()) {
-    // For private files, users can view their own private files if the
-    // user is not anonymous, and has the 'view own private files' permission.
-    $query->condition('fm.uri', db_like('private://') . '%', 'LIKE');
-    $query->condition('fm.uid', $user->uid, '=');
-    $query->condition('fm.status', FILE_STATUS_PERMANENT);
-  }
-
-  foreach (array_keys(file_entity_get_hidden_stream_wrappers()) as $name) {
-    $query->condition('fm.uri', $name . '%', 'NOT LIKE');
-  }
-
-  $limit = variable_get('file_entity_admin_files_limit', 50);
-
-  $fids = $query
-    ->fields('fm', array('fid'))
-    ->limit($limit)
+  $result = $query
+    ->fields('fm', array('fid', 'uid'))
+    ->limit(50)
     ->orderByHeader($header)
-    ->addTag('admin_files')
+    ->addTag('file_access')
     ->execute()
-    ->fetchCol();
-  $files = file_load_multiple($fids);
+    ->fetchAllKeyed();
+  $files = file_load_multiple(array_keys($result));
+  $accounts = user_load_multiple(array_unique($result));
 
   // Prepare the list of files.
   $destination = drupal_get_destination();
@@ -376,21 +341,40 @@ function file_entity_admin_files() {
       ),
       'type' => $file_type ? check_plain($file_type->label) : FILE_TYPE_NONE,
       'size' => format_size($file->filesize),
-      'author' => theme('username', array('account' => user_load($file->uid))),
+      'author' => theme('username', array('account' => $accounts[$file->uid])),
       'timestamp' => format_date($file->timestamp, 'short'),
     );
+
+    // Show a warning for files that do not exist.
+    if (@!is_file($file->uri)) {
+      $options[$file->fid]['#attributes']['class'][] = 'error';
+      if (!file_stream_wrapper_get_instance_by_uri($file->uri)) {
+        $options[$file->fid]['#attributes']['title'] = t('The stream wrapper for @scheme files is missing.', array('@scheme' => file_uri_scheme($file->uri)));
+      }
+      else {
+        $options[$file->fid]['#attributes']['title'] = t('The file does not exist.');
+      }
+    }
+
     // Build a list of all the accessible operations for the current file.
     $operations = array();
     if (file_entity_access('update', $file)) {
       $operations['edit'] = array(
-        'title' => t('edit'),
+        'title' => t('Edit'),
         'href' => 'file/' . $file->fid . '/edit',
+        'query' => $destination,
+      );
+    }
+    if (file_entity_access('update', $file)) {
+      $operations['usage'] = array(
+        'title' => t('Usage'),
+        'href' => 'file/' . $file->fid . '/usage',
         'query' => $destination,
       );
     }
     if (file_entity_access('delete', $file)) {
       $operations['delete'] = array(
-        'title' => t('delete'),
+        'title' => t('Delete'),
         'href' => 'file/' . $file->fid . '/delete',
         'query' => $destination,
       );
@@ -533,7 +517,7 @@ function file_entity_list_types_page() {
   );
   $rows = array();
   $weight = 0;
-  $types = file_type_get_all_types(TRUE);
+  $types = file_type_load_all(TRUE);
   $count = count($types);
   foreach ($types as $type) {
     $weight++;
@@ -774,7 +758,6 @@ function file_entity_file_type_form($form, &$form_state, $type = NULL) {
       'type' => '',
       'label' => '',
       'description' => '',
-      'streams' => array(),
       'mimetypes' => array(),
     );
   }
@@ -826,25 +809,6 @@ function file_entity_file_type_form($form, &$form_state, $type = NULL) {
   $form['mimetype_mapping']['mapping'] = array(
     '#theme' => 'item_list',
     '#items' => $mimetypes['mimetypes'],
-  );
-
-  // Options for allowed Streams.
-  $options = array('public' => t('Public files'), 'private' => t('Private files'));
-  foreach (file_get_stream_wrappers() as $stream => $wrapper) {
-    $options[$stream] = $wrapper['name'];
-  }
-  unset($options['temporary']);
-  $default_value = array();
-  if (isset($type->streams)) {
-    foreach ($type->streams as $stream) {
-      $default_value[$stream] = $stream;
-    }
-  }
-  $form['streams'] = array(
-    '#type' => 'checkboxes',
-    '#title' => t('Allowed streams'),
-    '#options' => $options,
-    '#default_value' => $default_value,
   );
 
   $form['actions'] = array('#type' => 'actions');
@@ -908,12 +872,6 @@ function file_entity_file_type_form_submit($form, &$form_state) {
   $type->label = $form_state['values']['label'];
   $type->description = $form_state['values']['description'];
   $type->mimetypes = array_filter(array_map('trim', explode("\n", $form_state['values']['mimetypes'])));
-  $type->streams = array();
-  foreach ($form_state['values']['streams'] as $stream) {
-    if ($stream) {
-      $type->streams[] = $stream;
-    }
-  }
 
   file_type_save($type);
 
