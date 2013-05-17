@@ -21,6 +21,35 @@ include_once DRUPAL_ROOT . '/' . drupal_get_path('module', 'media_cloudcast') . 
 include_once DRUPAL_ROOT . '/' . drupal_get_path('module', 'media_cloudcast') . '/includes/media_cloudcast.formatters.inc';
 
 /**
+ * Implements hook_permission().
+ */
+function media_cloudcast_permission() {
+  return array(
+    'administer media cloudcast' => array(
+      'title' => 'Administer Media Cloudcast',
+      'description' => t('Control availability of Cloudcast videos.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function media_cloudcast_menu() {
+
+  $items['admin/config/media/media_cloudcast'] = array(
+    'title' => 'Cloudcast Video Control',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('media_cloudcast_admin_config'),
+    'access arguments' => array('administer media cloudcast'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'includes/media_cloudcast.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
  * Implements hook_media_internet_providers().
  */
 function media_cloudcast_media_internet_providers() {
@@ -51,7 +80,7 @@ function media_cloudcast_stream_wrappers() {
 function media_cloudcast_theme($existing, $type, $theme, $path) {
   return array(
     'media_cloudcast_video' => array(
-      'variables' => array('uri' => NULL, 'options' => array()),
+      'variables' => array('uri' => NULL, 'options' => array(), 'node' => NULL),
       'file' => 'media_cloudcast.theme.inc',
       'path' => $path . '/includes/themes',
       'template' => 'media-cloudcast-video',
@@ -375,4 +404,20 @@ function media_cloudcast_valid_id($id, $refresh = FALSE) {
   $ids[$id] = ($response->code == 200);
   cache_set('media_cloudcast:id:' . $id, $ids[$id], 'cache_media_xml', media_variable_get('xml_cache_expire', 3600));
   return $ids[$id];
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * @see node_type_form()
+ * @see media_cloudcast_add_bundle_settings()
+ */
+function media_cloudcast_form_node_type_form_alter(&$form, $form_state) {
+  $node_type = isset($form['#node_type']->type) ? $form['#node_type']->type : '';
+  module_load_include('inc', 'media_cloudcast', 'includes/media_cloudcast.admin');
+
+  $media_cloudcast_node_types = array_filter(variable_get('media_cloudcast_node_types', array()));
+  if (in_array($node_type, $media_cloudcast_node_types)) {
+    media_cloudcast_add_bundle_settings($form, $form_state, 'node', $node_type);
+  }
 }

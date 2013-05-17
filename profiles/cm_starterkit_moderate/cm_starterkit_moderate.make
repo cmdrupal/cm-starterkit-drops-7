@@ -1,3 +1,10 @@
+; This version of the .make will build a local copy of the distribution
+; using the versions of modules and patches listed.
+; Modules and libraries will be in sites/all 
+; This is used to test the packaging BEFORE committing
+; drush make cm_starterkit_moderate.make
+
+
 core = 7.22
 api = 2
 
@@ -7,23 +14,26 @@ projects[drupal][version] = "7.22"
 ; ====== CIVICRM RELATED =========
 
 libraries[civicrm][download][type] = get
-libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.3.1-starterkit.tgz"
+libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.3.3-starterkit.tgz"
 libraries[civicrm][destination] = modules
 libraries[civicrm][directory_name] = civicrm
+
+;PATCHES THAT SHOULD BE ADDRESSED IN FUTURE CIVICRM RELEASES
 libraries[civicrm][patch][1844558] = http://drupal.org/files/1844558-run-civicrm-from-profile-dir-config-2.patch
-libraries[civicrm][patch][1940074] = http://drupal.org/files/1940074-openFlashChart_tpl_javascript.patch
+libraries[civicrm][patch][1940074] = http://drupal.org/files/1940074-openFlashChart_tpl_javascript-4.patch
 libraries[civicrm][patch][1946820] = http://drupal.org/files/1946820-turn_IDS_off_in_civicrm.settings.php_.tpl_.patch
 libraries[civicrm][patch][1967972] = http://drupal.org/files/1967972-bootsrap-fixes.patch
 
-;IMPROVING PROFILE INSTALL UX
-libraries[civicrm][patch][1849424] = http://drupal.org/files/1849424-use-vars-in-link.patch
-libraries[civicrm][patch][] = http://drupal.org/files/1849424-pass-vars-in-link-2.patch
-
-;PANTHEON PATCHES
-libraries[civicrm][patch][1978142] = http://drupal.org/files/1978142-pantheon-settings.patch
+;PANTHEON RELATED PATCHES
+libraries[civicrm][patch][1978142] = http://drupal.org/files/1978142-pantheon-settings-2.patch
 libraries[civicrm][patch][1978142] = http://drupal.org/files/1978796-session.save-as_file.patch
 libraries[civicrm][patch][1978838] =  http://drupal.org/files/1978838-pre-populate-db-settings.patch
 
+;IMPROVING PROFILE INSTALL UX WHEN INSTALLING FROM A PROFILE
+libraries[civicrm][patch][1849424] = http://drupal.org/files/1849424-use-vars-in-link.patch
+libraries[civicrm][patch][] = http://drupal.org/files/1849424-pass-vars-in-link-2.patch
+
+;PATCHES THAT ADD LIBRARIES BACK
 libraries[jquery][download][type] = get
 libraries[jquery][download][url] = "http://code.jquery.com/jquery-1.8.3.min.js"
 libraries[jquery][destination] = "modules/civicrm/packages"
@@ -91,7 +101,7 @@ projects[civicrm_realname][version] = "1.0"
 
 ; Community Media Modules
 projects[cm_show_vod][subdir] = "contrib-cm"
-projects[cm_show_vod][version] = "1.x-dev"
+projects[cm_show_vod][version] = "2.x-dev"
 
 projects[cm_airing][subdir] = "contrib-cm"
 projects[cm_airing][version] = "3.x-dev"
@@ -158,7 +168,7 @@ projects[media_archive][subdir] = "contrib"
 projects[media_archive][version] = "1.x-dev"
 
 projects[media_cloudcast][subdir] = "contrib"
-projects[media_cloudcast][version] = "1.x-dev"
+projects[media_cloudcast][version] = "2.x-dev"
 
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "2.0"
@@ -302,9 +312,6 @@ projects[resp_img][version] = "1.3"
 
 projects[strongarm][subdir] = "contrib"
 projects[strongarm][version] = "2.0"
-
-projects[styles][subdir] = "contrib"
-projects[styles][version] = "2.0-alpha8"
 
 projects[token][subdir] = "contrib"
 projects[token][version] = "1.5"

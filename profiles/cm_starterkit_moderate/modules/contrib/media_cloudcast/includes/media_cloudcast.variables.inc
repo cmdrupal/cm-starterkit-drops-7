@@ -128,6 +128,8 @@ function media_cloudcast_variable_default($name = NULL) {
       'rel' => TRUE,
       'showinfo' => TRUE,
       'theme' => 'dark',
+      'html5' => FALSE,
+      'override_size' => FALSE,
     );
   }
 

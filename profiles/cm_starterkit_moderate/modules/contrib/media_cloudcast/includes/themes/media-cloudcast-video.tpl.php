@@ -19,6 +19,10 @@
  */
 
 ?>
-<div class="<?php print $classes; ?> media-cloudcast-<?php print $id; ?>">
-  <iframe class="media-cloudcast-player" <?php print $api_id_attribute; ?>width="<?php print $width; ?>" height="<?php print $height; ?>" src="<?php print $url; ?>" frameborder="0" allowfullscreen></iframe>
-</div>
+<?php if($show_video): ?>
+  <div class="<?php print $classes; ?> media-cloudcast-<?php print $id; ?>">
+    <iframe class="media-cloudcast-player" <?php print $api_id_attribute; ?>width="<?php print $width; ?>" height="<?php print $height; ?>" src="<?php print $url; ?>" frameborder="0" allowfullscreen></iframe>
+  </div>
+<?php elseif($show_thumbnail): ?>
+  <?php print $video_thumbnail; ?>
+<?php endif; ?>

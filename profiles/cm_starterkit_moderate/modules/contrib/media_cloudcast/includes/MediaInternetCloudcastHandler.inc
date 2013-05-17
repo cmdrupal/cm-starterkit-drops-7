@@ -31,18 +31,47 @@ class MediaInternetCloudcastHandler extends MediaInternetBaseHandler {
   }
 
   public function parse($embedCode) {
-    $patterns = array(
-      '@peg\.tv/pegtv_player[#\?]id=([^"\& ]+)&video=([^"\& ]+)@i',
-      '@vp\.telvue\.com/player[#\?]id=([^"\& ]+)&video=([^"\& ]+)@i',
-      '@vp\.telvue\.com/preview[#\?]id=([^"\& ]+)&video=([^"\& ]+)@i'
+    $domains = array(
+      'peg.tv/pegtv_player',
+      'vp.telvue.com/player',
+      'vp.telvue.com/preview',
+      'cvp.telvue.com/player',
+      'cvp.telvue.com/preview',
     );
-    foreach ($patterns as $pattern) {
-      preg_match($pattern, $embedCode, $matches);
-      // @TODO: Parse is called often. Refactor so that valid ID is checked
-      // when a video is added, but not every time the embedCode is parsed.
-      if (isset($matches[1]) && self::validId($matches[1])) {
-        return file_stream_wrapper_uri_normalize('cloudcast://id/' . $matches[1] .'/video/' . $matches[2]);
+
+    $query = parse_url($embedCode);
+    $domain = $query['host'] . $query['path'];
+
+    parse_str($query['query'], $params);
+    foreach ($params as $key => $value) {
+      switch ($key) {
+        case 'id':
+          $id = $value;
+          break;
+        case 'video':
+          $video = $value;
+          break;
+        case 'width':
+          $width = $value;
+          break;
+        case 'height':
+          $height = $value;
+          break;
       }
+    }
+
+    if (in_array($domain, $domains) && isset($id) && isset($video) && self::validId($id)) {
+      $size = '';
+
+      if (!isset($width) || !isset($width)) {
+        unset($width);
+        unset($height);
+      }
+      else {
+        $size = '/width/' . $width . '/height/' . $height;
+      }
+
+      return file_stream_wrapper_uri_normalize('cloudcast://id/' . $id . $size . '/video/' . $video);
     }
   }
 
@@ -55,9 +84,9 @@ class MediaInternetCloudcastHandler extends MediaInternetBaseHandler {
   public function getFileObject() {
     $uri = $this->parse($this->embedCode);
     $file = file_uri_to_object($uri, TRUE);
-    
+
     //dsm($file);
-    
+
     //if (empty($file->fid) && $info = $this->getOEmbed()) {
       //$file->filename = truncate_utf8($info['title'], 255);
     //}
@@ -79,7 +108,7 @@ class MediaInternetCloudcastHandler extends MediaInternetBaseHandler {
   public function getMRSS() {
     $uri = $this->parse($this->embedCode);
     $client_id = arg(1, file_uri_target($uri));
-    $rss_url = url('http://origin.peg.tv/channels/' . $client_id, array('query' => array('v' => '2')));
+    $rss_url = url('http://cloudcast.telvue.com/channels/' . $client_id, array('query' => array('v' => '2')));
     // @todo Use media_retrieve_xml() once it's upgraded to include elements
     //   from all namespaces, not just the document default namespace.
     $request = drupal_http_request($rss_url);

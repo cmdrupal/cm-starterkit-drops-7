@@ -18,7 +18,9 @@ function media_cloudcast_file_formatter_info() {
     'settings callback' => 'media_cloudcast_file_formatter_video_settings',
   );
 
-  foreach (array('width', 'height', 'autohide', 'autoplay', 'color', 'enablejsapi', 'loop', 'modestbranding', 'nocookie', 'origin', 'protocol', 'protocol_specify', 'rel', 'showinfo', 'theme') as $setting) {
+  $settings = array_keys(media_cloudcast_variable_default());
+
+  foreach ($settings as $setting) {
     $formatters['media_cloudcast_video']['default settings'][$setting] = media_cloudcast_variable_get($setting);
   }
 
@@ -46,12 +48,15 @@ function media_cloudcast_file_formatter_video_view($file, $display, $langcode) {
       '#theme' => 'media_cloudcast_video',
       '#uri' => $file->uri,
       '#options' => array(),
+      '#node' => (object) $file->referencing_entity,
     );
 
     // Fake a default for attributes so the ternary doesn't choke.
     $display['settings']['attributes'] = array();
 
-    foreach (array('width', 'height', 'autohide', 'autoplay', 'color', 'enablejsapi', 'loop', 'modestbranding', 'nocookie', 'origin', 'protocol', 'protocol_specify', 'rel', 'showinfo', 'theme', 'attributes') as $setting) {
+    $settings = array_keys(media_cloudcast_variable_default());
+
+    foreach ($settings as $setting) {
       $element['#options'][$setting] = isset($file->override[$setting]) ? $file->override[$setting] : $display['settings'][$setting];
     }
     return $element;
@@ -75,6 +80,12 @@ function media_cloudcast_file_formatter_video_settings($form, &$form_state, $set
     '#type' => 'textfield',
     '#default_value' => $settings['height'],
     '#element_validate' => array('_cloudcast_validate_video_width_and_height'),
+  );
+
+  $element['override_size'] = array(
+    '#title' => t('Allow height and width overrides in URL'),
+    '#type' => 'checkbox',
+    '#default_value' => $settings['override_size'],
   );
 
   // @see https://developers.google.com/cloudcast/player_parameters#Parameters
@@ -119,6 +130,11 @@ function media_cloudcast_file_formatter_video_settings($form, &$form_state, $set
     '#title' => t('Loop video'),
     '#type' => 'checkbox',
     '#default_value' => $settings['loop'],
+  );
+  $element['html5'] = array(
+    '#title' => t('Force HTMl5'),
+    '#type' => 'checkbox',
+    '#default_value' => $settings['html5'],
   );
 
   // Note: make sure the positive/negitive language lines up with option
@@ -252,6 +268,17 @@ function media_cloudcast_file_formatter_image_settings($form, &$form_state, $set
     '#default_value' => $settings['image_style'],
     '#empty_option' => t('None (original image)'),
   );
+  $element['image_style_edit_link'] = array(
+    '#type' => 'link',
+    '#title' => t('Edit image style'),
+    '#href' => 'admin/config/media/image-styles/edit/' . key(image_style_options(FALSE)),
+    '#attached' => array(
+      'js' => array(
+        drupal_get_path('module', 'media_cloudcast') . '/js/media_cloudcast.imagestyle.js',
+      ),
+    ),
+  );
+
   return $element;
 }
 
