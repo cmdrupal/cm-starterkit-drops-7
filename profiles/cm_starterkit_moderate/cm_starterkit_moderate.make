@@ -138,7 +138,7 @@ projects[entityreference][subdir] = "contrib"
 projects[entityreference][version] = "1.x-dev"
 
 projects[og][subdir] = "contrib"
-projects[og][version] = "2.0"
+projects[og][version] = "2.2"
 
 projects[og_extras][subdir] = "contrib"
 projects[og_extras][version] = "1.1"
@@ -257,7 +257,7 @@ projects[entity][subdir] = "contrib"
 projects[entity][version] = "1.0"
 
 projects[features][subdir] = "contrib"
-projects[features][version] = "2.0-beta2"
+projects[features][version] = "2.0-rc1"
 
 projects[field_group][subdir] = "contrib"
 projects[field_group][version] = "2.x-dev"

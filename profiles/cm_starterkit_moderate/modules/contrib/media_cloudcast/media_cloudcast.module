@@ -24,12 +24,7 @@ include_once DRUPAL_ROOT . '/' . drupal_get_path('module', 'media_cloudcast') . 
  * Implements hook_permission().
  */
 function media_cloudcast_permission() {
-  return array(
-    'administer media cloudcast' => array(
-      'title' => 'Administer Media Cloudcast',
-      'description' => t('Control availability of Cloudcast videos.'),
-    ),
-  );
+
 }
 
 /**
@@ -37,16 +32,6 @@ function media_cloudcast_permission() {
  */
 function media_cloudcast_menu() {
 
-  $items['admin/config/media/media_cloudcast'] = array(
-    'title' => 'Cloudcast Video Control',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('media_cloudcast_admin_config'),
-    'access arguments' => array('administer media cloudcast'),
-    'type' => MENU_NORMAL_ITEM,
-    'file' => 'includes/media_cloudcast.admin.inc',
-  );
-
-  return $items;
 }
 
 /**
