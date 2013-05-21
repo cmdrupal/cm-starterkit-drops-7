@@ -37,12 +37,22 @@ class MediaInternetCloudcastHandler extends MediaInternetBaseHandler {
       'vp.telvue.com/preview',
       'cvp.telvue.com/player',
       'cvp.telvue.com/preview',
+      'cloudcast.telvue.com/pegtv_player',
     );
 
-    $query = parse_url($embedCode);
-    $domain = $query['host'] . $query['path'];
+    // handle encoded url also
+    $query = parse_url(html_entity_decode($embedCode));
 
+    // handle RESTful url, extract id
+    // e.g. http://cloudcast.telvue.com/pegtv_player/index/T02188?autostart=true&height=240&noplaylistskin=true&video=149829&width=320
+    $matches = array();
+    if ($query['host'] == 'cloudcast.telvue.com' && preg_match('#/index/(.*)#i', $query['path'], $matches)) {
+      $id = $matches[1];
+    }
+
+    $domain = $query['host'] . $query['path'];
     parse_str($query['query'], $params);
+
     foreach ($params as $key => $value) {
       switch ($key) {
         case 'id':
@@ -60,7 +70,13 @@ class MediaInternetCloudcastHandler extends MediaInternetBaseHandler {
       }
     }
 
-    if (in_array($domain, $domains) && isset($id) && isset($video) && self::validId($id)) {
+    // preparing regex
+    foreach ($domains as $key => $value) {
+      $domains[$key] = preg_quote($value);
+    }
+    $regex = '#^' . implode('|', $domains) .'#i';
+
+    if (preg_match($regex, $domain) && isset($id) && isset($video) && self::validId($id)) {
       $size = '';
 
       if (!isset($width) || !isset($width)) {

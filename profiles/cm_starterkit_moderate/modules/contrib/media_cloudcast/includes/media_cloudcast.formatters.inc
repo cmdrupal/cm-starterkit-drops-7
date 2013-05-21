@@ -48,7 +48,6 @@ function media_cloudcast_file_formatter_video_view($file, $display, $langcode) {
       '#theme' => 'media_cloudcast_video',
       '#uri' => $file->uri,
       '#options' => array(),
-      '#node' => (object) $file->referencing_entity,
     );
 
     // Fake a default for attributes so the ternary doesn't choke.

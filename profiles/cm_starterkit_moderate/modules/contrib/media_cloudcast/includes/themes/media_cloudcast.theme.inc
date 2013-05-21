@@ -13,27 +13,32 @@ function media_cloudcast_preprocess_media_cloudcast_video(&$variables) {
   $show_video = FALSE;
   $show_thumbnail = FALSE;
 
-  $node = $variables['node'];
-  $lang = $node->language;
+  if (isset($variables['node'])) {
+    $node = $variables['node'];
+    $lang = $node->language;
 
-  // Check if manual control for a video availability
-  if (variable_get('media_cloudcast_video_access', 0) && in_array($node->type, array_filter(variable_get('media_cloudcast_node_types', array())))) {
-    if (isset($node->cloudcast_field_available) && !empty($node->cloudcast_field_available)) {
-      $availability = $node->cloudcast_field_available[$lang][0]['value'];
+    // Check if manual control for a video availability
+    if (variable_get('media_cloudcast_video_access', 0) && in_array($node->type, array_filter(variable_get('media_cloudcast_node_types', array())))) {
+      if (isset($node->cloudcast_field_available) && !empty($node->cloudcast_field_available)) {
+        $availability = $node->cloudcast_field_available[$lang][0]['value'];
 
-      if ($availability) {
-        $show_video = TRUE;
-      }
-      else {
-        module_load_include('inc', 'media_cloudcast', 'includes/media_cloudcast.admin');
+        if ($availability) {
+          $show_video = TRUE;
+        }
+        else {
+          module_load_include('inc', 'media_cloudcast', 'includes/media_cloudcast.admin');
 
-        $bundle_info = media_cloudcast_bundle_load('node', $node->type);
-        $video_info = $bundle_info['info']['media_cloudcast'];
+          $bundle_info = media_cloudcast_bundle_load('node', $node->type);
+          $video_info = $bundle_info['info']['media_cloudcast'];
 
-        if ($video_info['display']) {
-          $show_thumbnail = TRUE;
+          if ($video_info['display']) {
+            $show_thumbnail = TRUE;
+          }
         }
       }
+    }
+    else {
+      $show_video = TRUE;
     }
   }
   else {
