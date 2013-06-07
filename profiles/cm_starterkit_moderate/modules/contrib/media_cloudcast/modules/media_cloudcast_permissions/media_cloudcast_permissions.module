@@ -18,6 +18,8 @@ function media_cloudcast_permissions_permission() {
       'description' => t('Control availability of Cloudcast videos.'),
     ),
   );
+  
+  return array();
 }
 
 /**

@@ -11,9 +11,9 @@ files[] = media_cloudcast_feeds.module
 files[] = MediaCloudcastFeedsParser.inc
 
 
-; Information added by drupal.org packaging script on 2013-05-21
-version = "7.x-2.0-alpha1+2-dev"
+; Information added by drupal.org packaging script on 2013-05-25
+version = "7.x-2.0-alpha1+3-dev"
 core = "7.x"
 project = "media_cloudcast"
-datestamp = "1369098665"
+datestamp = "1369444189"
 

@@ -4,7 +4,6 @@
 ; This is used to test the packaging BEFORE committing
 ; drush make cm_starterkit_moderate.make
 
-
 core = 7.22
 api = 2
 
@@ -23,10 +22,11 @@ libraries[civicrm][patch][1844558] = http://drupal.org/files/1844558-run-civicrm
 libraries[civicrm][patch][1940074] = http://drupal.org/files/1940074-openFlashChart_tpl_javascript-4.patch
 libraries[civicrm][patch][1946820] = http://drupal.org/files/1946820-turn_IDS_off_in_civicrm.settings.php_.tpl_.patch
 libraries[civicrm][patch][1967972] = http://drupal.org/files/1967972-bootsrap-fixes.patch
+libraries[civicrm][patch][1988296] = http://drupal.org/files/1988296-logo-filename-change.patch
 
 ;PANTHEON RELATED PATCHES
-libraries[civicrm][patch][1978142] = http://drupal.org/files/1978142-pantheon-settings-2.patch
-libraries[civicrm][patch][1978142] = http://drupal.org/files/1978796-session.save-as_file.patch
+libraries[civicrm][patch][1978142] = http://drupal.org/files/1978142-pantheon-settings-11.patch
+libraries[civicrm][patch][1978796] = http://drupal.org/files/1978796-session.save-as_file.patch
 libraries[civicrm][patch][1978838] =  http://drupal.org/files/1978838-pre-populate-db-settings.patch
 
 ;IMPROVING PROFILE INSTALL UX WHEN INSTALLING FROM A PROFILE
@@ -40,9 +40,9 @@ libraries[jquery][destination] = "modules/civicrm/packages"
 libraries[jquery][directory_name] = jquery
 libraries[jquery][download][filename] = jquery-1.8.3.min.js
 libraries[jquery][patch][1787976] = http://drupal.org/files/1787976-jquery-missing-files-9.patch
+libraries[jquery][patch][] = http://drupal.org/files/1787976-updated-fo-4-3-3.patch
 libraries[jquery][patch][] = http://drupal.org/files/textarearesizer-4.patch
 libraries[jquery][patch][1950068] = http://drupal.org/files/1950068-more-js-files-2.patch
-libraries[jquery][patch][] = http://drupal.org/files/1787976-updated-fo-4-3-3.patch
 
 libraries[jquery_ui][download][type] = get
 libraries[jquery_ui][download][url] = "http://jquery-ui.googlecode.com/files/jquery-ui-1.9.0-rc.1.zip"
@@ -329,7 +329,7 @@ projects[views_slideshow][subdir] = "contrib"
 projects[views_slideshow][version] = "3.0"
 
 projects[webform][subdir] = "contrib"
-projects[webform][version] = "3.18"
+projects[webform][version] = "3.19"
 
 projects[wysiwyg][subdir] = "contrib"
 projects[wysiwyg][version] = "2.1"

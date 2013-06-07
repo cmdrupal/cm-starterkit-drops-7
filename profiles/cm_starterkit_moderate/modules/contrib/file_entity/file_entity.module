@@ -2106,7 +2106,7 @@ function path_file_insert($file) {
     // Only save a non-empty alias.
     if (!empty($path['alias'])) {
       // Ensure fields for programmatic executions.
-      $path['source'] = 'file/' . $file->tid;
+      $path['source'] = 'file/' . $file->fid;
       // Core does not provide a way to store the file language but contrib
       // modules can do it so we need to take this into account.
       $langcode = entity_language('file', $file);
@@ -2177,4 +2177,15 @@ function file_entity_fnmatch($pattern, $string) {
     return preg_match("#^".strtr(preg_quote($pattern, '#'), array('\*' => '.*', '\?' => '.', '\[' => '[', '\]' => ']'))."$#", $string);
   }
   return fnmatch($pattern, $string);
+}
+
+/**
+ * Return an URI for a file download.
+ */
+function file_entity_download_uri($file) {
+  $uri = array('path' => "file/{$file->fid}/download", 'options' => array());
+  if (!variable_get('file_entity_allow_insecure_download', FALSE)) {
+    $uri['options']['query']['token'] = drupal_get_token($uri['path']);
+  }
+  return $uri;
 }
