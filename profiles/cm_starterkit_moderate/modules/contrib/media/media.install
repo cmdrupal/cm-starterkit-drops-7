@@ -60,17 +60,22 @@ function media_install() {
   if (variable_get('media__show_deprecated_view_modes')) {
     $default_image_styles['media_original'] = '';
   }
+
   foreach ($default_image_styles as $view_mode => $image_style) {
-    $display_name = 'image__' . $view_mode . '__file_image';
-    $display = array(
-      'api_version' => 1,
-      'name' => $display_name,
-      'status' => 1,
-      'weight' => 5,
-      'settings' => array('image_style' => $image_style),
-      'export_type' => NULL,
-    );
-    file_display_save((object) $display);
+    $existing_display = file_displays_load('image', $view_mode);
+
+    if (empty($existing_display)) {
+      $display_name = 'image__' . $view_mode . '__file_image';
+      $display = array(
+        'api_version' => 1,
+        'name' => $display_name,
+        'status' => 1,
+        'weight' => 5,
+        'settings' => array('image_style' => $image_style),
+        'export_type' => NULL,
+      );
+      file_display_save((object) $display);
+    }
   }
 }
 
@@ -968,11 +973,12 @@ function media_update_7210() {
  * Flush old version of the image style to make the thumbnails appear correctly.
  */
 function media_update_7211() {
-  image_style_flush('square_thumbnail');
-  db_update('image_styles')
-    ->fields(array('name' => 'media_thumbnail'))
-    ->condition('name', 'square_thumbnail')
-    ->execute();
+  $style = image_style_load('square_thumbnail');
+
+  if ($style) {
+    $style['name'] = 'media_thumbnail';
+    image_style_save($style);
+  }
 
   // Replace any instances in display settings
   module_load_include('inc', 'file_entity', 'file_entity.file_api');

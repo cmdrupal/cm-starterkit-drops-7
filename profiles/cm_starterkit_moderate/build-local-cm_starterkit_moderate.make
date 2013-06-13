@@ -1,7 +1,7 @@
 ; This version of the .make will build a local copy of the distribution
 ; using the version of drupal-org.make that has been committed.
-; Modules and libraries will be in profiles/cm_moderate_starterkit 
-; drush make build-local-cm_moderate_starterkit.make
+; Modules and libraries will be in profiles/cm_starterkit_easy
+; drush make build-local-cm_starterkit_easy.make
 
 api = 2
 core = 7.x
@@ -13,5 +13,5 @@ projects[drupal][version] = "7.22"
 ;includes[] = drupal-org-core.make
 
 ; Download the Install profile and recursively build all its dependencies:
-projects[cm_moderate_starterkit][type] = profile
-projects[cm_moderate_starterkit][version] = 2.x-dev
+projects[cm_starterkit_easy][type] = profile
+projects[cm_starterkit_easy][version] = 2.x-dev

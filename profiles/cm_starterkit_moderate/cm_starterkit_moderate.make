@@ -13,7 +13,7 @@ projects[drupal][version] = "7.22"
 ; ====== CIVICRM RELATED =========
 
 libraries[civicrm][download][type] = get
-libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.3.3-starterkit.tgz"
+libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.3.4-starterkit.tgz"
 libraries[civicrm][destination] = modules
 libraries[civicrm][directory_name] = civicrm
 
@@ -22,7 +22,7 @@ libraries[civicrm][patch][1844558] = http://drupal.org/files/1844558-run-civicrm
 libraries[civicrm][patch][1940074] = http://drupal.org/files/1940074-openFlashChart_tpl_javascript-4.patch
 libraries[civicrm][patch][1946820] = http://drupal.org/files/1946820-turn_IDS_off_in_civicrm.settings.php_.tpl_.patch
 libraries[civicrm][patch][1967972] = http://drupal.org/files/1967972-bootsrap-fixes.patch
-libraries[civicrm][patch][1988296] = http://drupal.org/files/1988296-logo-filename-change.patch
+libraries[civicrm][patch][2010430] = https://drupal.org/files/2010430-htmlpurifier_path.patch
 
 ;PANTHEON RELATED PATCHES
 libraries[civicrm][patch][1978142] = http://drupal.org/files/1978142-pantheon-settings-11.patch
@@ -88,7 +88,7 @@ libraries[tinymce-civicrm][directory_name] = tinymce
 
 ; CiviCRM Modules
 projects[civicrm_cron][subdir] = "contrib"
-projects[civicrm_cron][version] = "1.0-beta2"
+projects[civicrm_cron][version] = "2.0-beta1"
 
 projects[civicrm_multiday_event][subdir] = "contrib-cm"
 projects[civicrm_multiday_event][version] = "1.0-beta5"
@@ -229,7 +229,7 @@ projects[cm_show][subdir] = "contrib-cm"
 projects[cm_show][version] = "1.x-dev"
 
 projects[cm_slideshow][subdir] = "contrib-cm"
-projects[cm_slideshow][version] = "1.0-beta1"
+projects[cm_slideshow][version] = "2.x-dev"
 
 projects[om_crew_connect][subdir] = "contrib-cm"
 projects[om_crew_connect][version] = "2.0-beta3"
@@ -254,7 +254,7 @@ projects[creativecommons][subdir] = "contrib"
 projects[creativecommons][version] = "1.0-alpha2"
 
 projects[entity][subdir] = "contrib"
-projects[entity][version] = "1.0"
+projects[entity][version] = "1.1"
 
 projects[features][subdir] = "contrib"
 projects[features][version] = "2.0-rc1"
