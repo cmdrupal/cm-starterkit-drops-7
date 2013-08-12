@@ -118,6 +118,22 @@ function headerimage_settings_form() {
     );
   }
 
+  if (module_exists('locale')) {
+    $form['headerimage_language_support'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show only nodes in current language'),
+      '#description' => t('Display only header images in the current language.'),
+      '#default_value' => variable_get('headerimage_language_support', FALSE),
+    );
+
+    $form['headerimage_language_support_neutral'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Respect language neutral'),
+      '#description' => t('Display only header images in the current language and respect language neutral. Both checkboxes need to be active to support this.'),
+      '#default_value' => variable_get('headerimage_language_support_neutral', FALSE),
+    );
+  }
+
   return system_settings_form($form);
 }
 

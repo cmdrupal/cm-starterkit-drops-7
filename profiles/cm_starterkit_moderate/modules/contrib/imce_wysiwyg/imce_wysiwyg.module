@@ -11,7 +11,12 @@
  */
 function imce_wysiwyg_plugin($editor, $version) {
   static $integrated = array();
-
+  
+  //required for admins who don't use IMCE to enable button in WYSIWYG profile
+  if (user_access('administer filters') && !module_invoke('imce', 'access')) {
+    return TRUE;
+  }
+  
   if (!module_invoke('imce', 'access')) {
     return;
   }

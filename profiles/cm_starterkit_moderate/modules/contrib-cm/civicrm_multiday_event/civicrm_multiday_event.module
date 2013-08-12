@@ -309,15 +309,6 @@ function civicrm_multiday_event_form_alter(&$form, &$form_state, $form_id) {
         $form['field_civicrm_group'][LANGUAGE_NONE]['#default_value'] = $node->field_civicrm_group[LANGUAGE_NONE][0]['value'];
       }
     }
-       
-    // field_collection is always trying to add a new date to the form...
-    // even on the first load when using current version of field_collection 
-    // Get the index of the last input element in this field
-    
-    $last_index = $form['field_civicrm_multiday_session'][LANGUAGE_NONE]['#max_delta'];
-    if ($last_index) {
-      unset($form['field_civicrm_multiday_session'][LANGUAGE_NONE][$last_index]);
-    }
   }
 }
 
@@ -436,19 +427,20 @@ function civicrm_multiday_event_node_presave($node) {
     // Only update the title and body from template or event when form field is 
     // empty.  This allows admins to override the default.
     
-    if (isset($node->body[LANGUAGE_NONE][0]['summary']) && $node->body[LANGUAGE_NONE][0]['summary'] == '[civicrm-template-event-summary]') {
-      $node->body[LANGUAGE_NONE][0]['summary'] = isset($params['summary']) ? $params['summary'] : NULL;
+    if (isset($node->body[LANGUAGE_NONE][0]['summary']) && isset($params['summary'])) {
+      $node->body[LANGUAGE_NONE][0]['summary'] = str_replace("[civicrm-template-event-summary]", $params['summary'], $node->body[LANGUAGE_NONE][0]['summary']);  
+      //$node->body[LANGUAGE_NONE][0]['summary'] = isset($params['summary']) ? $params['summary'] : NULL;
     }
     
-    if (isset($node->body[LANGUAGE_NONE][0]['value']) && $node->body[LANGUAGE_NONE][0]['value'] == '[civicrm-template-complete-description]') {
-      $node->body[LANGUAGE_NONE][0]['value'] = isset($params['description']) ? $params['description'] : NULL;
+    if (isset($node->body[LANGUAGE_NONE][0]['value']) && isset($params['description'])) {
+      $node->body[LANGUAGE_NONE][0]['value'] = str_replace("[civicrm-template-complete-description]", $params['description'], $node->body[LANGUAGE_NONE][0]['value']);
+      //$node->body[LANGUAGE_NONE][0]['value'] = isset($params['description']) ? $params['description'] : NULL;
     }
-    
-    
+     
     if (!$node->title || !variable_get('civicrm_multiday_event_allow_title_override', 0)) {
       //reset title to pattern... need template
-      $event_id = $node->field_civievent_template[LANGUAGE_NONE][0]['value'];
-      $template_params = civicrm_multiday_event_lookup($event_id, 1);
+      $template_event_id = $node->field_civievent_template[LANGUAGE_NONE][0]['value'];
+      $template_params = civicrm_multiday_event_lookup($template_event_id, 1);
       
       if ($title_start != $title_end) {
         $date = ' - ' . $title_start . ' to ' . $title_end;

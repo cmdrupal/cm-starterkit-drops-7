@@ -248,12 +248,27 @@ function headerimage_select_node($block) {
   $match = NULL;
   $block_nids = array();
 
-  $result = db_select('headerimage', 'hi')
-    ->fields('hi', array('nid', 'conditions'))
-    ->condition('block', $block)
-    ->orderBy('weight', 'ASC')
-    ->orderBy('nid', 'ASC')
-    ->execute();
+  $query = db_select('headerimage', 'hi');
+  $query->fields('hi', array('nid', 'conditions'));
+  $query->condition('hi.block', $block);
+
+  if (module_exists('locale') && variable_get('headerimage_language_support', FALSE)) {
+    $query->join('node', 'n', 'hi.nid = n.nid');
+
+    // Respect language neutral if set
+    if (variable_get('headerimage_language_support_neutral', FALSE)) {
+      $query->condition(db_or()
+          ->condition('n.language', $GLOBALS['language']->language)
+          ->condition('n.language', LANGUAGE_NONE)
+      );
+    } else {
+      $query->condition('n.language', $GLOBALS['language']->language);
+    }
+  }
+
+  $query->orderBy('hi.weight', 'ASC');
+  $query->orderBy('hi.nid', 'ASC');
+  $result = $query->execute();
 
   foreach ($result as $header_image) {
     $conditions = unserialize($header_image->conditions);
@@ -362,7 +377,9 @@ function headerimage_eval_url($condition) {
 function headerimage_eval_taxonomy($condition) {
   if (arg(0) == 'node' && is_numeric(arg(1))) {
     if ($node = menu_get_object()) {
-      foreach (array_keys($node->taxonomy) as $key) {
+      $query = "SELECT tid FROM {taxonomy_index} WHERE nid = :nid";
+      $terms = db_query($query, array(':nid' => $node->nid))->fetchAllKeyed(0, 0);
+      foreach (array_keys($terms) as $key) {
         if (isset($condition[$key])) {
           return true;
         }

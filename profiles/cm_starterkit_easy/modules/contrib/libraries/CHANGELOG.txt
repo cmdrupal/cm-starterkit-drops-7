@@ -1,12 +1,10 @@
 
-Libraries 7.x-3.x, xxxx-xx-xx
+Libraries 7.x-2.1, 2013-03-09
 -----------------------------
+#1937446 by Pol, tstoeckler: Add a 'pre-dependencies-load' callback group.
 #1775668 by tstoeckler: Fix bogus assertion message in assertLibraryFiles().
 #1773640 by tstoeckler: Use drupal_get_path() to find the profile directory.
 #1565426 by tstoeckler: Invoke hook_libraries_info() in enabled themes.
-
-Libraries 7.x-2.x, xxxx-xx-xx
------------------------------
 
 Libraries 7.x-2.0, 2012-07-29
 -----------------------------
@@ -79,7 +77,7 @@ Libraries 6.x-1.0, 2010-01-27
 #496732 by tstoeckler, robphillips: Allow placing libraries in root directory.
 
 
-Libraries 6.x-1.0-alpha1, 2009-12-30
+Libraries 6.x-1.0-ALPHA1, 2009-12-30
 ------------------------------------
 #480440 by markus_petrux: Fixed base_path() not applied to default library path.
 #320562 by sun: Added basic functions.

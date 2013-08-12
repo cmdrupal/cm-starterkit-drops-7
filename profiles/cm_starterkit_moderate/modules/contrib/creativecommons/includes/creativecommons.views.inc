@@ -15,25 +15,25 @@
  * Implementation of hook_views_data().
  */
 function creativecommons_views_data() {
-  $data['creativecommons_node']['table']['group'] = t('Creative Commons');
+  $data['creativecommons']['table']['group'] = t('Creative Commons');
 
-  $data['creativecommons_node']['table']['base'] = array(
-    'field' => 'nid',
+  $data['creativecommons']['table']['base'] = array(
+    'field' => 'entity_id',
     'title' => t('Creative Commons'),
-    'help' => t("Creative Commons table contains licensing information related to nodes."),
+    'help' => t("Creative Commons table contains licensing information related to nodes or entities."),
     'weight' => -10,
   );
 
   // Explain how this table joins to others.
-  $data['creativecommons_node']['table']['join'] = array(
+  $data['creativecommons']['table']['join'] = array(
     'node' => array(
-      'field' => 'nid',
+      'field' => 'entity_id',
       'left_table' => 'node',
       'left_field' => 'nid',
     ),
   );
 
-  $data['creativecommons_node']['nid'] = array(
+  $data['creativecommons']['entity_id'] = array(
     'title' => t('Creative Commons License'),
     'help' => t('License information that references a node.'),
     'relationship' => array(
@@ -44,7 +44,7 @@ function creativecommons_views_data() {
     ),
   );
 
-  $data['creativecommons_node']['license_uri'] = array(
+  $data['creativecommons']['license_uri'] = array(
     'title' => t('License'), // Appears in views UI.
     'help' => t('The Creative Commons license applied to this node.'),
     'field' => array(
@@ -60,7 +60,7 @@ function creativecommons_views_data() {
     ),
   );
 
-  $data['creativecommons_node']['attribution'] = array(
+  $data['creativecommons']['attribution'] = array(
     'title' => t('Attribution'), // Appears in views UI.
     'help' => t('The name and/or URL the creator of a work would like used when attributing re-use.'), // description based on creativecommons.org/ns
     'field' => array(

@@ -9,6 +9,8 @@ dependencies[] = "list"
 dependencies[] = "options"
 dependencies[] = "resp_img"
 dependencies[] = "strongarm"
+dependencies[] = "styles"
+dependencies[] = "styles_ui"
 dependencies[] = "views"
 dependencies[] = "views_slideshow"
 dependencies[] = "views_ui"
@@ -47,9 +49,9 @@ package = "Community Media"
 php = "5.2.4"
 project = "cm_slideshow"
 
-; Information added by drupal.org packaging script on 2013-05-11
-version = "7.x-2.x-dev"
+; Information added by drupal.org packaging script on 2013-06-23
+version = "7.x-2.0-alpha1"
 core = "7.x"
 project = "cm_slideshow"
-datestamp = "1368232924"
+datestamp = "1372020360"
 
