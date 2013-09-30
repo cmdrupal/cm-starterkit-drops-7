@@ -13,9 +13,14 @@ projects[drupal][version] = "7.23"
 ; ====== CIVICRM RELATED =========
 
 libraries[civicrm][download][type] = get
-libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.3.5-starterkit.tgz"
+;libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.4.alpha3-starterkit.tgz"
+libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.3.6-starterkit.tgz"
 libraries[civicrm][destination] = modules
 libraries[civicrm][directory_name] = civicrm
+
+;PATCHES THAT CHANGED BETWEEN 4.3 and 4.4
+;libraries[civicrm][patch][1978142] = https://drupal.org/files/2082713-pantheon-settings-4-4.patch
+libraries[civicrm][patch][1978142] = http://drupal.org/files/1978142-pantheon-settings-12.patch
 
 ;PATCHES THAT SHOULD BE ADDRESSED IN FUTURE CIVICRM RELEASES
 libraries[civicrm][patch][1844558] = http://drupal.org/files/1844558-run-civicrm-from-profile-dir-config-2.patch
@@ -23,7 +28,6 @@ libraries[civicrm][patch][1940074] = http://drupal.org/files/1940074-openFlashCh
 libraries[civicrm][patch][1967972] = http://drupal.org/files/1967972-bootsrap-fixes.patch
 
 ;PANTHEON RELATED PATCHES
-libraries[civicrm][patch][1978142] = http://drupal.org/files/1978142-pantheon-settings-12.patch
 libraries[civicrm][patch][2063371] = https://drupal.org/files/2063371-add-modulePath-var.patch
 libraries[civicrm][patch][1978796] = http://drupal.org/files/1978796-session.save-as_file.patch
 libraries[civicrm][patch][1978838] = http://drupal.org/files/1978838-pre-populate-db-settings.patch
@@ -74,10 +78,92 @@ libraries[jquery_ui][download][url] = "http://jquery-ui.googlecode.com/files/jqu
 libraries[jquery_ui][destination] = "modules/civicrm/packages/jquery/jquery-ui-1.9.0"
 libraries[jquery_ui][directory_name] = development-bundle
 
+; MANUALLY GRAB SPECIFIC IMAGES
+libraries[jquery_ui_bg_flat_0][download][type] = get
+libraries[jquery_ui_bg_flat_0][download][url] = "https://raw.github.com/jquery/jquery-ui/master/themes/base/images/ui-bg_flat_0_aaaaaa_40x100.png"
+libraries[jquery_ui_bg_flat_0][download][filename] = ui-bg_flat_0_aaaaaa_40x100.png
+libraries[jquery_ui_bg_flat_0][directory_name] = images
+libraries[jquery_ui_bg_flat_0][destination] = "modules/civicrm/packages/jquery/jquery-ui-1.9.0/css/smoothness"
+
+libraries[jquery_ui_bg_flat_75][download][type] = get
+libraries[jquery_ui_bg_flat_75][download][url] = "https://raw.github.com/jquery/jquery-ui/master/themes/base/images/ui-bg_flat_75_ffffff_40x100.png"
+libraries[jquery_ui_bg_flat_75][download][filename] = ui-bg_flat_75_ffffff_40x100.png
+libraries[jquery_ui_bg_flat_75][directory_name] = images
+libraries[jquery_ui_bg_flat_75][destination] = "modules/civicrm/packages/jquery/jquery-ui-1.9.0/css/smoothness"
+
+libraries[jquery_ui_bg_glass_55][download][type] = get
+libraries[jquery_ui_bg_glass_55][download][url] = "https://raw.github.com/jquery/jquery-ui/master/themes/base/images/ui-bg_glass_55_fbf9ee_1x400.png"
+libraries[jquery_ui_bg_glass_55][download][filename] = ui-bg_glass_55_fbf9ee_1x400.png
+libraries[jquery_ui_bg_glass_55][directory_name] = images
+libraries[jquery_ui_bg_glass_55][destination] = "modules/civicrm/packages/jquery/jquery-ui-1.9.0/css/smoothness"
+
+libraries[jquery_ui_bg_glass_65][download][type] = get
+libraries[jquery_ui_bg_glass_65][download][url] = "https://raw.github.com/jquery/jquery-ui/master/themes/base/images/ui-bg_glass_65_ffffff_1x400.png"
+libraries[jquery_ui_bg_glass_65][download][filename] = ui-bg_glass_65_ffffff_1x400.png
+libraries[jquery_ui_bg_glass_65][directory_name] = images
+libraries[jquery_ui_bg_glass_65][destination] = "modules/civicrm/packages/jquery/jquery-ui-1.9.0/css/smoothness"
+
+libraries[jquery_ui_bg_glass_75_dadada][download][type] = get
+libraries[jquery_ui_bg_glass_75_dadada][download][url] = "https://raw.github.com/jquery/jquery-ui/master/themes/base/images/ui-bg_glass_75_dadada_1x400.png"
+libraries[jquery_ui_bg_glass_75_dadada][download][filename] = ui-bg_glass_75_dadada_1x400.png
+libraries[jquery_ui_bg_glass_75_dadada][directory_name] = images
+libraries[jquery_ui_bg_glass_75_dadada][destination] = "modules/civicrm/packages/jquery/jquery-ui-1.9.0/css/smoothness"
+
+libraries[jquery_ui_bg_glass_75_e6e6e6][download][type] = get
+libraries[jquery_ui_bg_glass_75_e6e6e6][download][url] = "https://raw.github.com/jquery/jquery-ui/master/themes/base/images/ui-bg_glass_75_e6e6e6_1x400.png"
+libraries[jquery_ui_bg_glass_75_e6e6e6][download][filename] = ui-bg_glass_75_e6e6e6_1x400.png
+libraries[jquery_ui_bg_glass_75_e6e6e6][directory_name] = images
+libraries[jquery_ui_bg_glass_75_e6e6e6][destination] = "modules/civicrm/packages/jquery/jquery-ui-1.9.0/css/smoothness"
+
+libraries[jquery_ui_bg_glass_95][download][type] = get
+libraries[jquery_ui_bg_glass_95][download][url] = "https://raw.github.com/jquery/jquery-ui/master/themes/base/images/ui-bg_glass_95_fef1ec_1x400.png"
+libraries[jquery_ui_bg_glass_95][download][filename] = ui-bg_glass_95_fef1ec_1x400.png
+libraries[jquery_ui_bg_glass_95][directory_name] = images
+libraries[jquery_ui_bg_glass_95][destination] = "modules/civicrm/packages/jquery/jquery-ui-1.9.0/css/smoothness"
+
+libraries[jquery_ui_bg_highlight][download][type] = get
+libraries[jquery_ui_bg_highlight][download][url] = "https://raw.github.com/jquery/jquery-ui/master/themes/base/images/ui-bg_highlight-soft_75_cccccc_1x100.png"
+libraries[jquery_ui_bg_highlight][download][filename] = ui-bg_highlight-soft_75_cccccc_1x100.png
+libraries[jquery_ui_bg_highlight][directory_name] = images
+libraries[jquery_ui_bg_highlight][destination] = "modules/civicrm/packages/jquery/jquery-ui-1.9.0/css/smoothness"
+
+libraries[jquery_ui_icons_2e83ff][download][type] = get
+libraries[jquery_ui_icons_2e83ff][download][url] = "https://raw.github.com/jquery/jquery-ui/master/themes/base/images/ui-icons_2e83ff_256x240.png"
+libraries[jquery_ui_icons_2e83ff][download][filename] = ui-icons_2e83ff_256x240.png
+libraries[jquery_ui_icons_2e83ff][directory_name] = images
+libraries[jquery_ui_icons_2e83ff][destination] = "modules/civicrm/packages/jquery/jquery-ui-1.9.0/css/smoothness"
+
+libraries[jquery_ui_icons_222222][download][type] = get
+libraries[jquery_ui_icons_222222][download][url] = "https://raw.github.com/jquery/jquery-ui/master/themes/base/images/ui-icons_222222_256x240.png"
+libraries[jquery_ui_icons_222222][download][filename] = ui-icons_222222_256x240.png
+libraries[jquery_ui_icons_222222][directory_name] = images
+libraries[jquery_ui_icons_222222][destination] = "modules/civicrm/packages/jquery/jquery-ui-1.9.0/css/smoothness"
+
+libraries[jquery_ui_icons_454545][download][type] = get
+libraries[jquery_ui_icons_454545][download][url] = "https://raw.github.com/jquery/jquery-ui/master/themes/base/images/ui-icons_454545_256x240.png"
+libraries[jquery_ui_icons_454545][download][filename] = ui-icons_454545_256x240.png
+libraries[jquery_ui_icons_454545][directory_name] = images
+libraries[jquery_ui_icons_454545][destination] = "modules/civicrm/packages/jquery/jquery-ui-1.9.0/css/smoothness"
+
+libraries[jquery_ui_icons_888888][download][type] = get
+libraries[jquery_ui_icons_888888][download][url] = "https://raw.github.com/jquery/jquery-ui/master/themes/base/images/ui-icons_888888_256x240.png"
+libraries[jquery_ui_icons_888888][download][filename] = ui-icons_888888_256x240.png
+libraries[jquery_ui_icons_888888][directory_name] = images
+libraries[jquery_ui_icons_888888][destination] = "modules/civicrm/packages/jquery/jquery-ui-1.9.0/css/smoothness"
+
+libraries[jquery_ui_icons_cd0a0a][download][type] = get
+libraries[jquery_ui_icons_cd0a0a][download][url] = "https://raw.github.com/jquery/jquery-ui/master/themes/base/images/ui-icons_cd0a0a_256x240.png"
+libraries[jquery_ui_icons_cd0a0a][download][filename] = ui-icons_cd0a0a_256x240.png
+libraries[jquery_ui_icons_cd0a0a][directory_name] = images
+libraries[jquery_ui_icons_cd0a0a][destination] = "modules/civicrm/packages/jquery/jquery-ui-1.9.0/css/smoothness"
+
+
 libraries[jstree][download][type] = get
 libraries[jstree][download][url] = "https://github.com/vakata/jstree/archive/v.pre1.0.zip"
 libraries[jstree][destination] = "modules/civicrm/packages/jquery/plugins"
 libraries[jstree][directory_name] = jstree
+
+
 
 ; THIS IS INSANE!!!  But the alternative is adjust paths w/ patched to core CiviCRM files
 ; because we need just the files in /lib, this has to be done this way for 40 files in
@@ -252,7 +338,7 @@ libraries[tinymce-civicrm][directory_name] = tinymce
 
 ; CiviCRM Modules
 projects[civicrm_cron][subdir] = "contrib"
-projects[civicrm_cron][version] = "2.0-beta1"
+projects[civicrm_cron][version] = "2.0-beta2"
 
 projects[civicrm_multiday_event][subdir] = "contrib-cm"
 projects[civicrm_multiday_event][version] = "1.0-beta7"
@@ -287,19 +373,16 @@ projects[colors][subdir] = "contrib"
 projects[colors][version] = "1.0-rc1"
 
 projects[context][subdir] = "contrib"
-projects[context][version] = "3.0-beta4"
+projects[context][version] = "3.0-rc1"
 
 projects[devel][subdir] = "contrib"
 projects[devel][version] = "1.3"
 
 projects[delta][subdir] = "contrib"
-projects[delta][version] = "3.0-beta9"
+projects[delta][version] = "3.0-beta11"
 
 projects[environment_indicator][subdir] = "contrib"
 projects[environment_indicator][version] = "1.1"
-
-projects[entityreference][subdir] = "contrib"
-projects[entityreference][version] = "1.x-dev"
 
 projects[field_collection][subdir] = "contrib"
 projects[field_collection][version] = "1.0-beta5"
@@ -308,7 +391,7 @@ projects[field_permissions][subdir] = "contrib"
 projects[field_permissions][version] = "1.0-beta2"
 
 projects[flag][subdir] = "contrib"
-projects[flag][version] = "2.0"
+projects[flag][version] = "3.1"
 
 projects[fullcalendar][subdir] = "contrib"
 projects[fullcalendar][version] = "2.0"
@@ -317,7 +400,7 @@ projects[hms_field][subdir] = "contrib"
 projects[hms_field][version] = "1.2"
 
 projects[link][subdir] = "contrib"
-projects[link][version] = "1.0"
+projects[link][version] = "1.1"
 
 projects[og][subdir] = "contrib"
 projects[og][version] = "2.3"
@@ -367,13 +450,13 @@ projects[backup_migrate][subdir] = "contrib"
 projects[backup_migrate][version] = "2.7"
 
 projects[block_class][subdir] = "contrib"
-projects[block_class][version] = "2.0"
+projects[block_class][version] = "2.1"
 
 projects[css_injector][subdir] = "contrib"
 projects[css_injector][version] = "1.8"
 
 projects[ctools][subdir] = "contrib"
-projects[ctools][version] = "1.2"
+projects[ctools][version] = "1.3"
 
 projects[captcha][subdir] = "contrib"
 projects[captcha][version] = "1.0"
@@ -385,19 +468,25 @@ projects[empty_page][subdir] = "contrib"
 projects[empty_page][version] = "1.0"
 
 projects[entity][subdir] = "contrib"
-projects[entity][version] = "1.1"
+projects[entity][version] = "1.2"
+
+projects[entityreference][subdir] = "contrib"
+projects[entityreference][version] = "1.x-dev"
 
 projects[features][subdir] = "contrib"
-projects[features][version] = "2.0-beta1"
+projects[features][version] = "2.0-rc3"
 
 projects[field_group][subdir] = "contrib"
 projects[field_group][version] = "2.x-dev"
 
 projects[fitvids][subdir] = "contrib"
-projects[fitvids][version] = "1.12"
+projects[fitvids][version] = "1.14"
 
 projects[flexslider][subdir] = "contrib"
-projects[flexslider][version] = "2.0-alpha1"
+projects[flexslider][version] = "2.0-alpha3"
+
+projects[flexslider_views_slideshow][subdir] = "contrib"
+projects[flexslider_views_slideshow][version] = "2.x-dev" 
 
 projects[fontyourface][subdir] = "contrib"
 projects[fontyourface][version] = "2.8"
@@ -425,7 +514,7 @@ projects[libraries][subdir] = "contrib"
 projects[libraries][version] = "2.1"
 
 projects[module_filter][subdir] = "contrib"
-projects[module_filter][version] = "1.7"
+projects[module_filter][version] = "1.8"
 
 projects[menu_attributes][subdir] = "contrib"
 projects[menu_attributes][version] = "1.0-rc2"
@@ -446,13 +535,13 @@ projects[profile_switcher][subdir] = "contrib"
 projects[profile_switcher][version] = "1.0-alpha1"
 
 projects[recaptcha][subdir] = "contrib"
-projects[recaptcha][version] = "1.9"
+projects[recaptcha][version] = "1.10"
 
 projects[strongarm][subdir] = "contrib"
 projects[strongarm][version] = "2.0"
 
 projects[token][subdir] = "contrib"
-projects[token][version] = "1.4"
+projects[token][version] = "1.5"
 
 projects[views][subdir] = "contrib"
 projects[views][version] = "3.7"
@@ -474,7 +563,7 @@ projects[wysiwyg][version] = "2.2"
 
 ; Themes
 projects[omega][version] = "3.1"
-projects[zen][version] = "5.1"
+projects[zen][version] = "5.4"
 projects[cm_theme][version] = "2.x-dev"
 
 ;Libraries
@@ -506,13 +595,14 @@ projects[cm_show_vod][version] = "2.x-dev"
 
 ; Contrib Modules
 projects[file_entity][subdir] = "contrib"
-projects[file_entity][version] = "2.0-alpha1"
+projects[file_entity][version] = "2.0-alpha2"
 
 projects[media][subdir] = "contrib"
 projects[media][version] = "2.0-alpha1"
 
 projects[media_youtube][subdir] = "contrib"
-projects[media_youtube][version] = "2.0-rc2"
+projects[media_youtube][version] = "2.0-rc3"
+projects[media_youtube][patch][2062695] = "https://drupal.org/files/2062695-default_image_styles.patch"
 
 projects[media_vimeo][subdir] = "contrib"
 projects[media_vimeo][version] = "2.x-dev"
@@ -553,3 +643,7 @@ projects[job_scheduler][version] = "2.0-alpha3"
 
 projects[feeds_media_internet_files][subdir] = "contrib-cm"
 projects[feeds_media_internet_files][version] = "2.x-dev"
+
+projects[feeds_mediarss][subdir] = "contrib"
+projects[feeds_mediarss][version] = "2.x-dev"
+
