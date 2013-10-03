@@ -9,7 +9,7 @@ core = 7.23
 
 libraries[civicrm][download][type] = get
 ;libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.4.alpha3-starterkit.tgz"
-libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.3.6-starterkit.tgz"
+libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.3.7-starterkit.tgz"
 libraries[civicrm][destination] = modules
 libraries[civicrm][directory_name] = civicrm
 
@@ -332,6 +332,9 @@ libraries[tinymce-civicrm][directory_name] = tinymce
 ; ====== MODERATE =========
 
 ; CiviCRM Modules
+projects[civicrm_clear_all_caches][subdir] = "contrib"
+projects[civicrm_clear_all_caches][version] = "1.0-beta1"
+
 projects[civicrm_cron][subdir] = "contrib"
 projects[civicrm_cron][version] = "2.0-beta2"
 
@@ -386,7 +389,7 @@ projects[field_permissions][subdir] = "contrib"
 projects[field_permissions][version] = "1.0-beta2"
 
 projects[flag][subdir] = "contrib"
-projects[flag][version] = "3.1"
+projects[flag][version] = "3.2"
 
 projects[fullcalendar][subdir] = "contrib"
 projects[fullcalendar][version] = "2.0"
@@ -412,6 +415,9 @@ projects[socialmedia][version] = "1.0-beta13"
 projects[views_accordion][subdir] = "contrib"
 projects[views_accordion][version] = "1.0-rc2"
 
+projects[webform_civicrm][subdir] = "contrib"
+projects[webform_civicrm][version] = "3.6"
+
 ;Libraries
 
 libraries[fullcalendar][download][type] = get
@@ -425,6 +431,9 @@ libraries[fullcalendar][directory_name] = fullcalendar-download
 ; ====== EASY =========
 
 ; Community Media Modules
+projects[cm_airing][subdir] = "contrib-cm"
+projects[cm_airing][version] = "3.0-alpha1"
+
 projects[cm_checklist][subdir] = "contrib-cm"
 projects[cm_checklist][version] = "1.x-dev"
 
@@ -458,6 +467,9 @@ projects[captcha][version] = "1.0"
 
 projects[creativecommons][subdir] = "contrib"
 projects[creativecommons][version] = "2.x-dev"
+
+projects[date][subdir] = "contrib"
+projects[date][version] = "2.6"
 
 projects[empty_page][subdir] = "contrib"
 projects[empty_page][version] = "1.0"
@@ -593,7 +605,7 @@ projects[file_entity][subdir] = "contrib"
 projects[file_entity][version] = "2.0-alpha2"
 
 projects[media][subdir] = "contrib"
-projects[media][version] = "2.0-alpha1"
+projects[media][version] = "2.0-alpha2"
 
 projects[media_youtube][subdir] = "contrib"
 projects[media_youtube][version] = "2.0-rc3"

@@ -8,9 +8,9 @@ package = Media
 configure = admin/config/media/jupload
 
 
-; Information added by drupal.org packaging script on 2012-09-14
+; Information added by drupal.org packaging script on 2013-09-30
 version = "7.x-1.0-beta1+0-dev"
 core = "7.x"
 project = "jupload"
-datestamp = "1347583388"
+datestamp = "1380584257"
 
