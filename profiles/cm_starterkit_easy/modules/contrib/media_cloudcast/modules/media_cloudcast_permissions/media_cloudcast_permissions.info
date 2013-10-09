@@ -8,9 +8,9 @@ dependencies[] = media_cloudcast
 
 configure = admin/config/media/media-cloudcast-permissions
 
-; Information added by drupal.org packaging script on 2013-06-17
-version = "7.x-2.0-alpha1+4-dev"
+; Information added by drupal.org packaging script on 2013-10-01
+version = "7.x-2.0-alpha1+5-dev"
 core = "7.x"
 project = "media_cloudcast"
-datestamp = "1371475741"
+datestamp = "1380586193"
 

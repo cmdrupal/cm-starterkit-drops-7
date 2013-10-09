@@ -8,7 +8,7 @@ core = 7.23
 ; ====== CIVICRM RELATED =========
 
 libraries[civicrm][download][type] = get
-;libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.4.alpha3-starterkit.tgz"
+;libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.4.beta4-starterkit.tgz"
 libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.3.7-starterkit.tgz"
 libraries[civicrm][destination] = modules
 libraries[civicrm][directory_name] = civicrm
@@ -23,7 +23,7 @@ libraries[civicrm][patch][1940074] = http://drupal.org/files/1940074-openFlashCh
 libraries[civicrm][patch][1967972] = http://drupal.org/files/1967972-bootsrap-fixes.patch
 
 ;PANTHEON RELATED PATCHES
-libraries[civicrm][patch][2063371] = http://drupal.org/files/2063371-add-modulePath-var.patch
+libraries[civicrm][patch][2063371] = https://drupal.org/files/2063371-add-modulePath-var-4-4.patch
 libraries[civicrm][patch][1978796] = http://drupal.org/files/1978796-session.save-as_file.patch
 libraries[civicrm][patch][1978838] = http://drupal.org/files/1978838-pre-populate-db-settings.patch
 
@@ -431,9 +431,6 @@ libraries[fullcalendar][directory_name] = fullcalendar-download
 ; ====== EASY =========
 
 ; Community Media Modules
-projects[cm_airing][subdir] = "contrib-cm"
-projects[cm_airing][version] = "3.0-alpha1"
-
 projects[cm_checklist][subdir] = "contrib-cm"
 projects[cm_checklist][version] = "1.x-dev"
 
@@ -468,29 +465,26 @@ projects[captcha][version] = "1.0"
 projects[creativecommons][subdir] = "contrib"
 projects[creativecommons][version] = "2.x-dev"
 
-projects[date][subdir] = "contrib"
-projects[date][version] = "2.6"
-
 projects[empty_page][subdir] = "contrib"
 projects[empty_page][version] = "1.0"
 
 projects[entity][subdir] = "contrib"
-projects[entity][version] = "1.2"
+projects[entity][version] = "1.2"  
 
 projects[entityreference][subdir] = "contrib"
 projects[entityreference][version] = "1.x-dev"
 
 projects[features][subdir] = "contrib"
-projects[features][version] = "2.0-rc3"
+projects[features][version] = "2.0-rc5"
 
 projects[field_group][subdir] = "contrib"
-projects[field_group][version] = "2.x-dev"
+projects[field_group][version] = "1.3"
 
 projects[fitvids][subdir] = "contrib"
 projects[fitvids][version] = "1.14"
 
 projects[flexslider][subdir] = "contrib"
-projects[flexslider][version] = "2.0-alpha3"
+projects[flexslider][version] = "2.0-alpha3"  
 
 projects[flexslider_views_slideshow][subdir] = "contrib"
 projects[flexslider_views_slideshow][version] = "2.x-dev" 
@@ -509,7 +503,7 @@ projects[imce][version] = "1.7"
 
 projects[imce_wysiwyg][subdir] = "contrib"
 projects[imce_wysiwyg][version] = "1.0"
-projects[imce_wysiwyg][patch][1794930] = "http://drupal.org/files/imce_wysiwyg-access-issue-1825850-2.patch"
+projects[imce_wysiwyg][patch][1794930] = "https://drupal.org/files/imce_wysiwyg-access-issue-1825850-2.patch"
 
 projects[jquery_update][subdir] = "contrib"
 projects[jquery_update][version] = "2.3"
@@ -533,7 +527,7 @@ projects[pbcore][subdir] = "contrib"
 projects[pbcore][version] = "1.0-beta2"
 
 projects[picture][subdir] = "contrib"
-projects[picture][version] = "1.1"
+projects[picture][version] = "1.x-dev"
 
 projects[profile2][subdir] = "contrib"
 projects[profile2][version] = "1.3"
@@ -609,7 +603,7 @@ projects[media][version] = "2.0-alpha2"
 
 projects[media_youtube][subdir] = "contrib"
 projects[media_youtube][version] = "2.0-rc3"
-projects[media_youtube][patch][2062695] = "http://drupal.org/files/2062695-default_image_styles.patch"
+projects[media_youtube][patch][2062695] = "https://drupal.org/files/2062695-default_image_styles.patch"
 
 projects[media_vimeo][subdir] = "contrib"
 projects[media_vimeo][version] = "2.x-dev"
@@ -643,7 +637,7 @@ projects[cm_vod_feed][version] = "2.0-beta1"
 
 projects[feeds][subdir] = "contrib"
 projects[feeds][version] = "2.x-dev"
-projects[feeds][patch][1033202] = "http://drupal.org/files/feeds_entity_processor-1033202-203.patch"
+projects[feeds][patch][1033202] = "https://drupal.org/files/feeds_entity_processor-1033202-203.patch"
 
 projects[job_scheduler][subdir] = "contrib"
 projects[job_scheduler][version] = "2.0-alpha3"

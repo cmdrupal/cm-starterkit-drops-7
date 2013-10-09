@@ -7,89 +7,53 @@
 include_once('cm_show_vod.features.inc');
 
 /**
- * Implementation of hook_node_info().
- */
-function cm_show_vod_node_info() {
-  $items = array(
-    'cm_show_vod' => array(
-      'name' => t('Video on Demand'),
-      'base' => 'node_content',
-      'description' => '',
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'help' => '',
-    ),
-  );
-  return $items;
-}
-
-/**
  * Implementation of hook_field_default_fields().
  */
 function cm_show_vod_field_default_fields() {
   $fields = array();
 
-  // Exported field: 'node-cm_show-field_cm_show_vod_ref'
-  $fields['node-cm_show-field_cm_show_vod_ref'] = array(
+  // Exported field: 'node-cm_show-field_show_vod'.
+  $fields['node-cm_show-field_show_vod'] = array(
     'field_config' => array(
       'active' => '1',
       'cardinality' => '1',
       'deleted' => '0',
       'entity_types' => array(),
-      'field_name' => 'field_cm_show_vod_ref',
+      'field_name' => 'field_show_vod',
       'foreign keys' => array(
-        'node' => array(
+        'fid' => array(
           'columns' => array(
-            'target_id' => 'nid',
+            'fid' => 'fid',
           ),
-          'table' => 'node',
+          'table' => 'file_managed',
         ),
       ),
       'indexes' => array(
-        'target_id' => array(
-          0 => 'target_id',
+        'fid' => array(
+          0 => 'fid',
         ),
       ),
-      'module' => 'entityreference',
+      'locked' => '0',
+      'module' => 'file',
       'settings' => array(
-        'handler' => 'base',
-        'handler_settings' => array(
-          'behaviors' => array(
-            'views-select-list' => array(
-              'status' => 0,
-            ),
-          ),
-          'sort' => array(
-            'direction' => 'ASC',
-            'field' => 'none',
-            'property' => 'fid',
-            'type' => 'none',
-          ),
-          'target_bundles' => array(
-            'video' => 'video',
-          ),
-        ),
-        'handler_submit' => 'Change handler',
-        'profile2_private' => FALSE,
-        'target_type' => 'file',
+        'display_default' => 0,
+        'display_field' => 0,
+        'uri_scheme' => 'public',
       ),
       'translatable' => '0',
-      'type' => 'entityreference',
+      'type' => 'file',
     ),
     'field_instance' => array(
       'bundle' => 'cm_show',
-      'default_value' => NULL,
       'deleted' => '0',
       'description' => '',
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'entityreference',
-          'settings' => array(
-            'link' => FALSE,
-          ),
-          'type' => 'entityreference_label',
-          'weight' => 4,
+          'module' => 'file',
+          'settings' => array(),
+          'type' => 'file_default',
+          'weight' => 0,
         ),
         'teaser' => array(
           'label' => 'above',
@@ -99,25 +63,134 @@ function cm_show_vod_field_default_fields() {
         ),
       ),
       'entity_type' => 'node',
-      'field_name' => 'field_cm_show_vod_ref',
+      'field_name' => 'field_show_vod',
       'label' => 'VOD',
       'required' => 0,
       'settings' => array(
+        'description_field' => 0,
+        'file_directory' => '',
+        'file_extensions' => 'txt',
+        'max_filesize' => '',
         'user_register_form' => FALSE,
       ),
       'widget' => array(
         'active' => 1,
-        'module' => 'entityreference',
+        'module' => 'media',
         'settings' => array(
-          'match_operator' => 'CONTAINS',
-          'path' => '',
+          'allowed_schemes' => array(
+            'private' => 0,
+            'public' => 0,
+            'vimeo' => 'vimeo',
+            'youtube' => 'youtube',
+          ),
+          'allowed_types' => array(
+            'audio' => 0,
+            'document' => 0,
+            'image' => 0,
+            'video' => 'video',
+          ),
+          'browser_plugins' => array(
+            'media_default--media_browser_1' => 'media_default--media_browser_1',
+            'media_default--media_browser_my_files' => 0,
+            'media_internet' => 'media_internet',
+            'upload' => 0,
+            'youtube' => 0,
+          ),
+          'progress_indicator' => 'throbber',
+        ),
+        'type' => 'media_generic',
+        'weight' => '-4',
+      ),
+    ),
+  );
+  
+  // Exported field: 'file-video-field_title'.
+  $fields['file-video-field_title'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_title',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => '255',
+        'profile2_private' => FALSE,
+      ),
+      'translatable' => '0',
+      'type' => 'text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'video',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 0,
+        ),
+        'preview' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'wysiwyg' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'file',
+      'field_name' => 'field_title',
+      'label' => 'Title',
+      'required' => 0,
+      'settings' => array(
+        'text_processing' => '0',
+        'user_register_form' => FALSE,
+        'wysiwyg_override' => 1,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
           'size' => '60',
         ),
-        'type' => 'entityreference_autocomplete',
-        'weight' => '1',
+        'type' => 'text_textfield',
+        'weight' => '0',
       ),
     ),
   );
 
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Title');
+  t('VOD');
+  
   return $fields;
 }

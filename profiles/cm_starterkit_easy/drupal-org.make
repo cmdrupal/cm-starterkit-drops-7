@@ -24,13 +24,13 @@ projects[backup_migrate][subdir] = "contrib"
 projects[backup_migrate][version] = "2.7"
 
 projects[block_class][subdir] = "contrib"
-projects[block_class][version] = "2.0"
+projects[block_class][version] = "2.1"
 
 projects[css_injector][subdir] = "contrib"
 projects[css_injector][version] = "1.8"
 
 projects[ctools][subdir] = "contrib"
-projects[ctools][version] = "1.2"
+projects[ctools][version] = "1.3"
 
 projects[captcha][subdir] = "contrib"
 projects[captcha][version] = "1.0"
@@ -42,19 +42,25 @@ projects[empty_page][subdir] = "contrib"
 projects[empty_page][version] = "1.0"
 
 projects[entity][subdir] = "contrib"
-projects[entity][version] = "1.1"
+projects[entity][version] = "1.2"
+
+projects[entityreference][subdir] = "contrib"
+projects[entityreference][version] = "1.x-dev"
 
 projects[features][subdir] = "contrib"
-projects[features][version] = "2.0-beta1"
+projects[features][version] = "2.0-rc5"
 
 projects[field_group][subdir] = "contrib"
-projects[field_group][version] = "2.x-dev"
+projects[field_group][version] = "1.3"
 
 projects[fitvids][subdir] = "contrib"
-projects[fitvids][version] = "1.12"
+projects[fitvids][version] = "1.14"
 
 projects[flexslider][subdir] = "contrib"
-projects[flexslider][version] = "2.0-alpha1"
+projects[flexslider][version] = "2.0-alpha3"
+
+projects[flexslider_views_slideshow][subdir] = "contrib"
+projects[flexslider_views_slideshow][version] = "2.x-dev" 
 
 projects[fontyourface][subdir] = "contrib"
 projects[fontyourface][version] = "2.8"
@@ -82,7 +88,7 @@ projects[libraries][subdir] = "contrib"
 projects[libraries][version] = "2.1"
 
 projects[module_filter][subdir] = "contrib"
-projects[module_filter][version] = "1.7"
+projects[module_filter][version] = "1.8"
 
 projects[menu_attributes][subdir] = "contrib"
 projects[menu_attributes][version] = "1.0-rc2"
@@ -94,7 +100,7 @@ projects[pbcore][subdir] = "contrib"
 projects[pbcore][version] = "1.0-beta2"
 
 projects[picture][subdir] = "contrib"
-projects[picture][version] = "1.1"
+projects[picture][version] = "1.x-dev"
 
 projects[profile2][subdir] = "contrib"
 projects[profile2][version] = "1.3"
@@ -103,13 +109,13 @@ projects[profile_switcher][subdir] = "contrib"
 projects[profile_switcher][version] = "1.0-alpha1"
 
 projects[recaptcha][subdir] = "contrib"
-projects[recaptcha][version] = "1.9"
+projects[recaptcha][version] = "1.10"
 
 projects[strongarm][subdir] = "contrib"
 projects[strongarm][version] = "2.0"
 
 projects[token][subdir] = "contrib"
-projects[token][version] = "1.4"
+projects[token][version] = "1.5"
 
 projects[views][subdir] = "contrib"
 projects[views][version] = "3.7"
@@ -131,7 +137,7 @@ projects[wysiwyg][version] = "2.2"
 
 ; Themes
 projects[omega][version] = "3.1"
-projects[zen][version] = "5.1"
+projects[zen][version] = "5.4"
 projects[cm_theme][version] = "2.x-dev"
 
 ;Libraries
@@ -163,13 +169,14 @@ projects[cm_show_vod][version] = "2.x-dev"
 
 ; Contrib Modules
 projects[file_entity][subdir] = "contrib"
-projects[file_entity][version] = "2.0-alpha1"
+projects[file_entity][version] = "2.0-alpha2"
 
 projects[media][subdir] = "contrib"
-projects[media][version] = "2.0-alpha1"
+projects[media][version] = "2.0-alpha2"
 
 projects[media_youtube][subdir] = "contrib"
-projects[media_youtube][version] = "2.0-rc2"
+projects[media_youtube][version] = "2.0-rc3"
+projects[media_youtube][patch][2062695] = "https://drupal.org/files/2062695-default_image_styles.patch"
 
 projects[media_vimeo][subdir] = "contrib"
 projects[media_vimeo][version] = "2.x-dev"
@@ -210,3 +217,6 @@ projects[job_scheduler][version] = "2.0-alpha3"
 
 projects[feeds_media_internet_files][subdir] = "contrib-cm"
 projects[feeds_media_internet_files][version] = "2.x-dev"
+
+projects[feeds_mediarss][subdir] = "contrib"
+projects[feeds_mediarss][version] = "2.x-dev"

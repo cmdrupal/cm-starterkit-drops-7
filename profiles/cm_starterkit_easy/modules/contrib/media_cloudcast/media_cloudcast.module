@@ -23,16 +23,16 @@ include_once DRUPAL_ROOT . '/' . drupal_get_path('module', 'media_cloudcast') . 
 /**
  * Implements hook_permission().
  */
-function media_cloudcast_permission() {
+/*function media_cloudcast_permission() {
 
-}
+}*/
 
 /**
  * Implements hook_menu().
  */
-function media_cloudcast_menu() {
+/*function media_cloudcast_menu() {
 
-}
+}*/
 
 /**
  * Implements hook_media_internet_providers().
@@ -389,20 +389,4 @@ function media_cloudcast_valid_id($id, $refresh = FALSE) {
   $ids[$id] = ($response->code == 200);
   cache_set('media_cloudcast:id:' . $id, $ids[$id], 'cache_media_xml', media_variable_get('xml_cache_expire', 3600));
   return $ids[$id];
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- *
- * @see node_type_form()
- * @see media_cloudcast_add_bundle_settings()
- */
-function media_cloudcast_form_node_type_form_alter(&$form, $form_state) {
-  $node_type = isset($form['#node_type']->type) ? $form['#node_type']->type : '';
-  module_load_include('inc', 'media_cloudcast', 'includes/media_cloudcast.admin');
-
-  $media_cloudcast_node_types = array_filter(variable_get('media_cloudcast_node_types', array()));
-  if (in_array($node_type, $media_cloudcast_node_types)) {
-    media_cloudcast_add_bundle_settings($form, $form_state, 'node', $node_type);
-  }
 }

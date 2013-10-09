@@ -1,12 +1,11 @@
 name = "Show VOD"
-description = "Defines cm_show_vod Content Type and entity reference field on cm_show"
+description = "Defines cm_show_vod file reference field on cm_show and title on Video file type"
 package = "Community Media"
 php = "5.2.4"
 project = "cm_show_vod"
 core = "7.x"
 
 dependencies[] = "cm_show"
-dependencies[] = "entityreference"
 dependencies[] = "features"
 dependencies[] = "file"
 dependencies[] = "file_entity"
@@ -23,9 +22,10 @@ features[variable][] = "node_options_cm_show_vod"
 features[variable][] = "node_preview_cm_show_vod"
 features[variable][] = "node_submitted_cm_show_vod"
 
-; Information added by drupal.org packaging script on 2012-10-30
+
+; Information added by drupal.org packaging script on 2013-09-30
 version = "7.x-2.x-dev"
 core = "7.x"
 project = "cm_show_vod"
-datestamp = "1351557670"
+datestamp = "1380559183"
 
