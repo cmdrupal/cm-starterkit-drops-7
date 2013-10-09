@@ -1,0 +1,14 @@
+name = CiviCRM User Reference Field
+description = Makes a Drupal User Reference Field, but uses CiviCRM contact look to search by part of the first or last name.
+package = CiviCRM
+core = 7.x
+dependencies[] = field
+dependencies[] = references
+dependencies[] = options
+dependencies[] = civicrm
+; Information added by drupal.org packaging script on 2013-09-30
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "civicrm_user_reference"
+datestamp = "1380558800"
+

@@ -1,0 +1,19 @@
+; Basic information
+name = Feeds: MediaRSS + Cloudcast
+description = Adds a Cloudcast MediaRSS feed processor to the Feeds module.
+core = 7.x
+package = Feeds
+dependencies[] = "feeds_mediarss"
+
+; Files
+files[] = media_cloudcast_feeds.install
+files[] = media_cloudcast_feeds.module
+files[] = MediaCloudcastFeedsParser.inc
+
+
+; Information added by drupal.org packaging script on 2013-10-01
+version = "7.x-2.0-alpha1+5-dev"
+core = "7.x"
+project = "media_cloudcast"
+datestamp = "1380586193"
+
