@@ -1,9 +1,8 @@
-
 This module allows you to display an image in a block where the selection
 of the image is based on conditions per image.
 
 Each image, included in a node, can be shown based on node id, path,
-taxonomy, book or PHP code. Headerimage has an arbitrary node type to work
+taxonomy, book or PHP code. Headerimage has an arbitrary content type to work
 with.
 
 Multiple images (nodes) can be displayed in one block, with each image
@@ -18,14 +17,14 @@ can be controlled.
 
 * Set access rights for admin and view on the access control page.
 
-* If required create a node type to put your image in.
-  Set node type(s) and conditions types on the header image settings page
+* If required create a content type to put your image in.
+  Set content type(s) and conditions types on the header image settings page
   Structure > Header image > Settings
 
 * Create one or more blocks for header image at the add block page.
   Structure > Header image > Add block
 
-* Using the selected node type, upload one image into the node using an image
+* Using the selected content type, upload one image into the node using an image
   field.
   Image header is designed to work with a node containing only one image.
   However with custom theming you can display any node content and any
@@ -64,7 +63,7 @@ can be controlled.
   For example: path: '*' or PHP: <?php return true; ?>
 
 * If the block is (partly) not visible, check the Display settings of your
-  node type. Header image uses the teaser view or full view depending
+  content type. Header image uses the teaser view or full view depending
   on the Teaser setting.
   Administer > Content management > Content types > MyHeaderImageContentType > Display fields
 

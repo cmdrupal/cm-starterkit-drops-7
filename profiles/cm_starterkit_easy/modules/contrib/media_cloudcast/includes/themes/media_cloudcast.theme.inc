@@ -131,14 +131,14 @@ function media_cloudcast_preprocess_media_cloudcast_video(&$variables) {
     else {
       $url_base = 'cloudcast.com';
     }
-
+  */
     if ($variables['options']['protocol_specify']) {
       $protocol = $variables['options']['protocol'];
     }
     else {
       $protocol = '';
     }
-  */
+
 
     // Add some options as their own template variables.
     foreach (array('width', 'height') as $themevar) {
@@ -174,7 +174,7 @@ function media_cloudcast_preprocess_media_cloudcast_video(&$variables) {
       }
     }
 
-    $variables['url'] = url('http://vp.telvue.com/player', array('query' => $query, 'external' => TRUE));
+    $variables['url'] = url($protocol .'//vp.telvue.com/player', array('query' => $query, 'external' => TRUE));
   }
   else if ($show_thumbnail) {
     module_load_include('inc', 'media_cloudcast', '/includes/media_cloudcast.formatters.inc');

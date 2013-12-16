@@ -3,9 +3,6 @@
 /**
  * @file headerimage.module
  * Conditionally display an node in a block.
- *
- * WHISH LIST:
- *   create CCK node type at install (see: http://drupal.org/node/82908) (maybe: http://drupal.org/node/101742)
  */
 
 /**
@@ -419,15 +416,15 @@ function headerimage_eval_book($condition) {
 }
 
 /**
- * Evaluate node type condition
+ * Evaluate content type condition
  *
  * Return true if type of current node is selected
  *
  * @param $condition
- *   array of selected node types
+ *   array of selected content types
  *
  * @return
- *   true: current node type is selected
+ *   true: current content type is selected
  *   false: if not
  *   null: current page is not a node
  */
@@ -587,7 +584,7 @@ function headerimage_form_alter(&$form, &$form_state, $form_id) {
               $form['headerimage'][$name] = array(
                 '#type' => 'select',
                 '#title' => $title,
-                '#description' => t('Select one or multiple node types'),
+                '#description' => t('Select one or multiple content types'),
                 '#default_value' => isset($form['#node']->$name) ? $form['#node']->$name : '',
                 '#options' => $nodetype,
                 '#multiple' => true,
@@ -645,23 +642,27 @@ function headerimage_node_insert($node) {
 }
 
 /**
- * Implementation of hook_node_prepare().
+ * Implementation of hook_node_load().
  */
-function headerimage_node_prepare($node) {
-  if (!empty($node->type) && in_array($node->type, variable_get('headerimage_node_type', array()), true)) {
-    // Load data from database if node is edited
-    if (isset($node->nid)) {
-      $result = db_select('headerimage', 'hi')->fields('hi')->condition('nid', $node->nid)->execute()->fetchObject();
-      if ($result) {
-        $node->headerimage_block = $result->block;
-        $node->headerimage_weight = $result->weight;
-        $conditions = unserialize($result->conditions);
-        if (!empty($conditions)) {
-          foreach ($conditions as $condition => $value) {
-            $name = 'headerimage_condition_' . $condition;
-            if (!isset($node->$name)) {
-              $node->$name = $value;
-            }
+function headerimage_node_load($nodes, $types) {
+  $valid_types = variable_get('headerimage_node_type', array());
+  foreach ($nodes as $nid => $node) {
+    // Only operate on valid types.
+    if (!in_array($node->type, $valid_types, true)) {
+      continue;
+    }
+
+    // Load header image properties from the database.
+    $result = db_select('headerimage', 'hi')->fields('hi')->condition('nid', $node->nid)->execute()->fetchObject();
+    if ($result) {
+      $node->headerimage_block = $result->block;
+      $node->headerimage_weight = $result->weight;
+      $conditions = unserialize($result->conditions);
+      if (!empty($conditions)) {
+        foreach ($conditions as $condition => $value) {
+          $name = 'headerimage_condition_' . $condition;
+          if (!isset($node->$name)) {
+            $node->$name = $value;
           }
         }
       }
@@ -730,19 +731,19 @@ function headerimage_help($path, $arg) {
       $block_in_region = $block_in_region ? t('(DONE)') : t('(TO DO)');
 
       $output = "<p>" . t('Header Image allows you to to display an image on selected pages. It can display one image at the front page, a different one at FAQ pages and yet another at all other pages.') . "</p>\n";
-      $output .= "<p>" . t('Visibility of each image, included in a node, can be determined by node ID, path, taxonomy, book, node type or custom PHP code. Header Image uses an arbitrary node type.') . "</p>\n";
+      $output .= "<p>" . t('Visibility of each image, included in a node, can be determined by node ID, path, taxonomy, book, content type or custom PHP code. Header Image uses an arbitrary content type.') . "</p>\n";
       $output .= "<p>" . t('Multiple images (nodes) can be displayed in one block, with each image having its own conditions. Using a weight per node the order of selection can be controlled.') . "</p>\n";
       $output .= "<h2>" . t('Installation') . "</h2>\n";
       $output .= "<p>" . t('<ol>
 <li>Set up <a href="!permissions">permissions</a>.</li>
-<li>Optionally <a href="!create_node_type">create a node type</a> which will contain the header image.</li>
-<li><a href="!set_node_type">Select a node type</a> to be used as Header Image. %status_type</li>
+<li>Optionally <a href="!create_content_type">create a content type</a> which will contain the header image.</li>
+<li><a href="!set_node_type">Select a content type</a> to be used as Header Image. %status_type</li>
 <li><a href="!create_header_image_block">Create a Header Image block</a>. %status_create</li>
 <li>Create Header Image nodes. Select a Header Image block and set display conditions for each node. %status_assign</li>
 <li><a href="!assign_header_image_block">Assign the Header Image block</a> to a region. %status_region</li>
 </ol>', array(
           '!permissions' => url('admin/user/permissions'),
-          '!create_node_type' => url('admin/content/types/add'),
+          '!create_content_type' => url('admin/content/types/add'),
           '!set_node_type' => url('admin/settings/headerimage/settings'),
           '%status_type' => $type_is_set,
           '!create_header_image_block' => url('admin/settings/headerimage'),
@@ -769,7 +770,7 @@ function headerimage_get_condition_types() {
     'url' => t('URL'),
     'taxonomy' => t('Taxonomy'),
     'book' => t('Book'),
-    'nodetype' => t('Node type'),
+    'nodetype' => t('Content type'),
     'php' => t('PHP'),
   );
 }
@@ -834,4 +835,13 @@ function template_preprocess_headerimage_block(&$vars) {
   } else {
     $vars['content'] = drupal_render($node->content);
   }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function headerimage_views_api() {
+  return array(
+    'api' => 3,
+  );
 }

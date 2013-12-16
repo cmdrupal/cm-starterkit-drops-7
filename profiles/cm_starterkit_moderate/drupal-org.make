@@ -3,33 +3,37 @@
 ; locally before committing to the drupal-org.make. 
 
 api = 2
-core = 7.23
+core = 7.24
 
 ; ====== CIVICRM RELATED =========
 
 libraries[civicrm][download][type] = get
-;libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.4.beta4-starterkit.tgz"
-libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.3.7-starterkit.tgz"
+libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.4.3-starterkit.tgz"
+;libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.3.7-starterkit.tgz"
 libraries[civicrm][destination] = modules
 libraries[civicrm][directory_name] = civicrm
 
 ;PATCHES THAT CHANGED BETWEEN 4.3 and 4.4
-;libraries[civicrm][patch][1978142] = http://drupal.org/files/2082713-pantheon-settings-4-4.patch
-libraries[civicrm][patch][1978142] = http://drupal.org/files/1978142-pantheon-settings-12.patch
+libraries[civicrm][patch][1978142] = http://drupal.org/files/2082713-pantheon-settings-4-4-2.patch
+;libraries[civicrm][patch][1978142] = http://drupal.org/files/1978142-pantheon-settings-12.patch
 
 ;PATCHES THAT SHOULD BE ADDRESSED IN FUTURE CIVICRM RELEASES
 libraries[civicrm][patch][1844558] = http://drupal.org/files/1844558-run-civicrm-from-profile-dir-config-2.patch
 libraries[civicrm][patch][1940074] = http://drupal.org/files/1940074-openFlashChart_tpl_javascript-4.patch
 libraries[civicrm][patch][1967972] = http://drupal.org/files/1967972-bootsrap-fixes.patch
+libraries[civicrm][patch][2130213] = http://drupal.org/files/issues/2130213-ignore-timezone-on-install-2.patch
+libraries[civicrm][patch][2153441] = https://drupal.org/files/issues/2153441_formatresourceurl-4.patch
+libraries[civicrm][patch][] = https://drupal.org/files/issues/2153441_formatresourceurl-5.patch
 
 ;PANTHEON RELATED PATCHES
-libraries[civicrm][patch][2063371] = https://drupal.org/files/2063371-add-modulePath-var-4-4.patch
+libraries[civicrm][patch][2063371] = http://drupal.org/files/2063371-add-modulePath-var-4-4.patch
 libraries[civicrm][patch][1978796] = http://drupal.org/files/1978796-session.save-as_file.patch
-libraries[civicrm][patch][1978838] = http://drupal.org/files/1978838-pre-populate-db-settings.patch
+libraries[civicrm][patch][1978838] = http://drupal.org/files/issues/1978838-pre-populate-db-settings-2.patch
 
 ;IMPROVING PROFILE INSTALL UX WHEN INSTALLING FROM A PROFILE
-libraries[civicrm][patch][1849424] = http://drupal.org/files/1849424-use-vars-in-link.patch
+libraries[civicrm][patch][1849424] = https://drupal.org/files/issues/1849424-use-vars-in-link-2.patch
 libraries[civicrm][patch][] = http://drupal.org/files/1849424-pass-vars-in-link-2.patch
+libraries[civicrm][patch][2130213] = http://drupal.org/files/issues/2130213-ignore-timezone-on-install-2.patch
 
 ;PATCHES THAT ADD LIBRARIES BACK
 libraries[jquery][download][type] = get
@@ -37,7 +41,7 @@ libraries[jquery][download][url] = "http://code.jquery.com/jquery-1.8.3.min.js"
 libraries[jquery][destination] = "modules/civicrm/packages"
 libraries[jquery][directory_name] = jquery
 libraries[jquery][download][filename] = jquery-1.8.3.min.js
-libraries[jquery][patch][1787976] = http://drupal.org/files/1787976-jquery-missing-files-12.patch
+libraries[jquery][patch][1787976] = http://drupal.org/files/1787976-jquery-missing-files-13.patch
 libraries[jquery][patch][] = http://drupal.org/files/1787976-updated-fo-4-3-3.patch
 libraries[jquery][patch][] = http://drupal.org/files/textarearesizer-4.patch
 ; JQuery Notify and Validate were whitelisted
@@ -306,8 +310,15 @@ libraries[phpids_log_interface][download][filename] = Interface.php
 libraries[phpids_log_interface][directory_name] = Log
 libraries[phpids_log_interface][destination] = "modules/civicrm/packages/IDS"
 
+; This file is added to create the sites/all/extensions directory
+libraries[cache][download][type] = get
+libraries[cache][download][url] = "https://raw.github.com/PHPIDS/PHPIDS/master/README.md"
+libraries[cache][download][filename] = timestamp.txt
+libraries[cache][destination] = extensions
+libraries[cache][patch][1980088] = https://drupal.org/files/1980088-create-extensions-dir-4.patch
+
 libraries[htmlpurifier][download][type] = get
-libraries[htmlpurifier][download][url] = "http://repo.or.cz/w/htmlpurifier.git/snapshot/33a1efbb2d6e234c0143523e9273afec8b84ce8d.tar.gz"
+libraries[htmlpurifier][download][url] = "http://htmlpurifier.org/releases/htmlpurifier-4.6.0.tar.gz"
 libraries[htmlpurifier][destination] = "modules/civicrm/packages/IDS/vendors"
 libraries[htmlpurifier][directory_name] = htmlpurifier
 
@@ -347,8 +358,11 @@ projects[civicrm_user_reference][version] = "1.x-dev"
 projects[civicrm_realname][subdir] = "contrib"
 projects[civicrm_realname][version] = "1.0"
 
+projects[options_element][subdir] = "contrib"
+projects[options_element][version] = "1.10"
+
 projects[webform_civicrm][subdir] = "contrib"
-projects[webform_civicrm][version] = "3.6"
+projects[webform_civicrm][version] = "4.3"
 
 ; Community Media Modules
 projects[cm_project][subdir] = "contrib-cm"
@@ -425,12 +439,12 @@ libraries[fullcalendar][download][url] = "http://arshaw.com/fullcalendar/downloa
 libraries[fullcalendar][destination] = libraries
 libraries[fullcalendar][directory_name] = fullcalendar-download
 
-; ===== REMOVE IN FUTURE RELEASES =========
-
-
-; ====== EASY =========
+; ====== EASY ==========
 
 ; Community Media Modules
+projects[cm_airing][subdir] = "contrib-cm"
+projects[cm_airing][version] = "3.x-alpha1"
+
 projects[cm_checklist][subdir] = "contrib-cm"
 projects[cm_checklist][version] = "1.x-dev"
 
@@ -440,18 +454,30 @@ projects[cm_header][version] = "1.0-alpha1"
 projects[cm_show][subdir] = "contrib-cm"
 projects[cm_show][version] = "1.x-dev"
 
+projects[cm_show_vod][subdir] = "contrib-cm"
+projects[cm_show_vod][version] = "2.x-dev"
+
 projects[cm_slideshow][subdir] = "contrib-cm"
 projects[cm_slideshow][version] = "2.x-dev"
+
+projects[cm_vod_feed][subdir] = "contrib-cm"
+projects[cm_vod_feed][version] = "2.0-beta1"
 
 projects[om_crew_connect][subdir] = "contrib-cm"
 projects[om_crew_connect][version] = "2.x-dev"
 
-; Contrib Modules
+; Contribb Modules
 projects[backup_migrate][subdir] = "contrib"
-projects[backup_migrate][version] = "2.7"
+projects[backup_migrate][version] = "2.8"
 
 projects[block_class][subdir] = "contrib"
 projects[block_class][version] = "2.1"
+
+projects[breakpoints][subdir] = "contrib"
+projects[breakpoints][version] = "1.1"
+
+projects[commentsblock][subdir] = "contrib"
+projects[commentsblock][version] = "2.2"
 
 projects[css_injector][subdir] = "contrib"
 projects[css_injector][version] = "1.8"
@@ -465,6 +491,12 @@ projects[captcha][version] = "1.0"
 projects[creativecommons][subdir] = "contrib"
 projects[creativecommons][version] = "2.x-dev"
 
+projects[date][subdir] = "contrib"
+projects[date][version] = "2.6"
+
+projects[draggable_captcha][subdir] = "contrib"
+projects[draggable_captcha][version] = "1.2"
+
 projects[empty_page][subdir] = "contrib"
 projects[empty_page][version] = "1.0"
 
@@ -475,10 +507,20 @@ projects[entityreference][subdir] = "contrib"
 projects[entityreference][version] = "1.x-dev"
 
 projects[features][subdir] = "contrib"
-projects[features][version] = "2.0-rc5"
+projects[features][version] = "2.0"
+
+projects[feeds][subdir] = "contrib"
+projects[feeds][version] = "2.x-dev"
+projects[feeds][patch][1033202] = "http://drupal.org/files/feeds_entity_processor-1033202-203.patch"
+
+projects[feeds_mediarss][subdir] = "contrib"
+projects[feeds_mediarss][version] = "2.x-dev"
 
 projects[field_group][subdir] = "contrib"
 projects[field_group][version] = "1.3"
+
+projects[file_entity][subdir] = "contrib"
+projects[file_entity][version] = "2.0-alpha3"
 
 projects[fitvids][subdir] = "contrib"
 projects[fitvids][version] = "1.14"
@@ -493,17 +535,24 @@ projects[fontyourface][subdir] = "contrib"
 projects[fontyourface][version] = "2.8"
 
 projects[headerimage][subdir] = "contrib"
-projects[headerimage][version] = "1.3"
+projects[headerimage][version] = "1.4"
+
+projects[hms_field][subdir] = "contrib"
+projects[hms_field][version] = "2.x-dev"
+projects[hms_field][patch][2119623] = "http://drupal.org/files/2119623-hidden_field_empty_error.patch"
 
 projects[google_analytics][subdir] = "contrib"
-projects[google_analytics][version] = "1.3"
+projects[google_analytics][version] = "1.4"
 
 projects[imce][subdir] = "contrib"
 projects[imce][version] = "1.7"
 
 projects[imce_wysiwyg][subdir] = "contrib"
 projects[imce_wysiwyg][version] = "1.0"
-projects[imce_wysiwyg][patch][1794930] = "https://drupal.org/files/imce_wysiwyg-access-issue-1825850-2.patch"
+projects[imce_wysiwyg][patch][1794930] = "http://drupal.org/files/imce_wysiwyg-access-issue-1825850-2.patch"
+
+projects[job_scheduler][subdir] = "contrib"
+projects[job_scheduler][version] = "2.0-alpha3"
 
 projects[jquery_update][subdir] = "contrib"
 projects[jquery_update][version] = "2.3"
@@ -514,11 +563,35 @@ projects[legal][version] = "1.x-dev"
 projects[libraries][subdir] = "contrib"
 projects[libraries][version] = "2.1"
 
+projects[media][subdir] = "contrib"
+projects[media][version] = "2.0-alpha3"
+
+projects[media_youtube][subdir] = "contrib"
+projects[media_youtube][version] = "2.0-rc4"
+
+projects[media_vimeo][subdir] = "contrib"
+projects[media_vimeo][version] = "2.x-dev"
+
+projects[media_bliptv][subdir] = "contrib"
+projects[media_bliptv][version] = "1.x-dev"
+
+projects[media_archive][subdir] = "contrib"
+projects[media_archive][version] = "1.x-dev"
+
+projects[media_cloudcast][subdir] = "contrib"
+projects[media_cloudcast][version] = "2.x-dev"
+
+projects[menu_expanded][subdir] = "contrib"
+projects[menu_expanded][version] = "2.2"
+
 projects[module_filter][subdir] = "contrib"
 projects[module_filter][version] = "1.8"
 
 projects[menu_attributes][subdir] = "contrib"
 projects[menu_attributes][version] = "1.0-rc2"
+
+projects[options_element][subdir] = "contrib"
+projects[options_element][version] = "1.10"
 
 projects[pathauto][subdir] = "contrib"
 projects[pathauto][version] = "1.2"
@@ -533,10 +606,7 @@ projects[profile2][subdir] = "contrib"
 projects[profile2][version] = "1.3"
 
 projects[profile_switcher][subdir] = "contrib"
-projects[profile_switcher][version] = "1.0-alpha1"
-
-projects[recaptcha][subdir] = "contrib"
-projects[recaptcha][version] = "1.10"
+projects[profile_switcher][version] = "1.0-beta1"
 
 projects[strongarm][subdir] = "contrib"
 projects[strongarm][version] = "2.0"
@@ -554,10 +624,10 @@ projects[views_send][subdir] = "contrib"
 projects[views_send][version] = "1.0-rc3"
 
 projects[views_slideshow][subdir] = "contrib"
-projects[views_slideshow][version] = "3.0"
+projects[views_slideshow][version] = "3.1"
 
 projects[webform][subdir] = "contrib"
-projects[webform][version] = "3.19"
+projects[webform][version] = "4.0-beta1"
 
 projects[wysiwyg][subdir] = "contrib"
 projects[wysiwyg][version] = "2.2"
@@ -565,7 +635,7 @@ projects[wysiwyg][version] = "2.2"
 ; Themes
 projects[omega][version] = "3.1"
 projects[zen][version] = "5.4"
-projects[cm_theme][version] = "2.x-dev"
+projects[cm_theme][version] = "2.0-beta1"
 
 ;Libraries
 libraries[ckeditor][download][type] = get
@@ -588,62 +658,4 @@ libraries[fitvids][download][url] = "https://raw.github.com/davatron5000/FitVids
 libraries[fitvids][destination] = libraries
 libraries[fitvids][directory_name] = fitvids
 
-; ====== MEDIA RELATED MODULES FROM MODERATE =========
 
-; Community Media Modules
-projects[cm_show_vod][subdir] = "contrib-cm"
-projects[cm_show_vod][version] = "2.x-dev"
-
-; Contrib Modules
-projects[file_entity][subdir] = "contrib"
-projects[file_entity][version] = "2.0-alpha2"
-
-projects[media][subdir] = "contrib"
-projects[media][version] = "2.0-alpha2"
-
-projects[media_youtube][subdir] = "contrib"
-projects[media_youtube][version] = "2.0-rc3"
-projects[media_youtube][patch][2062695] = "https://drupal.org/files/2062695-default_image_styles.patch"
-
-projects[media_vimeo][subdir] = "contrib"
-projects[media_vimeo][version] = "2.x-dev"
-
-projects[media_bliptv][subdir] = "contrib"
-projects[media_bliptv][version] = "1.x-dev"
-
-projects[media_archive][subdir] = "contrib"
-projects[media_archive][version] = "1.x-dev"
-
-projects[media_cloudcast][subdir] = "contrib"
-projects[media_cloudcast][version] = "2.x-dev"
-
-; ===== NEW MODULES USED ON OKV =========
-
-projects[breakpoints][subdir] = "contrib"
-projects[breakpoints][version] = "1.1"
-
-projects[commentsblock][subdir] = "contrib"
-projects[commentsblock][version] = "2.2"
-
-projects[menu_expanded][subdir] = "contrib"
-projects[menu_expanded][version] = "2.2"
-
-; ===== FEEDS =========
-; These are more advanced, but I think they are required to 
-; really make the easy kit useful
-
-projects[cm_vod_feed][subdir] = "contrib-cm"
-projects[cm_vod_feed][version] = "2.0-beta1"
-
-projects[feeds][subdir] = "contrib"
-projects[feeds][version] = "2.x-dev"
-projects[feeds][patch][1033202] = "https://drupal.org/files/feeds_entity_processor-1033202-203.patch"
-
-projects[job_scheduler][subdir] = "contrib"
-projects[job_scheduler][version] = "2.0-alpha3"
-
-projects[feeds_media_internet_files][subdir] = "contrib-cm"
-projects[feeds_media_internet_files][version] = "2.x-dev"
-
-projects[feeds_mediarss][subdir] = "contrib"
-projects[feeds_mediarss][version] = "2.x-dev"

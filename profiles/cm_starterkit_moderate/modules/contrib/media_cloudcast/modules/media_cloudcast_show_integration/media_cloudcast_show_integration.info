@@ -11,9 +11,9 @@ dependencies[] = telvue
 features[features_api][] = api:1
 features[field][] = node-cm_show-field_cloudcast
 
-; Information added by drupal.org packaging script on 2013-10-01
-version = "7.x-2.0-alpha1+5-dev"
+; Information added by drupal.org packaging script on 2013-10-16
+version = "7.x-2.0-alpha1+6-dev"
 core = "7.x"
 project = "media_cloudcast"
-datestamp = "1380586193"
+datestamp = "1381929271"
 

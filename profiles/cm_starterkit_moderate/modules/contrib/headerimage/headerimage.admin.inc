@@ -85,8 +85,8 @@ function headerimage_settings_form() {
 
   $form['headerimage_node_type'] = array(
    '#type' => 'checkboxes',
-   '#title' => t('Node type'),
-   '#description' => t('The node type(s) that can be used with Header Image module.'),
+   '#title' => t('Content type'),
+   '#description' => t('The Content type(s) that can be used with Header Image module.'),
    '#default_value' => variable_get('headerimage_node_type', array()),
    '#options' => $nodetype,
    '#multiple' => true,
