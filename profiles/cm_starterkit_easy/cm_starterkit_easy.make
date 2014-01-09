@@ -1,8 +1,8 @@
-core = 7.24
+core = 7.25
 api = 2
 
 ; Drupal Core
-projects[drupal][version] = "7.24"
+projects[drupal][version] = "7.25"
 
 ; ====== EASY ==========
 
@@ -66,7 +66,7 @@ projects[empty_page][subdir] = "contrib"
 projects[empty_page][version] = "1.0"
 
 projects[entity][subdir] = "contrib"
-projects[entity][version] = "1.2"  
+projects[entity][version] = "1.3"  
 
 projects[entityreference][subdir] = "contrib"
 projects[entityreference][version] = "1.x-dev"
@@ -98,6 +98,9 @@ projects[flexslider_views_slideshow][version] = "2.x-dev"
 
 projects[fontyourface][subdir] = "contrib"
 projects[fontyourface][version] = "2.8"
+
+projects[fullcalendar][subdir] = "contrib"
+projects[fullcalendar][version] = "2.0"
 
 projects[headerimage][subdir] = "contrib"
 projects[headerimage][version] = "1.4"
@@ -170,8 +173,14 @@ projects[picture][version] = "1.x-dev"
 projects[profile2][subdir] = "contrib"
 projects[profile2][version] = "1.3"
 
+projects[profile_status_check][subdir] = "contrib"
+projects[profile_status_check][version] = "1.0-beta1"
+
 projects[profile_switcher][subdir] = "contrib"
 projects[profile_switcher][version] = "1.0-beta1"
+
+projects[recaptcha][subdir] = "contrib"
+projects[recaptcha][version] = "1.10"
 
 projects[strongarm][subdir] = "contrib"
 projects[strongarm][version] = "2.0"
@@ -222,3 +231,8 @@ libraries[fitvids][download][type] = get
 libraries[fitvids][download][url] = "https://raw.github.com/davatron5000/FitVids.js/master/jquery.fitvids.js"
 libraries[fitvids][destination] = libraries
 libraries[fitvids][directory_name] = fitvids
+
+libraries[fullcalendar][download][type] = get
+libraries[fullcalendar][download][url] = "http://arshaw.com/fullcalendar/downloads/fullcalendar-1.5.3.zip"
+libraries[fullcalendar][destination] = libraries
+libraries[fullcalendar][directory_name] = fullcalendar-download

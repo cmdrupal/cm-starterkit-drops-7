@@ -28,7 +28,7 @@ dependencies[] = rdf
 dependencies[] = cm_checklist
 dependencies[] = cm_slideshow
 dependencies[] = views_slideshow
-dependencies[] = flexislider
+dependencies[] = flexslider
 dependencies[] = breakpoints
 dependencies[] = picture
 dependencies[] = views
@@ -46,9 +46,9 @@ dependencies[] = civicrmtheme
 
 
 
-; Information added by Drupal.org packaging script on 2013-12-16
-version = "7.x-2.0-beta1"
+; Information added by Drupal.org packaging script on 2014-01-09
+version = "7.x-2.0-beta3"
 core = "7.x"
 project = "cm_starterkit_moderate"
-datestamp = "1387211005"
+datestamp = "1389226609"
 

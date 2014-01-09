@@ -362,7 +362,8 @@ function cm_starterkit_moderate_install() {
   
   variable_set('admin_theme', 'seven');
   variable_set('node_admin_theme', '1');
-  
+  variable_set('fullcalendar_path', drupal_get_path('profile', 'cm_starterkit_moderate') . '/libraries/fullcalendar-download/fullcalendar');
+
   // Update the menu router information.
   menu_rebuild(); 
 }

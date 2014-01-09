@@ -11,9 +11,9 @@ name = "Project Airings"
 package = "Community Media"
 php = "5.2.4"
 
-; Information added by drupal.org packaging script on 2013-09-30
+; Information added by Drupal.org packaging script on 2013-12-19
 version = "7.x-2.x-dev"
 core = "7.x"
 project = "cm_project"
-datestamp = "1380559179"
+datestamp = "1387488520"
 

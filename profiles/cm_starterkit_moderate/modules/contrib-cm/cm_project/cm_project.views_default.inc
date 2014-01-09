@@ -11,151 +11,105 @@
  */
 function cm_project_views_default_views() {
 
-  $view = new view;
-  $view->name = 'cm_project_shows';
-  $view->description = '';
-  $view->tag = 'default';
-  $view->base_table = 'node';
-  $view->human_name = 'Project: Shows';
-  $view->core = 7;
-  $view->api_version = '3.0-alpha1';
-  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-  
-  /* Display: Master */
-  $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['access']['type'] = 'perm';
-  $handler->display->display_options['cache']['type'] = 'none';
-  $handler->display->display_options['query']['type'] = 'views_query';
-  $handler->display->display_options['query']['options']['query_comment'] = FALSE;
-  $handler->display->display_options['exposed_form']['type'] = 'basic';
-  $handler->display->display_options['pager']['type'] = 'full';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '25';
-  $handler->display->display_options['pager']['options']['offset'] = '0';
-  $handler->display->display_options['pager']['options']['id'] = '0';
-  $handler->display->display_options['pager']['options']['expose']['items_per_page_options_all'] = 0;
-  $handler->display->display_options['style_plugin'] = 'table';
-  $handler->display->display_options['style_options']['columns'] = array(
-	'title' => 'title',
-  );
-  $handler->display->display_options['style_options']['default'] = '-1';
-  $handler->display->display_options['style_options']['info'] = array(
-	'title' => array(
-	  'sortable' => 0,
-	  'default_sort_order' => 'asc',
-	  'align' => '',
-	  'separator' => '',
-	),
-  );
-  $handler->display->display_options['style_options']['override'] = 1;
-  $handler->display->display_options['style_options']['sticky'] = 0;
-  $handler->display->display_options['style_options']['empty_table'] = 0;
-  /* No results behavior: Global: Text area */
-  $handler->display->display_options['empty']['area']['id'] = 'area';
-  $handler->display->display_options['empty']['area']['table'] = 'views';
-  $handler->display->display_options['empty']['area']['field'] = 'area';
-  $handler->display->display_options['empty']['area']['empty'] = FALSE;
-  $handler->display->display_options['empty']['area']['content'] = '<div class="messages warning">There are currently Shows associated with this Project.</div>';
-  $handler->display->display_options['empty']['area']['format'] = 'full_html';
-  $handler->display->display_options['empty']['area']['tokenize'] = 0;
-  /* Relationship: Group membership: Node group membership */
-  $handler->display->display_options['relationships']['og_membership_rel']['id'] = 'og_membership_rel';
-  $handler->display->display_options['relationships']['og_membership_rel']['table'] = 'node';
-  $handler->display->display_options['relationships']['og_membership_rel']['field'] = 'og_membership_rel';
-  $handler->display->display_options['relationships']['og_membership_rel']['required'] = 0;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['make_link'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['title']['element_label_colon'] = 1;
-  $handler->display->display_options['fields']['title']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['title']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['title']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['title']['hide_alter_empty'] = 0;
-  $handler->display->display_options['fields']['title']['link_to_node'] = 1;
-  /* Field: Content: Post date */
-  $handler->display->display_options['fields']['created']['id'] = 'created';
-  $handler->display->display_options['fields']['created']['table'] = 'node';
-  $handler->display->display_options['fields']['created']['field'] = 'created';
-  $handler->display->display_options['fields']['created']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['created']['alter']['make_link'] = 0;
-  $handler->display->display_options['fields']['created']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['created']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['created']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['created']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['created']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['created']['alter']['word_boundary'] = 1;
-  $handler->display->display_options['fields']['created']['alter']['ellipsis'] = 1;
-  $handler->display->display_options['fields']['created']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['created']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['created']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['created']['element_label_colon'] = 1;
-  $handler->display->display_options['fields']['created']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['created']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['created']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['created']['hide_alter_empty'] = 0;
-  $handler->display->display_options['fields']['created']['date_format'] = 'short';
-  /* Field: Content: Published */
-  $handler->display->display_options['fields']['status']['id'] = 'status';
-  $handler->display->display_options['fields']['status']['table'] = 'node';
-  $handler->display->display_options['fields']['status']['field'] = 'status';
-  $handler->display->display_options['fields']['status']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['status']['alter']['make_link'] = 0;
-  $handler->display->display_options['fields']['status']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['status']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['status']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['status']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['status']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['status']['alter']['word_boundary'] = 1;
-  $handler->display->display_options['fields']['status']['alter']['ellipsis'] = 1;
-  $handler->display->display_options['fields']['status']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['status']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['status']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['status']['element_label_colon'] = 1;
-  $handler->display->display_options['fields']['status']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['status']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['status']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['status']['hide_alter_empty'] = 0;
-  $handler->display->display_options['fields']['status']['not'] = 0;
-  /* Sort criterion: Content: Post date */
-  $handler->display->display_options['sorts']['created']['id'] = 'created';
-  $handler->display->display_options['sorts']['created']['table'] = 'node';
-  $handler->display->display_options['sorts']['created']['field'] = 'created';
-  $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Contextual filter: OG membership: Group gid */
-  $handler->display->display_options['arguments']['group']['id'] = 'group';
-  $handler->display->display_options['arguments']['group']['table'] = 'og_membership';
-  $handler->display->display_options['arguments']['group']['field'] = 'group';
-  $handler->display->display_options['arguments']['group']['relationship'] = 'og_membership_rel';
-  $handler->display->display_options['arguments']['group']['default_action'] = 'empty';
-  $handler->display->display_options['arguments']['group']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['group']['default_argument_skip_url'] = 0;
-  $handler->display->display_options['arguments']['group']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['group']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['group']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['group']['break_phrase'] = 0;
-  $handler->display->display_options['arguments']['group']['not'] = 0;
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-	'cm_show' => 'cm_show',
-  );
+  $view = new view();
+	$view->name = 'cm_project_shows';
+	$view->description = '';
+	$view->tag = 'default';
+	$view->base_table = 'node';
+	$view->human_name = 'Project: Shows';
+	$view->core = 7;
+	$view->api_version = '3.0';
+	$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+	/* Display: Master */
+	$handler = $view->new_display('default', 'Master', 'default');
+	$handler->display->display_options['use_more_always'] = FALSE;
+	$handler->display->display_options['access']['type'] = 'perm';
+	$handler->display->display_options['cache']['type'] = 'none';
+	$handler->display->display_options['query']['type'] = 'views_query';
+	$handler->display->display_options['query']['options']['query_comment'] = FALSE;
+	$handler->display->display_options['exposed_form']['type'] = 'basic';
+	$handler->display->display_options['pager']['type'] = 'full';
+	$handler->display->display_options['pager']['options']['items_per_page'] = '25';
+	$handler->display->display_options['pager']['options']['offset'] = '0';
+	$handler->display->display_options['pager']['options']['id'] = '0';
+	$handler->display->display_options['style_plugin'] = 'table';
+	$handler->display->display_options['style_options']['columns'] = array(
+		'title' => 'title',
+	);
+	$handler->display->display_options['style_options']['default'] = '-1';
+	$handler->display->display_options['style_options']['info'] = array(
+		'title' => array(
+			'sortable' => 0,
+			'default_sort_order' => 'asc',
+			'align' => '',
+			'separator' => '',
+		),
+	);
+	/* No results behavior: Global: Text area */
+	$handler->display->display_options['empty']['area']['id'] = 'area';
+	$handler->display->display_options['empty']['area']['table'] = 'views';
+	$handler->display->display_options['empty']['area']['field'] = 'area';
+	$handler->display->display_options['empty']['area']['content'] = '<div class="messages warning">There are currently Shows associated with this Project.</div>';
+	$handler->display->display_options['empty']['area']['format'] = 'full_html';
+	/* Relationship: OG membership: OG membership from Node */
+	$handler->display->display_options['relationships']['og_membership_rel']['id'] = 'og_membership_rel';
+	$handler->display->display_options['relationships']['og_membership_rel']['table'] = 'node';
+	$handler->display->display_options['relationships']['og_membership_rel']['field'] = 'og_membership_rel';
+	/* Field: Content: Title */
+	$handler->display->display_options['fields']['title']['id'] = 'title';
+	$handler->display->display_options['fields']['title']['table'] = 'node';
+	$handler->display->display_options['fields']['title']['field'] = 'title';
+	$handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+	$handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+	$handler->display->display_options['fields']['title']['hide_alter_empty'] = FALSE;
+	/* Field: Content: Post date */
+	$handler->display->display_options['fields']['created']['id'] = 'created';
+	$handler->display->display_options['fields']['created']['table'] = 'node';
+	$handler->display->display_options['fields']['created']['field'] = 'created';
+	$handler->display->display_options['fields']['created']['hide_alter_empty'] = FALSE;
+	$handler->display->display_options['fields']['created']['date_format'] = 'short';
+	/* Field: Content: Published */
+	$handler->display->display_options['fields']['status']['id'] = 'status';
+	$handler->display->display_options['fields']['status']['table'] = 'node';
+	$handler->display->display_options['fields']['status']['field'] = 'status';
+	$handler->display->display_options['fields']['status']['hide_alter_empty'] = FALSE;
+	$handler->display->display_options['fields']['status']['not'] = 0;
+	/* Sort criterion: Content: Post date */
+	$handler->display->display_options['sorts']['created']['id'] = 'created';
+	$handler->display->display_options['sorts']['created']['table'] = 'node';
+	$handler->display->display_options['sorts']['created']['field'] = 'created';
+	$handler->display->display_options['sorts']['created']['order'] = 'DESC';
+	/* Contextual filter: OG membership: Group ID */
+	$handler->display->display_options['arguments']['gid']['id'] = 'gid';
+	$handler->display->display_options['arguments']['gid']['table'] = 'og_membership';
+	$handler->display->display_options['arguments']['gid']['field'] = 'gid';
+	$handler->display->display_options['arguments']['gid']['relationship'] = 'og_membership_rel';
+	$handler->display->display_options['arguments']['gid']['default_action'] = 'default';
+	$handler->display->display_options['arguments']['gid']['default_argument_type'] = 'og_context';
+	$handler->display->display_options['arguments']['gid']['summary']['number_of_records'] = '0';
+	$handler->display->display_options['arguments']['gid']['summary']['format'] = 'default_summary';
+	$handler->display->display_options['arguments']['gid']['summary_options']['items_per_page'] = '25';
+	$handler->display->display_options['arguments']['gid']['specify_validation'] = TRUE;
+	$handler->display->display_options['arguments']['gid']['validate']['type'] = 'og';
+	$handler->display->display_options['arguments']['gid']['break_phrase'] = TRUE;
+	/* Filter criterion: Content: Type */
+	$handler->display->display_options['filters']['type']['id'] = 'type';
+	$handler->display->display_options['filters']['type']['table'] = 'node';
+	$handler->display->display_options['filters']['type']['field'] = 'type';
+	$handler->display->display_options['filters']['type']['value'] = array(
+		'cm_show' => 'cm_show',
+	);
+	/* Filter criterion: OG membership: Group_type */
+	$handler->display->display_options['filters']['group_type']['id'] = 'group_type';
+	$handler->display->display_options['filters']['group_type']['table'] = 'og_membership';
+	$handler->display->display_options['filters']['group_type']['field'] = 'group_type';
+	$handler->display->display_options['filters']['group_type']['relationship'] = 'og_membership_rel';
+	$handler->display->display_options['filters']['group_type']['value'] = array(
+		'node' => 'node',
+	);
 
   $views[$view->name] = $view;
-  
+
   $view = new view;
   $view->name = 'cm_project_reservations';
   $view->description = 'Show the content from all the group the current user belongs to';
@@ -165,7 +119,7 @@ function cm_project_views_default_views() {
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-  
+
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['access']['type'] = 'perm';
@@ -207,12 +161,12 @@ function cm_project_views_default_views() {
   $handler->display->display_options['empty']['area']['content'] = '<div class="messages warning">No Reservations found for this Project</div>';
   $handler->display->display_options['empty']['area']['format'] = 'full_html';
   $handler->display->display_options['empty']['area']['tokenize'] = 0;
-  /* Relationship: OG membership: OG membership from Node */
+  /* Relationship: OG membership: OG membership from Content:  */
   $handler->display->display_options['relationships']['og_membership_rel']['id'] = 'og_membership_rel';
   $handler->display->display_options['relationships']['og_membership_rel']['table'] = 'node';
   $handler->display->display_options['relationships']['og_membership_rel']['field'] = 'og_membership_rel';
   $handler->display->display_options['relationships']['og_membership_rel']['required'] = 0;
-  /* Relationship: OG membership: Group Node from OG membership */
+  /* Relationship: (OG membership from node) OG membership: Group Content from OG membership */
   $handler->display->display_options['relationships']['og_membership_related_node_group']['id'] = 'og_membership_related_node_group';
   $handler->display->display_options['relationships']['og_membership_related_node_group']['table'] = 'og_membership';
   $handler->display->display_options['relationships']['og_membership_related_node_group']['field'] = 'og_membership_related_node_group';
@@ -335,19 +289,20 @@ function cm_project_views_default_views() {
   );
 
   $views[$view->name] = $view;
-  
-  $view = new view;
+
+  $view = new view();
   $view->name = 'cm_project_my_projects';
   $view->description = 'Show groups of a user.';
   $view->tag = 'og';
-  $view->base_table = 'node';
+  $view->base_table = 'og_membership';
   $view->human_name = 'Project: My Projects';
   $view->core = 7;
-  $view->api_version = '3.0-alpha1';
+  $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-  
+
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
@@ -356,131 +311,111 @@ function cm_project_views_default_views() {
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
-	'title' => 'title',
-	'state' => 'state',
+    'title' => 'title',
+    'state' => 'state',
   );
   $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
-	'title' => array(
-	  'sortable' => 0,
-	  'default_sort_order' => 'asc',
-	  'align' => '',
-	  'separator' => '',
-	),
-	'state' => array(
-	  'sortable' => 0,
-	  'default_sort_order' => 'asc',
-	  'align' => '',
-	  'separator' => '',
-	),
+    'title' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
+    'state' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
   );
-  $handler->display->display_options['style_options']['override'] = 1;
-  $handler->display->display_options['style_options']['sticky'] = 0;
-  $handler->display->display_options['style_options']['empty_table'] = 0;
   /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
   $handler->display->display_options['empty']['area']['table'] = 'views';
   $handler->display->display_options['empty']['area']['field'] = 'area';
-  $handler->display->display_options['empty']['area']['empty'] = FALSE;
   $handler->display->display_options['empty']['area']['content'] = 'User is not a member of any group.';
-  /* Relationship: Group: Node group */
-  $handler->display->display_options['relationships']['og_rel']['id'] = 'og_rel';
-  $handler->display->display_options['relationships']['og_rel']['table'] = 'node';
-  $handler->display->display_options['relationships']['og_rel']['field'] = 'og_rel';
-  $handler->display->display_options['relationships']['og_rel']['required'] = 0;
-  /* Relationship: Organic groups group: OG membership */
-  $handler->display->display_options['relationships']['og_membership']['id'] = 'og_membership';
-  $handler->display->display_options['relationships']['og_membership']['table'] = 'og';
-  $handler->display->display_options['relationships']['og_membership']['field'] = 'og_membership';
-  $handler->display->display_options['relationships']['og_membership']['relationship'] = 'og_rel';
-  $handler->display->display_options['relationships']['og_membership']['required'] = 0;
+  /* Relationship: OG membership: Group Node from OG membership */
+  $handler->display->display_options['relationships']['og_membership_related_node_group']['id'] = 'og_membership_related_node_group';
+  $handler->display->display_options['relationships']['og_membership_related_node_group']['table'] = 'og_membership';
+  $handler->display->display_options['relationships']['og_membership_related_node_group']['field'] = 'og_membership_related_node_group';
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['label'] = 'Group name';
-  $handler->display->display_options['fields']['title']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['make_link'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['title']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['title']['element_label_colon'] = 1;
-  $handler->display->display_options['fields']['title']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['title']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['title']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['title']['link_to_node'] = 1;
+  $handler->display->display_options['fields']['title']['relationship'] = 'og_membership_related_node_group';
+  $handler->display->display_options['fields']['title']['label'] = 'Project';
+  $handler->display->display_options['fields']['title']['hide_alter_empty'] = FALSE;
   /* Field: OG membership: Created */
   $handler->display->display_options['fields']['created']['id'] = 'created';
   $handler->display->display_options['fields']['created']['table'] = 'og_membership';
   $handler->display->display_options['fields']['created']['field'] = 'created';
-  $handler->display->display_options['fields']['created']['relationship'] = 'og_membership';
   $handler->display->display_options['fields']['created']['label'] = 'Member since';
-  $handler->display->display_options['fields']['created']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['created']['alter']['make_link'] = 0;
-  $handler->display->display_options['fields']['created']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['created']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['created']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['created']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['created']['alter']['word_boundary'] = 1;
-  $handler->display->display_options['fields']['created']['alter']['ellipsis'] = 1;
-  $handler->display->display_options['fields']['created']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['created']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['created']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['created']['element_label_colon'] = 1;
-  $handler->display->display_options['fields']['created']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['created']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['created']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['created']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['created']['date_format'] = 'time ago';
   /* Sort criterion: Content: Title */
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'node';
   $handler->display->display_options['sorts']['title']['field'] = 'title';
-  /* Contextual filter: We pass to the &quot;Entity ID&quot; the User ID. */
+  $handler->display->display_options['sorts']['title']['relationship'] = 'og_membership_related_node_group';
+  /* Contextual filter: We pass the user ID as the Entity ID. */
   $handler->display->display_options['arguments']['etid']['id'] = 'etid';
   $handler->display->display_options['arguments']['etid']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['etid']['field'] = 'etid';
-  $handler->display->display_options['arguments']['etid']['relationship'] = 'og_membership';
-  $handler->display->display_options['arguments']['etid']['ui_name'] = 'We pass to the "Entity ID" the User ID.';
+  $handler->display->display_options['arguments']['etid']['ui_name'] = 'We pass the user ID as the Entity ID.';
   $handler->display->display_options['arguments']['etid']['default_action'] = 'default';
-  $handler->display->display_options['arguments']['etid']['title_enable'] = 1;
+  $handler->display->display_options['arguments']['etid']['title_enable'] = TRUE;
   $handler->display->display_options['arguments']['etid']['title'] = '%1 groups';
   $handler->display->display_options['arguments']['etid']['default_argument_type'] = 'user';
-  $handler->display->display_options['arguments']['etid']['default_argument_options']['user'] = FALSE;
-  $handler->display->display_options['arguments']['etid']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['etid']['default_argument_options']['user'] = TRUE;
   $handler->display->display_options['arguments']['etid']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['etid']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['etid']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['etid']['specify_validation'] = 1;
+  $handler->display->display_options['arguments']['etid']['specify_validation'] = TRUE;
   $handler->display->display_options['arguments']['etid']['validate']['type'] = 'user';
-  $handler->display->display_options['arguments']['etid']['validate_options']['restrict_roles'] = 0;
-  $handler->display->display_options['arguments']['etid']['validate']['fail'] = 'empty';
-  $handler->display->display_options['arguments']['etid']['break_phrase'] = 0;
-  $handler->display->display_options['arguments']['etid']['not'] = 0;
   /* Filter criterion: OG membership: State */
   $handler->display->display_options['filters']['state']['id'] = 'state';
   $handler->display->display_options['filters']['state']['table'] = 'og_membership';
   $handler->display->display_options['filters']['state']['field'] = 'state';
-  $handler->display->display_options['filters']['state']['relationship'] = 'og_membership';
   $handler->display->display_options['filters']['state']['value'] = array(
-	1 => '1',
+    1 => '1',
   );
-  
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['relationship'] = 'og_membership_related_node_group';
+  $handler->display->display_options['filters']['status']['value'] = '1';
+  /* Filter criterion: OG membership: Entity_type */
+  $handler->display->display_options['filters']['entity_type']['id'] = 'entity_type';
+  $handler->display->display_options['filters']['entity_type']['table'] = 'og_membership';
+  $handler->display->display_options['filters']['entity_type']['field'] = 'entity_type';
+  $handler->display->display_options['filters']['entity_type']['value'] = 'user';
+
+  /* Display: Content pane */
+  $handler = $view->new_display('panel_pane', 'Content pane', 'panel_pane_1');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['argument_input'] = array(
+    'etid' => array(
+      'type' => 'context',
+      'context' => 'entity:user.uid',
+      'context_optional' => 0,
+      'panel' => '0',
+      'fixed' => '',
+      'label' => 'We pass to the &quot;Entity ID&quot; the User ID.',
+    ),
+  );
+
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page_1');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['path'] = 'user/%/projects';
   $handler->display->display_options['menu']['type'] = 'tab';
   $handler->display->display_options['menu']['title'] = 'My Projects';
   $handler->display->display_options['menu']['weight'] = '0';
-
+  $handler->display->display_options['menu']['context'] = 0;
 
   $views[$view->name] = $view;
-  
+
   $view = new view;
   $view->name = 'cm_project_unapproved_projects';
   $view->description = '';
@@ -490,7 +425,7 @@ function cm_project_views_default_views() {
   $view->core = 7;
   $view->api_version = '3.0-alpha1';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-  
+
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['title'] = 'Project: List Projects';
@@ -600,7 +535,7 @@ function cm_project_views_default_views() {
   $handler->display->display_options['filters']['group_group_value']['value'] = array(
 	1 => '1',
   );
-  
+
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['path'] = 'admin/projects/manage';
@@ -610,7 +545,7 @@ function cm_project_views_default_views() {
   $handler->display->display_options['menu']['name'] = 'management';
 
   $views[$view->name] = $view;
-  
+
   return $views;
 }
 

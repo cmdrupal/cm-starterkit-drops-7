@@ -28,7 +28,7 @@ dependencies[] = rdf
 dependencies[] = cm_checklist
 dependencies[] = cm_slideshow
 dependencies[] = views_slideshow
-dependencies[] = flexislider
+dependencies[] = flexslider
 dependencies[] = breakpoints
 dependencies[] = picture
 dependencies[] = views
@@ -44,9 +44,9 @@ dependencies[] = fullcalendar
 
 files[] = cm_starterkit_easy.profile
 
-; Information added by Drupal.org packaging script on 2013-12-16
-version = "7.x-2.0-beta1"
+; Information added by Drupal.org packaging script on 2014-01-08
+version = "7.x-2.0-beta2"
 core = "7.x"
 project = "cm_starterkit_easy"
-datestamp = "1387213125"
+datestamp = "1389223425"
 

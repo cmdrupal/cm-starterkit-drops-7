@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Code for the CiviCRM Multiday Event feature.
+ * Code for the CiviCRM Multiday Event
  */
 
 /**
@@ -95,7 +95,7 @@ function civicrm_multiday_event_admin_settings($form, &$form_state) {
     '#type' => 'checkbox',
     '#title' => t('Allow Custom Titles'),
     '#default_value' => variable_get('civicrm_multiday_event_allow_title_override', 0),
-    '#description' => t('If this is checked, users with the edit all events permission can add a title or leave it blank.  Blank titles will be autopopulated with [event type] - [startdate] to [enddate] pattern. This allows overriding titles with a custom title.  If unchecked, the title field will be hidden and it will always be updated to the patern.  The date pattern can be customized in the Date and Time settings. Custom titles will NOT be updated when altering dates using Full Calendar.'),
+    '#description' => t('If this is checked, users with the edit all events permission can add a title or leave it blank.  Blank titles will be autopopulated with [event type] - [startdate] to [enddate] pattern. This allows overriding titles with a custom title.  If unchecked, the title field will be hidden and it will always be updated to the pattern.  The date pattern can be customized in the Date and Time settings. Custom titles will NOT be updated when altering dates using Full Calendar.'),
   );
   $form['civicrm_multiday_event_publishing'] = array(
     '#type' => 'fieldset',
@@ -106,9 +106,9 @@ function civicrm_multiday_event_admin_settings($form, &$form_state) {
   );
   $form['civicrm_multiday_event_publishing']['civicrm_multiday_event_unpublish_civievent'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Make CiviCRM Event not public When Node is un published'),
+    '#title' => t('Make CiviCRM Event not public When Node is unpublished'),
     '#default_value' => variable_get('civicrm_multiday_event_unpublish_civievent', 0),
-    '#description' => t('If this is unchecked, un-publishing the node will leave the CiviCRM Event untouched.'),
+    '#description' => t('If this is unchecked, unpublishing the node will leave the CiviCRM Event untouched.'),
   );
   $form['civicrm_multiday_event_publishing']['civicrm_multiday_event_inactive_civievent'] = array(
     '#type' => 'checkbox',
@@ -224,7 +224,6 @@ function civicrm_multiday_event_participants_link($node) {
 }
 
 
-
 // use hook_node_info and hook_form to prevent uninstall issue caused by Features
 // http://drupal.org/node/1055460
 
@@ -258,6 +257,10 @@ function civicrm_multiday_event_form($node, $form_state) {
 function civicrm_multiday_event_form_alter(&$form, &$form_state, $form_id) {
 
   if ($form_id == 'civicrm_multiday_event_node_form') {
+    if (!civicrm_initialize()) {
+      drupal_set_message(t('Failed to initialize CiviCRM'));
+      return;
+    }
     
     if (user_access('edit all events')) {    
 	  $form['field_civievent_id'][LANGUAGE_NONE][0]['value']['#description'] = 'This field is only visible to users with permission to edit all CiviCRM events.  Adding an ID of and existing CiviCRM Event will link the Drupal node to CiviCRM event.  Leave blank to create a new CiviCRM Event.';
@@ -279,35 +282,36 @@ function civicrm_multiday_event_form_alter(&$form, &$form_state, $form_id) {
     $templates = array();
     $templates['_none'] = '- None -';
     
-    // @TODO: Can replace with API call in 4.2 or if patched w/
+    // Use API call in versions > 4.2
     // http://issues.civicrm.org/jira/browse/CRM-10540
-    $result = db_query('SELECT id, template_title FROM {civicrm_event} WHERE is_template = 1 ORDER BY template_title');
-        
-    foreach ($result as $record) {
-      $templates[$record->id] = $record->template_title;
+    $version = CRM_Utils_VersionCheck::singleton()->localVersion;
+
+    if ($version < "4.4") {
+      $result = db_query('SELECT id, template_title FROM {civicrm_event} WHERE is_template = 1 ORDER BY template_title');
+      
+      foreach ($result as $record) {
+        $templates[$record->id] = $record->template_title;
+      }
+    } else { 
+			$params = array(
+				'version' => 3,
+				 'sequential' => 1,
+				 'is_template' => 1,
+			);
+      $result = civicrm_api('Event', 'get', $params);
+      
+      foreach ($result['values'] as $key => $record) {
+        $templates[$record['id']] = $record['template_title'];
+      }
     }
-        
+          
     $form['field_civievent_template'][LANGUAGE_NONE]['#options'] = $templates;
-    
-    $certifications = array();
-    $certifications['_none'] = '- None -';
-    $result = db_query('SELECT id, title FROM {civicrm_group} WHERE is_active = 1 ORDER BY title');
-  
-    foreach ($result as $record) {
-      $certifications[$record->id] = $record->title;
-    }
-    
-    $form['field_civicrm_group'][LANGUAGE_NONE]['#options'] = $certifications;
     
     //set defaults for edit 
     if (isset($form['nid']['#value'])) {
       
       $node = node_load($form['nid']['#value']);
       $form['field_civievent_template'][LANGUAGE_NONE]['#default_value'] = $node->field_civievent_template[LANGUAGE_NONE][0]['value'];
-      
-      if (isset($node->field_civicrm_group[LANGUAGE_NONE][0]['value'])) {
-        $form['field_civicrm_group'][LANGUAGE_NONE]['#default_value'] = $node->field_civicrm_group[LANGUAGE_NONE][0]['value'];
-      }
     }
   }
 }
@@ -321,32 +325,23 @@ function civicrm_multiday_event_form_alter(&$form, &$form_state, $form_id) {
  * Implements hook_field_attach_presave().
  */
 function civicrm_multiday_event_field_attach_presave($entity_type, $entity) {
-  //dsm('civicrm_multiday_event_field_attach_presave');	
-  //dsm($entity_type);
-  //dsm($entity);
-  
+
   if ($entity_type != 'field_collection_item') {
-	return;
+	  return;
   }
   
   if ($entity->field_name != 'field_civicrm_multiday_session') {
-	return;
+	  return;
   }
   
 	if (!$entity->item_id) {
-	return;
+	  return;
 	}
 	
   $nid = db_query("SELECT entity_id FROM {field_data_field_civicrm_multiday_session} WHERE field_civicrm_multiday_session_value = :fid", array('fid' => $entity->item_id))->fetchField();
-  
-  //dsm($nid);
-  
-  $node = node_load($nid);
-  
-  //dsm($node);
+  $node = node_load($nid); 
   node_save($node);
 }
-
 
 
 /**
@@ -377,18 +372,12 @@ function civicrm_multiday_event_node_presave($node) {
     //set up array to create new event or update existing event 
     $params['id'] = isset($node->field_civievent_id[LANGUAGE_NONE][0]['value']) ? $node->field_civievent_id[LANGUAGE_NONE][0]['value'] : NULL;
     
-    
-    
     //we have to remove the timezone offset because CiviCRM will re-add it 
     $timezone = variable_get('date_default_timezone', 0);
     $offset = civicrm_multiday_event_get_timezone_offset($timezone, 'UTC');
     
     $start = strtotime($start_entity->field_session_date[LANGUAGE_NONE][0]['value'] . ' - ' . $offset . ' seconds');  
     $end = strtotime($end_entity->field_session_date[LANGUAGE_NONE][0]['value2'] . ' - ' . $offset . ' seconds');    
-    
-    
-    //dsm(format_date($start, 'custom', 'Y-m-d H:i:s'));
-    //dsm(format_date($end, 'custom', 'Y-m-d H:i:s'));
     
     // DST Check
     $now_dst = localtime(time(), TRUE);
@@ -417,9 +406,6 @@ function civicrm_multiday_event_node_presave($node) {
     
     $params['end_date'] = format_date($end, 'custom', 'Y-m-d H:i:s');
     $title_end = format_date($end, 'civicrm_multiday_event_date_format');
-    
-    //dsm($params['start_date']);
-    //dsm($params['end_date']);
     
     // this field is hidden.  Always set to start_date to help with sorting in Views  
     $node->field_date_of_first_session[LANGUAGE_NONE][0]['value'] = $params['start_date'];
@@ -462,20 +448,17 @@ function civicrm_multiday_event_node_presave($node) {
       }
       
     } else {    
-	 $params['title'] = $node->title;
+	    $params['title'] = $node->title;
     }
       
-    
     $params['is_public'] = ($node->status) ? 1 : 0;
-    
-    
     
     if (civicrm_initialize()) {
       $params['version'] = 3;
       //we never want new events to be templates
       $params['is_template'] = 0;
       $result = civicrm_api('event', 'create', $params);
-      
+            
       if ($result['is_error']) {
         drupal_set_message($result['error_message'], 'warning');
       } else {
@@ -485,6 +468,7 @@ function civicrm_multiday_event_node_presave($node) {
         }
  
         // manually insert the priceset, but only on new events
+        // this is still required for CiviCRM 4.4
         if ($params['price_set_id'] && $result['id'] != $event_id) {
           db_insert('civicrm_price_set_entity') 
             ->fields(array(
@@ -656,16 +640,24 @@ function civicrm_multiday_event_lookup($id, $is_template = NULL) {
   $result = civicrm_api("Event", "get", $params);
   
   if ($result['is_error'] || !$result['count']) {
+    // this will load templates if is_template doesn't work
     $params = db_query('SELECT * FROM {civicrm_event} WHERE id = :id', array(':id' => $id))->fetchAssoc();
   } else {
     $params = $result['values'][0];       
   }
-  
-  // priceset_id is not returned by the API nor will the API added it, so we are manually 
-  // inserting the priceset after the event. Need to get this fixed in 4.2
     
-  require_once 'CRM/Price/BAO/Set.php';
-  $params['price_set_id'] = CRM_Price_BAO_Set::getFor( 'civicrm_event', $id ); 
+  $version = CRM_Utils_VersionCheck::singleton()->localVersion;
+
+  if ($version < "4.4") {
+    // priceset_id is not returned by the API nor will the API added it, so we are manually
+    // inserting the priceset after the event. Need to get this fixed in 4.2
+
+    require_once 'CRM/Price/BAO/Set.php';
+    $params['price_set_id'] = CRM_Price_BAO_Set::getFor( 'civicrm_event', $id );
+  } else {
+    require_once 'CRM/Price/BAO/PriceSet.php';
+    $params['price_set_id'] = CRM_Price_BAO_PriceSet::getFor( 'civicrm_event', $id );
+  }
   
   return $params; 
 }

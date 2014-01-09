@@ -310,7 +310,6 @@ function cm_project_form_alter(&$form, &$form_state, $form_id) {
       $array = $form['group_audience'][LANGUAGE_NONE]['#options']['Other groups'];
       asort($array);
       #options['Other groups'];
-      dsm($array);
     }
     // http://stackoverflow.com/questions/6670041/sort-options-in-a-select-list-with-javascript-jquery-but-not-alphabetically
     
@@ -612,8 +611,6 @@ function cm_project_form_cm_show_node_form_alter(&$form, &$form_state) {
     );
         
   }
-  
-   dsm($form);
 }
 
 /**

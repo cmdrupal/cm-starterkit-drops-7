@@ -15,9 +15,9 @@ package = "CiviCRM-Contrib"
 php = "5.2.4"
 project = "civicrm_multiday_event"
 
-; Information added by drupal.org packaging script on 2013-07-13
-version = "7.x-1.0-beta7"
+; Information added by Drupal.org packaging script on 2013-12-17
+version = "7.x-1.0-rc1"
 core = "7.x"
 project = "civicrm_multiday_event"
-datestamp = "1373674270"
+datestamp = "1387292927"
 
