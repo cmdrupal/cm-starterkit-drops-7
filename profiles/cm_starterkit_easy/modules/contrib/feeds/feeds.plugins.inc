@@ -171,10 +171,10 @@ function _feeds_feeds_plugins() {
       // @todo: Test for saving and whatever else necessary?
       if (entity_type_supports($type, 'create')) {
         $info['FeedsEntityProcessor' . drupal_ucfirst($type)] = array(
-          'name' => 'Entity processor ' . $entity_info['label'],
+          'name' => $entity_info['label'] . ' entity processor - EXPERIMENTAL',
           // @todo: Use plural label if there.
-          'description' => 'Create and update ' . $entity_info['label'] . 's.',
-          'help' => 'Create and update ' . $entity_info['label'] . 's from parsed content.',
+          'description' => 'Create and update ' . drupal_strtolower($entity_info['label']) . 's.',
+          'help' => 'Create and update ' . drupal_strtolower($entity_info['label']) . 's from parsed content.',
           'plugin_key' => 'FeedsEntityProcessor',
           'handler' => array(
             'parent' => 'FeedsProcessor',
@@ -189,5 +189,6 @@ function _feeds_feeds_plugins() {
       }
     }
   }
+
   return $info;
 }

@@ -1238,6 +1238,9 @@ function feeds_api_version() {
   return $version['version'];
 }
 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
 function node_form_feedsentityprocessor_feeds_form_alter(&$form, &$form_state) {
   if ($form['#configurable']->entityType() == 'node') {
     unset($form['values']['title']);
@@ -1251,6 +1254,9 @@ function node_form_feedsentityprocessor_feeds_form_alter(&$form, &$form_state) {
   }
 }
 
+/**
+ * Validation callback for node_form_feedsentityprocessor_feeds_form_alter().
+ */
 function node_form_feedsentityprocessor_feeds_form_validate(&$form, &$form_state) {
   if (empty($form_state['values']['values']['author'])) {
     form_set_value($form['values']['author'], 0, $form_state);
@@ -1263,6 +1269,9 @@ function node_form_feedsentityprocessor_feeds_form_validate(&$form, &$form_state
   }
 }
 
+/**
+ * Implements hook_feeds_processor_targets_alter().
+ */
 function node_feeds_processor_targets_alter(&$targets, $entity_type, $bundle) {
   if ($entity_type == 'node') {
     $targets['nid']['name'] = t('Node id');
@@ -1270,6 +1279,9 @@ function node_feeds_processor_targets_alter(&$targets, $entity_type, $bundle) {
   }
 }
 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
 function user_form_feedsentityprocessor_feeds_form_alter(&$form, &$form_state) {
   if ($form['#configurable']->entityType() == 'user') {
     unset($form['values']['name']);
@@ -1277,6 +1289,9 @@ function user_form_feedsentityprocessor_feeds_form_alter(&$form, &$form_state) {
   }
 }
 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
 function taxonomy_form_feedsentityprocessor_feeds_form_alter(&$form, &$form_state) {
   if ($form['#configurable']->entityType() == 'taxonomy_term') {
     unset($form['values']['name']);
@@ -1295,6 +1310,9 @@ function taxonomy_form_feedsentityprocessor_feeds_form_alter(&$form, &$form_stat
   }
 }
 
+/**
+ * Validation callback for taxonomy_form_feedsentityprocessor_feeds_form_alter().
+ */
 function taxonomy_form_feedsentityprocessor_feeds_form_validate(&$form, &$form_state) {
   if (empty($form_state['values']['values']['weight'])) {
     form_set_value($form['values']['weight'], 0, $form_state);

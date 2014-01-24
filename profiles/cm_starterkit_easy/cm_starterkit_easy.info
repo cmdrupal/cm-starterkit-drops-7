@@ -44,9 +44,9 @@ dependencies[] = fullcalendar
 
 files[] = cm_starterkit_easy.profile
 
-; Information added by Drupal.org packaging script on 2014-01-08
-version = "7.x-2.0-beta2"
+; Information added by Drupal.org packaging script on 2014-01-24
+version = "7.x-2.0-beta3"
 core = "7.x"
 project = "cm_starterkit_easy"
-datestamp = "1389223425"
+datestamp = "1390536330"
 
