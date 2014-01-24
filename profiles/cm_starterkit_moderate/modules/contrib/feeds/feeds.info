@@ -57,9 +57,9 @@ files[] = views/feeds_views_handler_field_severity.inc
 files[] = views/feeds_views_handler_field_source.inc
 files[] = views/feeds_views_handler_filter_severity.inc
 
-; Information added by Drupal.org packaging script on 2013-12-18
-version = "7.x-2.0-alpha8+10-dev"
+; Information added by Drupal.org packaging script on 2014-01-16
+version = "7.x-2.0-alpha8+13-dev"
 core = "7.x"
 project = "feeds"
-datestamp = "1387336105"
+datestamp = "1389836306"
 

@@ -115,6 +115,65 @@ class FeedsMediaRSSParser extends FeedsParser {
       'media_content' => array(
         'name' => t('Media Content'),
       ),
+      
+      //http://www.rssboard.org/media-rss#media-content
+      // url="http://www.foo.com/movie.mov"
+      // fileSize="12216320"
+      // type="video/quicktime"
+      // medium="video"
+      // isDefault="true"
+      // expression="full"
+      // bitrate="128"
+      // framerate="25"
+      // samplingrate="44.1"
+      // channels="2"
+      // duration="185"
+      // height="200"
+      // width="300"
+      // lang="en"
+      'media_content_url' => array(
+        'name' => t('Media Content: URL'),
+      ), 
+      'media_content_filesize' => array(
+        'name' => t('Media Content: Filesize'),
+      ),
+      'media_content_type' => array(
+        'name' => t('Media Content: Type'),
+      ),    
+      'media_content_medium' => array(
+        'name' => t('Media Content: Media'),
+      ),  
+      'media_content_isdefult' => array(
+        'name' => t('Media Content: is Default'),
+      ),     
+      'media_content_expression' => array(
+        'name' => t('Media Content: Expression'),
+      ),      
+      'media_content_bitrate' => array(
+        'name' => t('Media Content: Bitrate'),
+      ),   
+      'media_content_framerate' => array(
+        'name' => t('Media Content: Framerate'),
+      ),   
+      'media_content_samplingrate' => array(
+        'name' => t('Media Content: Sampling Rate'),
+      ),
+      'media_content_channels' => array(
+        'name' => t('Media Content: Channels'),
+      ),
+      'media_content_duration' => array(
+        'name' => t('Media Content: Duration'),
+      ),
+      'media_content_height' => array(
+        'name' => t('Media Content: Height'),
+      ),
+      'media_content_width' => array(
+        'name' => t('Media Content: Width'),
+      ),
+      'media_content_lang' => array(
+        'name' => t('Media Content: Language'),
+      ),
+      
       'media_adult' => array(  //5.1
         'name' => t('Media Adult'),
       ),
@@ -178,8 +237,11 @@ class FeedsMediaRSSParser extends FeedsParser {
       'media_price' => array(  //5.20
         'name' => t('Media Price'),
       ),
-      'media_license' => array(  //5.21
-        'name' => t('Media License'),
+      'media_license_text' => array(  //5.21
+        'name' => t('Media License (text)'),
+      ),
+      'media_license_url' => array(  //5.21
+        'name' => t('Media License (URL)'),
       ),
       'media_subtitle_url' => array(  //5.22
         'name' => t('Media subTitle (URL)'),
@@ -313,8 +375,31 @@ class FeedsMediaRSSParser extends FeedsParser {
       } else {
         $attrs = $media->thumbnail[0]->attributes();
       }
-
+   
       $thumbnail = (string) $attrs['url'];
+      
+      // Get license
+      
+      if (isset($media->content->license)) {
+        $attrs = $media->content->thumbnail->attributes();
+      } else {
+        $attrs = $media->license[0]->attributes();
+      }
+      
+      $license = (string) $media->license[0];
+      $license_url = (string) $attrs['url'];
+      
+      //get media:content elements from media:group
+      if (isset($media->content->group)) {
+        $group = $media->content->group;
+      } else {
+        $group = $media->group;
+      }
+      
+      $content = (string) $group->content[0];
+      $content_attrs = $content->attributes();
+      
+      
                   
       $item = array(
         'guid' => (string) $entry->guid,
@@ -326,7 +411,21 @@ class FeedsMediaRSSParser extends FeedsParser {
         'published' => strtotime($entry->pubDate),
         
         // http://www.rssboard.org/media-rss
-        'media_content' => NULL,     
+        'media_content' => (string) $group->content[0],
+        'media_content_url' => (string) $content_attrs['url'],
+        'media_content_filesize' => (string) $content_attrs['filesize'],
+        'media_content_type' => (string) $content_attrs['type'],
+        'media_content_medium' => (string) $content_attrs['medium'],
+        'media_content_isdefault' => (string) $content_attrs['isdefault'],
+        'media_content_expression' => (string) $content_attrs['expression'],
+        'media_content_bitrate' => (string) $content_attrs['bitrate'],
+        'media_content_framerate' => (string) $content_attrs['framerate'],
+        'media_content_samplingrate' => (string) $content_attrs['samplingrate'],
+        'media_content_channels' => (string) $content_attrs['channels'],
+        'media_content_duration' => (string) $content_attrs['duration'],
+        'media_content_height' => (string) $content_attrs['height'],
+        'media_content_width' => (string) $content_attrs['width'],
+        'media_content_lang' => (string) $content_attrs['lang'],
         'media_adult' => NULL,
         'media_rating' => NULL,
         'media_title' => NULL,  
@@ -347,7 +446,8 @@ class FeedsMediaRSSParser extends FeedsParser {
         'media_backlinks_csv' => NULL,    
         'media_status' => NULL, 
         'media_price' => NULL,  
-        'media_license' =>  NULL,  
+        'media_license_text' =>  $license,  
+        'media_license_url' =>  $license_url,
         'media_subtitle_url' => NULL,   
         'media_peerlink_url' => NULL, 
         'media_rights_csv' => NULL,    

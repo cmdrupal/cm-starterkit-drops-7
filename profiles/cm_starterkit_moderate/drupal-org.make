@@ -3,7 +3,7 @@
 ; locally before committing to the drupal-org.make. 
 
 api = 2
-core = 7.25
+core = 7.26
 
 ; ====== CIVICRM RELATED =========
 
@@ -453,7 +453,7 @@ projects[cm_vod_feed][version] = "2.0-beta1"
 projects[om_crew_connect][subdir] = "contrib-cm"
 projects[om_crew_connect][version] = "2.x-dev"
 
-; Contribb Modules
+; Contrib Modules
 projects[backup_migrate][subdir] = "contrib"
 projects[backup_migrate][version] = "2.8"
 
@@ -498,10 +498,12 @@ projects[features][version] = "2.0"
 
 projects[feeds][subdir] = "contrib"
 projects[feeds][version] = "2.x-dev"
-projects[feeds][patch][1033202] = "http://drupal.org/files/feeds_entity_processor-1033202-203.patch"
 
 projects[feeds_mediarss][subdir] = "contrib"
-projects[feeds_mediarss][version] = "2.x-dev"
+projects[feeds_mediarss][version] = "1.x-dev"
+
+projects[feeds_media_internet_files][subdir] = "contrib"
+projects[feeds_media_internet_files][version] = "1.x-dev"
 
 projects[field_group][subdir] = "contrib"
 projects[field_group][version] = "1.3"
@@ -528,8 +530,8 @@ projects[headerimage][subdir] = "contrib"
 projects[headerimage][version] = "1.4"
 
 projects[hms_field][subdir] = "contrib"
-projects[hms_field][version] = "2.x-dev"
-projects[hms_field][patch][2119623] = "http://drupal.org/files/2119623-hidden_field_empty_error.patch"
+projects[hms_field][version] = "1.x-dev"
+projects[hms_field][patch][2119623] = "https://drupal.org/files/2119623-hidden_field_empty_error.patch"
 
 projects[google_analytics][subdir] = "contrib"
 projects[google_analytics][version] = "1.4"
@@ -539,7 +541,7 @@ projects[imce][version] = "1.7"
 
 projects[imce_wysiwyg][subdir] = "contrib"
 projects[imce_wysiwyg][version] = "1.0"
-projects[imce_wysiwyg][patch][1794930] = "http://drupal.org/files/imce_wysiwyg-access-issue-1825850-2.patch"
+projects[imce_wysiwyg][patch][1794930] = "https://drupal.org/files/imce_wysiwyg-access-issue-1825850-2.patch"
 
 projects[job_scheduler][subdir] = "contrib"
 projects[job_scheduler][version] = "2.0-alpha3"
@@ -552,6 +554,9 @@ projects[legal][version] = "1.x-dev"
 
 projects[libraries][subdir] = "contrib"
 projects[libraries][version] = "2.1"
+
+projects[options_element][subdir] = "contrib"
+projects[options_element][version] = "1.10"
 
 projects[media][subdir] = "contrib"
 projects[media][version] = "2.0-alpha3"
@@ -569,19 +574,16 @@ projects[media_archive][subdir] = "contrib"
 projects[media_archive][version] = "1.x-dev"
 
 projects[media_cloudcast][subdir] = "contrib"
-projects[media_cloudcast][version] = "2.x-dev"
+projects[media_cloudcast][version] = "2.0-beta1"
 
 projects[menu_expanded][subdir] = "contrib"
-projects[menu_expanded][version] = "2.2"
+projects[menu_expanded][version] = "1.0-beta1"
 
 projects[module_filter][subdir] = "contrib"
 projects[module_filter][version] = "1.8"
 
 projects[menu_attributes][subdir] = "contrib"
 projects[menu_attributes][version] = "1.0-rc2"
-
-projects[options_element][subdir] = "contrib"
-projects[options_element][version] = "1.10"
 
 projects[pathauto][subdir] = "contrib"
 projects[pathauto][version] = "1.2"
@@ -628,7 +630,7 @@ projects[webform][version] = "4.0-beta1"
 projects[wysiwyg][subdir] = "contrib"
 projects[wysiwyg][version] = "2.2"
 
-; Themes
+;  Themes
 projects[omega][version] = "3.1"
 projects[zen][version] = "5.4"
 projects[cm_theme][version] = "2.0-beta1"

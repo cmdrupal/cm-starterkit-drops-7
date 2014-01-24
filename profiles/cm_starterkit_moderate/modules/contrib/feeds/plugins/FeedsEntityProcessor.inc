@@ -27,7 +27,8 @@ class FeedsEntityProcessor extends FeedsProcessor {
    *   The bundle of the entities this processor will create.
    */
   public function bundle() {
-    $bundle = NULL;
+    $bundle = $this->entityType();
+
     $entity_info = $this->entityInfo();
     if(!empty($this->config['bundle']) && isset($entity_info['bundles'][$this->config['bundle']])) {
       $bundle = $this->config['bundle'];
@@ -56,8 +57,14 @@ class FeedsEntityProcessor extends FeedsProcessor {
    * Creates a new entity in memory and returns it.
    */
   protected function newEntity(FeedsSource $source) {
-    $entity = entity_property_values_create_entity($this->entityType(), $this->config['values'])->value();
-    return $entity;
+    $info = $this->entityInfo();
+    $values = $this->config['values'];
+
+    if (isset($info['entity keys']['bundle']) && isset($config['bundle'])) {
+      $values[$info['entity keys']['bundle']] = $config['bundle'];
+    }
+
+    return entity_create($this->entityType(), $values);
   }
 
   /**
@@ -149,7 +156,13 @@ class FeedsEntityProcessor extends FeedsProcessor {
 
     $wrapper = entity_metadata_wrapper($this->entityType());
 
+    $bundle_key = !empty($entity_info['entity keys']['bundle']) ? $entity_info['entity keys']['bundle']: NULL;
+
     foreach ($wrapper->getPropertyInfo() as $name => $property) {
+      if ($name == $bundle_key) {
+        continue;
+      }
+
       if (!empty($property['setter callback']) && empty($property['field'])) {
         $form['values'][$name] = array(
           '#type' => 'textfield',
@@ -204,9 +217,12 @@ class FeedsEntityProcessor extends FeedsProcessor {
           if (entity_property_list_extract_type($property['type']) && !is_array($values['values'][$name])) {
             $values['values'][$name] = array($values['values'][$name]);
           }
-          $valid = entity_property_verify_data_type($values['values'][$name], $property['type']);
-          if (!$valid) {
-            form_set_error("values][$name", t('Invalid data value given. Be sure it matches the required data type and format.'));
+          // check if values empty first as all default values are optional
+          if (!empty($values['values'][$name])) {
+            $valid = entity_property_verify_data_type($values['values'][$name], $property['type']);
+            if (!$valid) {
+              form_set_error("values][$name", t('Invalid data value given. Be sure it matches the required data type and format.'));
+            }
           }
         }
       }
@@ -225,7 +241,7 @@ class FeedsEntityProcessor extends FeedsProcessor {
     $wrapper = entity_metadata_wrapper($this->entityType(), NULL, $info);
     // @todo: maybe restrict to data types feeds can deal with.
     foreach ($wrapper->getPropertyInfo() as $name => $property) {
-      if (!empty($property['setter callback']) && empty($property['field'])) {
+      if (empty($property['field'])) {
         $targets[$name] = array(
           'name' => $property['label'],
           'description' => isset($property['description']) ? $property['description'] : NULL,
