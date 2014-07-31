@@ -6,69 +6,52 @@
 
 
 /**
- * Implements hook_menu().
+ * Implements hook_entity_insert().
  */
-function cm_vod_feed_menu() {
+function cm_vod_feed_cloudcast_lookup_entity_insert($entity, $type) {
+  //dsm($entity);
+  //dsm($type);
+  
+  if ($entity->filemime == 'video/cloudcast') {
+    // look for a show with matching root filename
+    
+    // entity presave is only populating field_title on items being inserted w/ a feed
+    // http://vp.telvue.com/player?id=T02123&mini=1&video=199448
+    // Without the additional data in the RSS, the filename is the uid of the video 199448
+    
+    //dsm($entity); 
+    $result = db_query('SELECT entity_id FROM {field_data_field_expected_filename} WHERE field_expected_filename_value LIKE :filename', array(':filename' => $entity->filename . '%'));
 
-  $items['node/%node/vods'] = array(
-    'title' => 'Imported Items',
-    'description' => 'Takes a node object of a vod_feed and returns the vod items imported',
-    'page arguments' => array(1),
-    'page callback' => 'cm_vod_feed_grid',
-    'access callback' => 'cm_vod_feed_display_tab',
-    'access arguments' => array(1),
-    'weight' => 10,
-    'type' => MENU_LOCAL_TASK,
-  );
-
-  return $items;
-}
-
-/**
- * controls which content types the Imported Items menu tab is displayed on
- */
-function cm_vod_feed_display_tab($node) {
-  return ($node->type == 'cm_vod_feed');
-}
-
-/**
- * renders view with nid as argument
- */
-function cm_vod_feed_grid($node) {
-
-  $args = array($node->nid);
-  $view = views_get_view('cm_vod_feed_items');
-  $view->override_url = 'node/' . $node->nid . '/vods';
-  $output = $view->execute_display('default', $args);
-
-  return $output;
-}
-
-
-// SEE http://www.metachunk.com/blog/adding-module-path-drupal-7-theme-registry
-// These function essentially trick Drupal into thinking this module is also a theme
-// where tpls can be found
-
-/**
-* Implementation of hook_registry_alter
-*/
-function cm_vod_feed_theme_registry_alter(&$theme_registry) {
-  $mod_path = drupal_get_path('module', 'cm_vod_feed');
-  $theme_registry_copy = $theme_registry;       // munge on a copy
-  _theme_process_registry($theme_registry_copy, 'phptemplate', 'theme_engine', 'pow', $mod_path);
-  $theme_registry += array_diff_key($theme_registry_copy, $theme_registry);
-  $hooks = array('node');
-  foreach ($hooks as $h) {
-    _cm_vod_feed_insert_after_first_element($theme_registry[$h]['theme paths'], $mod_path);
-  }          
-}
-
-/**
- * Helper function for re-ordering arrays (needed by theme_registry_alter)
-*/
-function _cm_vod_feed_insert_after_first_element(&$a, $element) {
-  if(is_array($a)) {
-    $first_element = array_shift($a);
-    array_unshift($a, $first_element, $element);
+    if ($result->rowCount() == 1) {  
+      foreach ($result as $record) {
+        $node = node_load($record->entity_id);
+        //update show node
+        $file = file_load($entity->fid);
+        $node->field_cm_show_vod[LANGUAGE_NONE][0] = array(
+          'fid' => $entity->fid,
+          'display' => 1,
+          'description' => '', 
+        );
+        node_save($node);
+      }
+      
+      //check to see if the fid was sucessfully added
+      // reload the node
+      
+      $node = node_load($record->entity_id);
+      if (isset($node->field_cm_show_vod[LANGUAGE_NONE][0]['fid'])) {
+        watchdog('cm_vod_feed_cloudcast_lookup', 'Lookup for %filename matched to Show node # %nid', array('%filename' => $entity->filename, '%nid' => $node->nid), WATCHDOG_NOTICE, $link = NULL);
+      }  else {
+        watchdog('cm_vod_feed_cloudcast_lookup', 'Lookup for %filename failed to resave to Show node # %nid', array('%filename' => $entity->filename, '%nid' => $node->nid), WATCHDOG_WARNING, $link = NULL);
+      }
+    }
+    
+    if ($result->rowCount() == 0) {  
+      watchdog('cm_vod_feed_cloudcast_lookup', 'Lookup for %filename failed to find matching Show', array('%filename' => $entity->filename), WATCHDOG_WARNING, $link = NULL);
+    }
+    
+    if ($result->rowCount() > 1) {  
+      watchdog('cm_vod_feed_cloudcast_lookup', 'Lookup for %filename returned multiple Shows', array('%filename' => $entity->filename), WATCHDOG_WARNING, $link = NULL);
+    }
   }
 }

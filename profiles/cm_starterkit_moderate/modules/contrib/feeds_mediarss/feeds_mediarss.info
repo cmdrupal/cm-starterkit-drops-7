@@ -11,9 +11,9 @@ files[] = feeds_mediarss.module
 files[] = FeedsMediaRSSParser.inc
 
 
-; Information added by drupal.org packaging script on 2013-09-30
-version = "7.x-1.0-beta1+1-dev"
+; Information added by Drupal.org packaging script on 2014-06-30
+version = "7.x-1.0-beta1+2-dev"
 core = "7.x"
 project = "feeds_mediarss"
-datestamp = "1380578357"
+datestamp = "1404141233"
 

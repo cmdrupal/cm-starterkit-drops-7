@@ -47,9 +47,10 @@ function civicrm_api($entity, $action, $params, $extra = NULL) {
     $errorScope = CRM_Core_TemporaryErrorScope::useException();
     // look up function, file, is_generic
     $apiRequest += _civicrm_api_resolve($apiRequest);
-    if (strtolower($action) == 'create' || strtolower($action) == 'delete' || strtolower($action) == 'submit') {
-      $apiRequest['is_transactional'] = 1;
-      $transaction = new CRM_Core_Transaction();
+    if ((strtolower($action) == 'create' || strtolower($action) == 'delete' || strtolower($action) == 'submit')
+      && (!isset($params['is_transactional']) || $params['is_transactional'])) {
+        $apiRequest['is_transactional'] = 1;
+        $transaction = new CRM_Core_Transaction();
     }
 
     // support multi-lingual requests
@@ -87,7 +88,7 @@ function civicrm_api($entity, $action, $params, $extra = NULL) {
       $result = isset($extra) ? $function($apiRequest['params'], $extra) : $function($apiRequest['params']);
     }
     else {
-      return civicrm_api3_create_error("API (" . $apiRequest['entity'] . "," . $apiRequest['action'] . ") does not exist (join the API team and implement it!)");
+      return civicrm_api3_create_error("API (" . $apiRequest['entity'] . ", " . $apiRequest['action'] . ") does not exist (join the API team and implement it!)");
     }
 
     // For output filtering, process $apiWrappers in reverse order
@@ -444,6 +445,12 @@ function _civicrm_api_get_camel_name($entity, $version = NULL) {
  */
 function _civicrm_api_call_nested_api(&$params, &$result, $action, $entity, $version) {
   $entity = _civicrm_api_get_entity_name_from_camel($entity);
+
+  //we don't need to worry about nested api in the getfields/getoptions actions, so just return immediately
+  if (in_array(strtolower($action), array('getfields', 'getoptions'))) {
+    return;
+  }
+
   if(strtolower($action) == 'getsingle'){
     // I don't understand the protocol here, but we don't want
     // $result to be a recursive array

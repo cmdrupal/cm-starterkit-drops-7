@@ -738,6 +738,9 @@ class CRM_Activity_BAO_Activity extends CRM_Activity_DAO_Activity {
     }
 
     $input['count'] = FALSE;
+
+    // skip bulk activities in activity tab
+    $input['activity_type_exclude_id'][$bulkActivityTypeID] = $bulkActivityTypeID;
     list($sqlClause, $params) = self::getActivitySQLClause($input);
 
     $query = "{$insertSQL}
@@ -760,7 +763,8 @@ LEFT JOIN  civicrm_case_activity ON ( civicrm_case_activity.activity_id = tbl.ac
     // create temp table for target contacts
     $activityContactTempTable = "civicrm_temp_activity_contact_{$randomNum}";
     $query = "CREATE TEMPORARY TABLE {$activityContactTempTable} (
-                activity_id int unsigned, contact_id int unsigned, record_type_id varchar(16), contact_name varchar(255), is_deleted int unsigned )
+                activity_id int unsigned, contact_id int unsigned, record_type_id varchar(16),
+                 contact_name varchar(255), is_deleted int unsigned, INDEX index_activity_id( activity_id ) )
                 ENGINE=MYISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci";
 
     CRM_Core_DAO::executeQuery($query);
@@ -773,8 +777,9 @@ SELECT     ac.activity_id,
            ac.record_type_id,
            c.sort_name,
            c.is_deleted
-FROM       civicrm_activity_contact ac
-INNER JOIN {$activityTempTable} ON ( ac.activity_id = {$activityTempTable}.activity_id )
+FROM       {$activityTempTable}
+INNER JOIN civicrm_activity a ON ( a.id = {$activityTempTable}.activity_id  )
+INNER JOIN civicrm_activity_contact ac ON ( ac.activity_id = {$activityTempTable}.activity_id )
 INNER JOIN civicrm_contact c ON c.id = ac.contact_id
 ";
     CRM_Core_DAO::executeQuery($query);
@@ -924,6 +929,14 @@ ORDER BY    fixed_sort_order
    * @static
    */
   static function &getActivitiesCount($input) {
+    // skip bulk activities in activity tab
+    $bulkActivityTypeID = CRM_Core_OptionGroup::getValue(
+      'activity_type',
+      'Bulk Email',
+      'name'
+    );
+    $input['activity_type_exclude_id'][$bulkActivityTypeID] = $bulkActivityTypeID;
+
     $input['count'] = TRUE;
     list($sqlClause, $params) = self::getActivitySQLClause($input);
 
@@ -1177,6 +1190,7 @@ LEFT JOIN civicrm_activity_contact src ON (src.activity_id = ac.activity_id AND 
     $subjectToken = CRM_Utils_Token::getTokens($subject);
     $messageToken = CRM_Utils_Token::getTokens($text);
     $messageToken = array_merge($messageToken, CRM_Utils_Token::getTokens($html));
+    $allTokens = array_merge($messageToken, $subjectToken);
 
     if (!$from) {
       $from = "$fromDisplayName <$fromEmail>";
@@ -1242,12 +1256,12 @@ LEFT JOIN civicrm_activity_contact src ON (src.activity_id = ac.activity_id AND 
 
     // get token details for contacts, call only if tokens are used
     $details = array();
-    if (!empty($returnProperties)) {
+    if (!empty($returnProperties) || !empty($tokens) || !empty($allTokens)) {
       list($details) = CRM_Utils_Token::getTokenDetails(
         $contactIds,
         $returnProperties,
         NULL, NULL, FALSE,
-        $messageToken,
+        $allTokens,
         'CRM_Activity_BAO_Activity'
       );
     }
@@ -2102,9 +2116,6 @@ AND cl.modified_id  = c.id
       // my case hence we have defined fields as case_*
       if ($name == 'Activity') {
         $exportableFields = CRM_Activity_DAO_Activity::export();
-        if (isset($exportableFields['activity_campaign_id'])) {
-          $exportableFields['activity_campaign'] = array('title' => ts('Campaign Title'));
-        }
         $exportableFields['source_contact_id']['title'] = ts('Source Contact ID');
         $exportableFields['source_contact'] = array(
           'title' => ts('Source Contact'),
@@ -2364,7 +2375,7 @@ INNER JOIN  civicrm_option_group grp ON ( grp.id = val.option_group_id AND grp.n
 
         //get the assignee contacts.
         if ($allow) {
-          $assigneeContacts = CRM_Activity_BAO_Contact::retrieveContactIdsByActivityId($activity->id, $assigneeID);
+          $assigneeContacts = CRM_Activity_BAO_ActivityContact::retrieveContactIdsByActivityId($activity->id, $assigneeID);
           foreach ($assigneeContacts as $cnt => $contactId) {
             if (!CRM_Contact_BAO_Contact_Permission::allow($contactId, $permission)) {
               $allow = FALSE;
@@ -2589,6 +2600,19 @@ INNER JOIN  civicrm_option_group grp ON ( grp.id = val.option_group_id AND grp.n
     }
 
     return self::getActivityContact($activityId, $sourceID);
+  }
+
+  function setApiFilter(&$params) {
+    if (CRM_Utils_Array::value('target_contact_id', $params)) {
+      $this->selectAdd();
+      $activityContacts = CRM_Core_OptionGroup::values('activity_contacts', FALSE, FALSE, FALSE, NULL, 'name');
+      $targetID = CRM_Utils_Array::key('Activity Targets', $activityContacts);
+      $obj = new CRM_Activity_BAO_ActivityContact();
+      $params['return.target_contact_id'] = 1;
+      $this->joinAdd($obj, 'LEFT');
+      $this->selectAdd('civicrm_activity.*');
+      $this->whereAdd(" civicrm_activity_contact.contact_id = {$params['target_contact_id']} AND civicrm_activity_contact.record_type_id = {$targetID}");
+    }
   }
 
 }

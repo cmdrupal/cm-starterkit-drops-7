@@ -1,26 +1,19 @@
-core = "7.x"
-dependencies[] = "cm_project"
-dependencies[] = "ctools"
-dependencies[] = "features"
-dependencies[] = "node_reference"
-dependencies[] = "views"
-description = "Relates Airings to Project"
-features[ctools][] = "views:views_default:3.0"
-features[field][] = "airing-airing-field_airing_project_ref"
-name = "Project Airings"
-package = "Community Media"
-php = "5.2.4"
+name = Project Airings
+description = Relates Airings to Project
+core = 7.x
+package = Community Media
+dependencies[] = cm_project
+dependencies[] = ctools
+dependencies[] = entityreference
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[field_base][] = field_airing_project_ref
+features[field_instance][] = airing-airing-field_airing_project_ref
+features_exclude[dependencies][features] = features
 
-; Information added by drupal.org packaging script on 2012-08-11
-version = "7.x-2.x-dev"
-core = "7.x"
-project = "cm_project"
-datestamp = "1344643827"
-
-
-; Information added by drupal.org packaging script on 2013-09-30
-version = "7.x-3.0-alpha1"
+; Information added by Drupal.org packaging script on 2014-05-31
+version = "7.x-3.0-alpha2"
 core = "7.x"
 project = "cm_airing"
-datestamp = "1380545427"
+datestamp = "1401558533"
 

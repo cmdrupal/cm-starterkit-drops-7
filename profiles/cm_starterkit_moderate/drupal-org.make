@@ -3,13 +3,12 @@
 ; locally before committing to the drupal-org.make. 
 
 api = 2
-core = 7.26
+core = 7.30
 
 ; ====== CIVICRM RELATED =========
 
 libraries[civicrm][download][type] = get
-libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.4.3-starterkit.tgz"
-;libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.3.7-starterkit.tgz"
+libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.4.6-starterkit.tgz"
 libraries[civicrm][destination] = modules
 libraries[civicrm][directory_name] = civicrm
 
@@ -18,7 +17,7 @@ libraries[civicrm][patch][1978142] = http://drupal.org/files/2082713-pantheon-se
 ;libraries[civicrm][patch][1978142] = http://drupal.org/files/1978142-pantheon-settings-12.patch
 
 ;PATCHES THAT SHOULD BE ADDRESSED IN FUTURE CIVICRM RELEASES
-libraries[civicrm][patch][1844558] = http://drupal.org/files/1844558-run-civicrm-from-profile-dir-config-2.patch
+libraries[civicrm][patch][1844558] = https://www.drupal.org/files/issues/1844558-run-civicrm-from-profile-dir-config-3.patch
 libraries[civicrm][patch][1940074] = http://drupal.org/files/1940074-openFlashChart_tpl_javascript-4.patch
 libraries[civicrm][patch][1967972] = http://drupal.org/files/1967972-bootsrap-fixes.patch
 libraries[civicrm][patch][2130213] = http://drupal.org/files/issues/2130213-ignore-timezone-on-install-2.patch
@@ -336,7 +335,7 @@ libraries[ckeditor-civicrm][destination] = "modules/civicrm/packages"
 libraries[ckeditor-civicrm][directory_name] = ckeditor
 
 libraries[tinymce-civicrm][download][type] = get
-libraries[tinymce-civicrm][download][url] = "https://github.com/downloads/tinymce/tinymce/tinymce_3.4.8.zip"
+libraries[tinymce-civicrm][download][url] = "http://download.moxiecode.com/tinymce/tinymce_3.5.11.zip"
 libraries[tinymce-civicrm][destination] = "modules/civicrm/packages"
 libraries[tinymce-civicrm][directory_name] = tinymce
 
@@ -359,14 +358,14 @@ projects[civicrm_realname][subdir] = "contrib"
 projects[civicrm_realname][version] = "1.0"
 
 projects[options_element][subdir] = "contrib"
-projects[options_element][version] = "1.10"
+projects[options_element][version] = "1.12"
 
 projects[webform_civicrm][subdir] = "contrib"
-projects[webform_civicrm][version] = "4.3"
+projects[webform_civicrm][version] = "4.7"
 
 ; Community Media Modules
 projects[cm_project][subdir] = "contrib-cm"
-projects[cm_project][version] = "2.x-dev"
+projects[cm_project][version] = "2.0-beta1"
 
 projects[cm_profile][subdir] = "contrib-cm"
 projects[cm_profile][version] = "1.x-dev"
@@ -375,9 +374,6 @@ projects[jupload][subdir] = "contrib-cm"
 projects[jupload][version] = "1.x-dev"
 
 ; Contrib Modules
-;projects[auto_nodetitle][subdir] = "contrib"
-;projects[auto_nodetitle][version] = "1.0"
-
 projects[auto_entitylabel][subdir] = "contrib"
 projects[auto_entitylabel][version] = "1.2"
 
@@ -385,34 +381,34 @@ projects[colors][subdir] = "contrib"
 projects[colors][version] = "1.0-rc1"
 
 projects[context][subdir] = "contrib"
-projects[context][version] = "3.0-rc1"
+projects[context][version] = "3.2"
 
 projects[devel][subdir] = "contrib"
-projects[devel][version] = "1.3"
+projects[devel][version] = "1.5"
 
 projects[delta][subdir] = "contrib"
 projects[delta][version] = "3.0-beta11"
 
 projects[environment_indicator][subdir] = "contrib"
-projects[environment_indicator][version] = "1.1"
+projects[environment_indicator][version] = "2.5"
 
 projects[field_collection][subdir] = "contrib"
-projects[field_collection][version] = "1.0-beta5"
+projects[field_collection][version] = "1.0-beta7"
 
 projects[field_permissions][subdir] = "contrib"
 projects[field_permissions][version] = "1.0-beta2"
 
 projects[flag][subdir] = "contrib"
-projects[flag][version] = "3.2"
+projects[flag][version] = "3.5"
 
 projects[hms_field][subdir] = "contrib"
 projects[hms_field][version] = "1.2"
 
 projects[link][subdir] = "contrib"
-projects[link][version] = "1.1"
+projects[link][version] = "1.2"
 
 projects[og][subdir] = "contrib"
-projects[og][version] = "2.3"
+projects[og][version] = "2.7"
 
 projects[og_extras][subdir] = "contrib"
 projects[og_extras][version] = "1.1"
@@ -424,13 +420,13 @@ projects[socialmedia][subdir] = "contrib"
 projects[socialmedia][version] = "1.0-beta13"
 
 projects[views_accordion][subdir] = "contrib"
-projects[views_accordion][version] = "1.0-rc2"
+projects[views_accordion][version] = "1.0"
 
 ; ====== EASY ==========
 
 ; Community Media Modules
 projects[cm_airing][subdir] = "contrib-cm"
-projects[cm_airing][version] = "3.x-alpha1"
+projects[cm_airing][version] = "3.0-alpha3"
 
 projects[cm_checklist][subdir] = "contrib-cm"
 projects[cm_checklist][version] = "1.x-dev"
@@ -439,29 +435,35 @@ projects[cm_header][subdir] = "contrib-cm"
 projects[cm_header][version] = "1.0-alpha1"
 
 projects[cm_show][subdir] = "contrib-cm"
-projects[cm_show][version] = "1.x-dev"
+projects[cm_show][version] = "1.0-beta1"
 
 projects[cm_show_vod][subdir] = "contrib-cm"
 projects[cm_show_vod][version] = "2.x-dev"
 
 projects[cm_slideshow][subdir] = "contrib-cm"
-projects[cm_slideshow][version] = "2.x-dev"
+projects[cm_slideshow][version] = "2.0-alpha1"
 
 projects[cm_vod_feed][subdir] = "contrib-cm"
 projects[cm_vod_feed][version] = "2.0-beta1"
 
 projects[om_crew_connect][subdir] = "contrib-cm"
-projects[om_crew_connect][version] = "2.x-dev"
+projects[om_crew_connect][version] = "2.0-beta4"
 
-; Contrib Modules
+; Contribb Modules
 projects[backup_migrate][subdir] = "contrib"
 projects[backup_migrate][version] = "2.8"
+
+projects[badbot][subdir] = "contrib"
+projects[badbot][version] = "1.1"
 
 projects[block_class][subdir] = "contrib"
 projects[block_class][version] = "2.1"
 
 projects[breakpoints][subdir] = "contrib"
 projects[breakpoints][version] = "1.1"
+
+projects[colors][subdir] = "contrib"
+projects[colors][version] = "1.0-rc1"
 
 projects[commentsblock][subdir] = "contrib"
 projects[commentsblock][version] = "2.2"
@@ -470,7 +472,7 @@ projects[css_injector][subdir] = "contrib"
 projects[css_injector][version] = "1.8"
 
 projects[ctools][subdir] = "contrib"
-projects[ctools][version] = "1.3"
+projects[ctools][version] = "1.4"
 
 projects[captcha][subdir] = "contrib"
 projects[captcha][version] = "1.0"
@@ -499,11 +501,17 @@ projects[features][version] = "2.0"
 projects[feeds][subdir] = "contrib"
 projects[feeds][version] = "2.x-dev"
 
+projects[feeds_cablecast][subdir] = "contrib"
+projects[feeds_cablecast][version] = "1.x-dev"
+
 projects[feeds_mediarss][subdir] = "contrib"
 projects[feeds_mediarss][version] = "1.x-dev"
 
 projects[feeds_media_internet_files][subdir] = "contrib"
 projects[feeds_media_internet_files][version] = "1.x-dev"
+
+projects[feeds_telvue][subdir] = "contrib"
+projects[feeds_telvue][version] = "1.x-dev"
 
 projects[field_group][subdir] = "contrib"
 projects[field_group][version] = "1.3"
@@ -531,7 +539,7 @@ projects[headerimage][version] = "1.4"
 
 projects[hms_field][subdir] = "contrib"
 projects[hms_field][version] = "1.x-dev"
-projects[hms_field][patch][2119623] = "https://drupal.org/files/2119623-hidden_field_empty_error.patch"
+projects[hms_field][patch][2119623] = "http://drupal.org/files/2119623-hidden_field_empty_error.patch"
 
 projects[google_analytics][subdir] = "contrib"
 projects[google_analytics][version] = "1.4"
@@ -541,7 +549,7 @@ projects[imce][version] = "1.7"
 
 projects[imce_wysiwyg][subdir] = "contrib"
 projects[imce_wysiwyg][version] = "1.0"
-projects[imce_wysiwyg][patch][1794930] = "https://drupal.org/files/imce_wysiwyg-access-issue-1825850-2.patch"
+projects[imce_wysiwyg][patch][1794930] = "http://drupal.org/files/imce_wysiwyg-access-issue-1825850-2.patch"
 
 projects[job_scheduler][subdir] = "contrib"
 projects[job_scheduler][version] = "2.0-alpha3"
@@ -554,9 +562,6 @@ projects[legal][version] = "1.x-dev"
 
 projects[libraries][subdir] = "contrib"
 projects[libraries][version] = "2.1"
-
-projects[options_element][subdir] = "contrib"
-projects[options_element][version] = "1.10"
 
 projects[media][subdir] = "contrib"
 projects[media][version] = "2.0-alpha3"
@@ -585,14 +590,20 @@ projects[module_filter][version] = "1.8"
 projects[menu_attributes][subdir] = "contrib"
 projects[menu_attributes][version] = "1.0-rc2"
 
+projects[options_element][subdir] = "office_hours"
+projects[options_element][version] = "1.3"
+
+projects[options_element][subdir] = "contrib"
+projects[options_element][version] = "1.10"
+
 projects[pathauto][subdir] = "contrib"
 projects[pathauto][version] = "1.2"
 
 projects[pbcore][subdir] = "contrib"
-projects[pbcore][version] = "1.0-beta2"
+projects[pbcore][version] = "1.0-beta3"
 
 projects[picture][subdir] = "contrib"
-projects[picture][version] = "1.x-dev"
+projects[picture][version] = "2.4"
 
 projects[profile2][subdir] = "contrib"
 projects[profile2][version] = "1.3"
@@ -613,7 +624,7 @@ projects[token][subdir] = "contrib"
 projects[token][version] = "1.5"
 
 projects[views][subdir] = "contrib"
-projects[views][version] = "3.7"
+projects[views][version] = "3.8"
 
 projects[views_bulk_operations][subdir] = "contrib"
 projects[views_bulk_operations][version] = "3.1"
@@ -625,12 +636,12 @@ projects[views_slideshow][subdir] = "contrib"
 projects[views_slideshow][version] = "3.1"
 
 projects[webform][subdir] = "contrib"
-projects[webform][version] = "4.0-beta1"
+projects[webform][version] = "4.0-beta2"
 
 projects[wysiwyg][subdir] = "contrib"
 projects[wysiwyg][version] = "2.2"
 
-;  Themes
+; Themes
 projects[omega][version] = "3.1"
 projects[zen][version] = "5.4"
 projects[cm_theme][version] = "2.0-beta1"
@@ -642,7 +653,7 @@ libraries[ckeditor][destination] = libraries
 libraries[ckeditor][directory_name] = ckeditor
 
 libraries[tinymce][download][type] = get
-libraries[tinymce][download][url] = "https://github.com/downloads/tinymce/tinymce/tinymce_3.5.8.zip"
+libraries[tinymce][download][url] = "http://download.moxiecode.com/tinymce/tinymce_3.5.11.zip"
 libraries[tinymce][destination] = libraries
 libraries[tinymce][directory_name] = tinymce
 

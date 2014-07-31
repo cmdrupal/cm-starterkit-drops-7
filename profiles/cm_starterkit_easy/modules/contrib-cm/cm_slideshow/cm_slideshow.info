@@ -29,9 +29,6 @@ features[image][] = "cm_slideshow_narrow"
 features[image][] = "cm_slideshow_normal"
 features[image][] = "cm_slideshow_wide"
 features[node][] = "cm_slideshow_slide"
-features[resp_img_suffix][] = "narrow"
-features[resp_img_suffix][] = "normal"
-features[resp_img_suffix][] = "wide"
 features[variable][] = "comment_anonymous_cm_slideshow_slide"
 features[variable][] = "comment_cm_slideshow_slide"
 features[variable][] = "comment_default_mode_cm_slideshow_slide"
@@ -47,9 +44,9 @@ features[variable][] = "node_submitted_cm_slideshow_slide"
 features[views_view][] = "cm_slideshow"
 
 
-; Information added by drupal.org packaging script on 2013-09-30
-version = "7.x-2.0-alpha1+2-dev"
+; Information added by Drupal.org packaging script on 2014-07-09
+version = "7.x-2.0-beta1"
 core = "7.x"
 project = "cm_slideshow"
-datestamp = "1380559187"
+datestamp = "1404943429"
 

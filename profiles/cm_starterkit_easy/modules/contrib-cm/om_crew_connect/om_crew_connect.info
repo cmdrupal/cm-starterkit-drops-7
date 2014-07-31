@@ -2,7 +2,6 @@ configure = "admin/structure/profiles/manage/skills/fields"
 core = "7.x"
 dependencies[] = "features"
 dependencies[] = "field_group"
-dependencies[] = "jquery_update"
 dependencies[] = "list"
 dependencies[] = "profile2"
 dependencies[] = "strongarm"
@@ -30,9 +29,9 @@ name = "Crew Connect"
 package = "Community Media"
 php = "5.2.4"
 
-; Information added by drupal.org packaging script on 2013-10-01
-version = "7.x-2.0-beta3+2-dev"
+; Information added by Drupal.org packaging script on 2014-05-14
+version = "7.x-2.0-beta4"
 core = "7.x"
 project = "om_crew_connect"
-datestamp = "1380596054"
+datestamp = "1400105628"
 

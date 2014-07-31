@@ -353,54 +353,58 @@ class FeedsMediaRSSParser extends FeedsParser {
     foreach ($sxml->xpath('//item') as $entry) {
 
       // Get nodes in media: namespace for media information
-      $media = $entry->children('http://search.yahoo.com/mrss/');
-            
-      // Get video player URL
+      // Some cms (like wp) define namespace without trailing slash, therefore
+      // if http://search.yahoo.com/mrss/ doesn't have result, try
+      // http://search.yahoo.com/mrss  
+      $media = $entry->children('http://search.yahoo.com/mrss/') ? $entry->children('http://search.yahoo.com/mrss/') : $entry->children('http://search.yahoo.com/mrss');
+      // First level child items require @count instead of isset... see #2118461 
       
+      // Get video player URL
+
       // check to see if player and thumbnail are inside of content
-      // not sure if that follows the mrss spec, but Vimeo does it.   
+      // not sure if that follows the mrss spec, but Vimeo does it.
       if (isset($media->content->player)) {
-        $attrs = $media->content->player->attributes();
-      } else {
-        $attrs = $media->player->attributes();
+        $player = $media->content->player->attributes();
       }
-      $player = (string) $attrs['url'];
-            
+      elseif (@count($media->player)) {
+        $player = $media->player->attributes();
+      }
+
       // Get video thumbnail
-            
+
       // check to see if player and thumbnail are inside of content
-      // not sure if that follows the mrss spec, but Vimeo does it.  
+      // not sure if that follows the mrss spec, but Vimeo does it.
       if (isset($media->content->thumbnail)) {
-        $attrs = $media->content->thumbnail->attributes();
-      } else {
-        $attrs = $media->thumbnail[0]->attributes();
+        $thumbnail = $media->content->thumbnail->attributes();
       }
-   
-      $thumbnail = (string) $attrs['url'];
+      elseif (@count($media->thumbnail)) {
+        $thumbnail = $media->thumbnail[0]->attributes();
+      }
       
       // Get license
       
       if (isset($media->content->license)) {
-        $attrs = $media->content->thumbnail->attributes();
-      } else {
-        $attrs = $media->license[0]->attributes();
+        $license = $media->content->licence->attributes();
       }
-      
-      $license = (string) $media->license[0];
-      $license_url = (string) $attrs['url'];
-      
+            
+      if (@count($media->license)) {
+        $license = $media->license[0]->attributes();
+      }
+
       //get media:content elements from media:group
       if (isset($media->content->group)) {
         $group = $media->content->group;
-      } else {
+      }
+
+      elseif (@count($media->group)) {
         $group = $media->group;
       }
-      
-      $content = (string) $group->content[0];
-      $content_attrs = $content->attributes();
-      
-      
-                  
+      else {
+        $group = $media;
+      }
+
+      $content_attrs = $group->attributes();
+
       $item = array(
         'guid' => (string) $entry->guid,
         'link' => (string) $entry->link,
@@ -431,10 +435,10 @@ class FeedsMediaRSSParser extends FeedsParser {
         'media_title' => NULL,  
         'media_description' => NULL,
         'media_keywords_csv' => NULL,
-        'media_thumbnail_url' => $thumbnail,
+        'media_thumbnail_url' => isset($thumbnail) ? (string) $thumbnail['url'] : NULL,
         'media_categories_csv' => NULL,
         'media_hash' => NULL,
-        'media_player_url' => $player,
+        'media_player_url' => isset($player) ? (string) $player['url'] : NULL,
         'media_credit' => NULL,
         'media_copyright' => NULL,
         'media_text' => NULL,      
@@ -446,8 +450,8 @@ class FeedsMediaRSSParser extends FeedsParser {
         'media_backlinks_csv' => NULL,    
         'media_status' => NULL, 
         'media_price' => NULL,  
-        'media_license_text' =>  $license,  
-        'media_license_url' =>  $license_url,
+        'media_license_text' =>  isset($license) ? (string) $license : NULL,
+        'media_license_url' => isset($license) ? (string) $license['url'] : NULL,
         'media_subtitle_url' => NULL,   
         'media_peerlink_url' => NULL, 
         'media_rights_csv' => NULL,    

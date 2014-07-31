@@ -150,6 +150,17 @@ function cm_airing_permission() {
       'description' => t('Allows users to edit own airings.'),
       'restrict access' => TRUE,
     ),
+    'delete any cm_airing entities' => array(
+      'title' => t('Delete any airings'),
+      'description' => t('Allows users to delete any airings.'),
+      'restrict access' => TRUE,
+    ),
+    'delete own cm_airing entities' => array(
+      'title' => t('Delete own airings'),
+      'description' => t('Allows users to Delete own airings.'),
+      'restrict access' => TRUE,
+    ),
+
   );
 
   return $permissions;
@@ -210,10 +221,16 @@ function cm_airing_access($op, $airing, $account = NULL, $entity_type = NULL) {
     case 'view':
       return user_access('administer cm_airing', $account)
           || user_access('view cm_airing entities', $account);
+    case 'update':
     case 'edit':
       return user_access('administer cm_airing')
           || user_access('edit any cm_airing entities')
           || (user_access('edit own cm_airing entities') && ($airing->uid == $account->uid));
+    case 'delete':
+      return user_access('administer cm_airing')
+          || user_access('delete any cm_airing entities')
+          || (user_access('delete own cm_airing entities') && ($airing->uid == $account->uid));
+
   }
 }
 

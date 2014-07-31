@@ -11,9 +11,9 @@ files[] = cm_show_staff.module
 configure = admin/config/communitymedia/show/staff
 
 
-; Information added by drupal.org packaging script on 2013-09-30
-version = "7.x-1.x-dev"
+; Information added by Drupal.org packaging script on 2014-07-08
+version = "7.x-1.0-beta1+0-dev"
 core = "7.x"
 project = "cm_show"
-datestamp = "1380559181"
+datestamp = "1404854028"
 

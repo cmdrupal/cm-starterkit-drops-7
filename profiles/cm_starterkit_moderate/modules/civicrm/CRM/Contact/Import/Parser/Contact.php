@@ -663,7 +663,7 @@ class CRM_Contact_Import_Parser_Contact extends CRM_Contact_Import_Parser {
     //fixed CRM-4148
     //now we create new contact in update/fill mode also.
     $contactID = NULL;
-    if ($createNewContact || $this->_updateWithId) {
+    if ($createNewContact || ($this->_retCode != CRM_Import_Parser::NO_MATCH && $this->_updateWithId)) {
 
       //CRM-4430, don't carry if not submitted.
       foreach (array('prefix_id', 'suffix_id', 'gender_id') as $name) {
@@ -1681,7 +1681,7 @@ class CRM_Contact_Import_Parser_Contact extends CRM_Contact_Import_Parser {
     }
 
     //get the id of the contact whose street address is not parsable, CRM-5886
-    if ($this->_parseStreetAddress && $newContact->address) {
+    if ($this->_parseStreetAddress && is_object($newContact) && property_exists($newContact, 'address') && $newContact->address) {
       foreach ($newContact->address as $address) {
         if (!empty($address['street_address']) && (!CRM_Utils_Array::value('street_number', $address) || !CRM_Utils_Array::value('street_name', $address))) {
           $this->_unparsedStreetAddressContacts[] = array(
@@ -1891,8 +1891,7 @@ class CRM_Contact_Import_Parser_Contact extends CRM_Contact_Import_Parser {
 
     //now format custom data.
     foreach ($params as $key => $field) {
-        if (!isset($field)){
-        //      if ($field == NULL || $field === '') {
+      if (!isset($field) || empty($field)){
         unset($params[$key]);
         continue;
       }
@@ -1954,6 +1953,22 @@ class CRM_Contact_Import_Parser_Contact extends CRM_Contact_Import_Parser {
         $extends = CRM_Utils_Array::value('extends', $customFields[$customFieldID]);
         $htmlType = CRM_Utils_Array::value( 'html_type', $customFields[$customFieldID] );
         switch ( $htmlType ) {
+        case 'Select':
+        case 'Radio':
+        case 'Autocomplete-Select':
+          if ($customFields[$customFieldID]['data_type'] == 'String') {
+            $customOption = CRM_Core_BAO_CustomOption::getCustomOption($customFieldID, TRUE);
+            foreach ($customOption as $customFldID => $customValue) {
+              $val = CRM_Utils_Array::value('value', $customValue);
+              $label = CRM_Utils_Array::value('label', $customValue);
+              $label = strtolower($label);
+              $value = strtolower(trim($formatted[$key]));
+              if (($value == $label) || ($value == strtolower($val))) {
+                $params[$key] = $formatted[$key] = $val;
+              }
+            }
+          }
+          break;
         case 'CheckBox':
         case 'AdvMulti-Select':
         case 'Multi-Select':

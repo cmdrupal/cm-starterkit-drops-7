@@ -8,7 +8,7 @@ include_once('pbcore_custom_names.features.inc');
 function pbcore_custom_names_form_alter(&$form, $form_state, $form_id) {
   
   //Genres 
-  if (isset($form['field_pbcore_genres'])) {    
+  if (isset($form['field_pbcore_genres']) && isset($form['field_pbcore_genres'][LANGUAGE_NONE])) {    
       
     $newoptions = array();
     $options = $form['field_pbcore_genres'][LANGUAGE_NONE]['#options'];
@@ -34,7 +34,7 @@ function pbcore_custom_names_form_alter(&$form, $form_state, $form_id) {
   
     
   //Languages
-  if (isset($form['field_pbcore_languages'])) {  
+  if (isset($form['field_pbcore_languages']) && isset($form['field_pbcore_genres'][LANGUAGE_NONE])) {  
     $newoptions = array();
     $options = $form['field_pbcore_languages'][LANGUAGE_NONE]['#options'];
 
@@ -58,7 +58,7 @@ function pbcore_custom_names_form_alter(&$form, $form_state, $form_id) {
   }
   
   //Ratings
-  if (isset($form['field_pbcore_fcc_ratings'])) { 
+  if (isset($form['field_pbcore_fcc_ratings']) && isset($form['field_pbcore_genres'][LANGUAGE_NONE])) { 
     $newoptions = array();
     $options = $form['field_pbcore_fcc_ratings'][LANGUAGE_NONE]['#options'];
     

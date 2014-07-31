@@ -173,6 +173,10 @@ function cm_starterkit_easy_block_info() {
     'info' => t('Logo Block'), //The name that will appear in the block list.
     'cache' => DRUPAL_CACHE_PER_ROLE, //Default
   );
+  $blocks['cm_theme_mobile_menu'] = array(
+    'info' => t('Mobile Menu'), //The name that will appear in the block list.
+    'cache' => DRUPAL_CACHE_PER_ROLE, //Default
+  );
   return $blocks;
 }
 
@@ -190,6 +194,10 @@ function cm_starterkit_easy_block_view($delta = '') {
     case 'cm_theme_logo':
       $block['subject'] = NULL;
       $block['content'] = '<a href="/" title="' . t('Home') . '" rel="home" id="logo"><img src="' . theme_get_setting('logo') .'" alt="' . t('Home') .'" /></a>';
+    break;
+    case 'cm_theme_mobile_menu':
+      $block['subject'] = NULL;
+      $block['content'] = '<ul class="toggle-wrapper"><li><a class="toggle-menu" href="#">Menu <span>☰</span></a></li><li><a class="toggle-search" href="#">Search</a></li></ul>';
     break;
   }
   return $block;
