@@ -1,0 +1,19 @@
+name = Project Airings
+description = Relates Airings to Project
+core = 7.x
+package = Community Media
+dependencies[] = cm_project
+dependencies[] = ctools
+dependencies[] = entityreference
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[field_base][] = field_airing_project_ref
+features[field_instance][] = airing-airing-field_airing_project_ref
+features_exclude[dependencies][features] = features
+
+; Information added by Drupal.org packaging script on 2014-05-31
+version = "7.x-3.0-alpha2"
+core = "7.x"
+project = "cm_airing"
+datestamp = "1401558533"
+

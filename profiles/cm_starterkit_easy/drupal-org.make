@@ -1,9 +1,9 @@
 api = 2
-core = 7.30
+core = 7.32
 
 ; ====== EASY ==========
 
-; Community Media Modules
+;Community Media Modules
 projects[cm_airing][subdir] = "contrib-cm"
 projects[cm_airing][version] = "3.0-alpha2"
 
@@ -28,7 +28,7 @@ projects[cm_vod_feed][version] = "2.0-beta2"
 projects[om_crew_connect][subdir] = "contrib-cm"
 projects[om_crew_connect][version] = "2.0-beta4"
 
-; Contribb Modules
+; Contrib Modules
 projects[backup_migrate][subdir] = "contrib"
 projects[backup_migrate][version] = "2.8"
 
@@ -48,7 +48,7 @@ projects[commentsblock][subdir] = "contrib"
 projects[commentsblock][version] = "2.2"
 
 projects[css_injector][subdir] = "contrib"
-projects[css_injector][version] = "1.8"
+projects[css_injector][version] = "2.x-dev"
 
 projects[ctools][subdir] = "contrib"
 projects[ctools][version] = "1.4"
@@ -60,7 +60,7 @@ projects[creativecommons][subdir] = "contrib"
 projects[creativecommons][version] = "2.x-dev"
 
 projects[date][subdir] = "contrib"
-projects[date][version] = "2.6"
+projects[date][version] = "2.8"
 
 projects[draggable_captcha][subdir] = "contrib"
 projects[draggable_captcha][version] = "1.2"
@@ -75,13 +75,13 @@ projects[entityreference][subdir] = "contrib"
 projects[entityreference][version] = "1.x-dev"
 
 projects[features][subdir] = "contrib"
-projects[features][version] = "2.0"
+projects[features][version] = "2.2"
 
 projects[feeds][subdir] = "contrib"
 projects[feeds][version] = "2.x-dev"
 
 projects[feeds_cablecast][subdir] = "contrib"
-projects[feeds_cablecast][version] = "1.x-dev"
+projects[feeds_cablecast][version] = "1.0-alpha1"
 
 projects[feeds_mediarss][subdir] = "contrib"
 projects[feeds_mediarss][version] = "1.x-dev"
@@ -133,6 +133,9 @@ projects[imce_wysiwyg][patch][1794930] = "http://drupal.org/files/imce_wysiwyg-a
 projects[job_scheduler][subdir] = "contrib"
 projects[job_scheduler][version] = "2.0-alpha3"
 
+projects[journal][subdir] = "contrib"
+projects[journal][version] = "1.0"
+
 projects[jquery_update][subdir] = "contrib"
 projects[jquery_update][version] = "2.3"
 
@@ -155,7 +158,7 @@ projects[media_bliptv][subdir] = "contrib"
 projects[media_bliptv][version] = "1.x-dev"
 
 projects[media_archive][subdir] = "contrib"
-projects[media_archive][version] = "1.x-dev"
+projects[media_archive][version] = "2.x-dev"
 
 projects[media_cloudcast][subdir] = "contrib"
 projects[media_cloudcast][version] = "2.0-beta1"
@@ -164,7 +167,7 @@ projects[menu_expanded][subdir] = "contrib"
 projects[menu_expanded][version] = "1.0-beta1"
 
 projects[module_filter][subdir] = "contrib"
-projects[module_filter][version] = "1.8"
+projects[module_filter][version] = "2.0-alpha2"
 
 projects[menu_attributes][subdir] = "contrib"
 projects[menu_attributes][version] = "1.0-rc2"
@@ -182,13 +185,13 @@ projects[pbcore][subdir] = "contrib"
 projects[pbcore][version] = "1.0-beta3"
 
 projects[picture][subdir] = "contrib"
-projects[picture][version] = "2.4"
+projects[picture][version] = "2.5"
 
 projects[profile2][subdir] = "contrib"
 projects[profile2][version] = "1.3"
 
 projects[profile_status_check][subdir] = "contrib"
-projects[profile_status_check][version] = "1.0-beta1"
+projects[profile_status_check][version] = "1.0-beta2"
 
 projects[profile_switcher][subdir] = "contrib"
 projects[profile_switcher][version] = "1.0-beta1"
@@ -215,15 +218,15 @@ projects[views_slideshow][subdir] = "contrib"
 projects[views_slideshow][version] = "3.1"
 
 projects[webform][subdir] = "contrib"
-projects[webform][version] = "4.0-beta2"
+projects[webform][version] = "4.0-rc5"
 
 projects[wysiwyg][subdir] = "contrib"
 projects[wysiwyg][version] = "2.2"
 
-; Themes
+;  Themes
 projects[omega][version] = "3.1"
-projects[zen][version] = "5.4"
-projects[cm_theme][version] = "2.0-beta1"
+projects[zen][version] = "5.5"
+projects[cm_theme][version] = "2.0-beta1" 
 
 ;Libraries
 libraries[ckeditor][download][type] = get
@@ -247,6 +250,6 @@ libraries[fitvids][destination] = libraries
 libraries[fitvids][directory_name] = fitvids
 
 libraries[fullcalendar][download][type] = get
-libraries[fullcalendar][download][url] = "http://arshaw.com/fullcalendar/downloads/fullcalendar-1.5.3.zip"
+libraries[fullcalendar][download][url] = "https://github.com/arshaw/fullcalendar/releases/download/v1.6.4/fullcalendar-1.6.4.zip"
 libraries[fullcalendar][destination] = libraries
 libraries[fullcalendar][directory_name] = fullcalendar-download

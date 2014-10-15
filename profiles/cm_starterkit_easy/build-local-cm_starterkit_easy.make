@@ -7,7 +7,7 @@ api = 2
 core = 7.x
 
 ; Drupal Core
-projects[drupal][version] = "7.22"
+projects[drupal][version] = "7.31"
 
 ;Include the definition for how to build Drupal core directly, including patches:
 ;includes[] = drupal-org-core.make

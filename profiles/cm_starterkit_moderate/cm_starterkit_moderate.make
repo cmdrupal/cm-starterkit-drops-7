@@ -4,11 +4,11 @@
 ; This is used to test the packaging BEFORE committing
 ; drush make cm_starterkit_moderate.make
 
-core = 7.30
+core = 7.31
 api = 2
 
 ; Drupal Core
-projects[drupal][version] = "7.30"
+projects[drupal][version] = "7.31"
 
 ; ====== CIVICRM RELATED =========
 
@@ -427,7 +427,6 @@ projects[socialmedia][version] = "1.0-beta13"
 projects[views_accordion][subdir] = "contrib"
 projects[views_accordion][version] = "1.0-rc2"
 
-
 ; ====== EASY ==========
 
 ; Community Media Modules
@@ -447,10 +446,10 @@ projects[cm_show_vod][subdir] = "contrib-cm"
 projects[cm_show_vod][version] = "2.x-dev"
 
 projects[cm_slideshow][subdir] = "contrib-cm"
-projects[cm_slideshow][version] = "2.0-alpha1"
+projects[cm_slideshow][version] = "2.0-beta1"
 
 projects[cm_vod_feed][subdir] = "contrib-cm"
-projects[cm_vod_feed][version] = "2.0-beta1"
+projects[cm_vod_feed][version] = "2.0-beta2"
 
 projects[om_crew_connect][subdir] = "contrib-cm"
 projects[om_crew_connect][version] = "2.0-beta4"
@@ -487,7 +486,7 @@ projects[creativecommons][subdir] = "contrib"
 projects[creativecommons][version] = "2.x-dev"
 
 projects[date][subdir] = "contrib"
-projects[date][version] = "2.6"
+projects[date][version] = "2.8"
 
 projects[draggable_captcha][subdir] = "contrib"
 projects[draggable_captcha][version] = "1.2"
@@ -609,7 +608,7 @@ projects[pbcore][subdir] = "contrib"
 projects[pbcore][version] = "1.0-beta3"
 
 projects[picture][subdir] = "contrib"
-projects[picture][version] = "2.4"
+projects[picture][version] = "2.5"
 
 projects[profile2][subdir] = "contrib"
 projects[profile2][version] = "1.3"
@@ -642,15 +641,15 @@ projects[views_slideshow][subdir] = "contrib"
 projects[views_slideshow][version] = "3.1"
 
 projects[webform][subdir] = "contrib"
-projects[webform][version] = "4.0-beta2"
+projects[webform][version] = "4.0-rc5"
 
 projects[wysiwyg][subdir] = "contrib"
 projects[wysiwyg][version] = "2.2"
 
-; Themes
+;  Themes
 projects[omega][version] = "3.1"
-projects[zen][version] = "5.4"
-projects[cm_theme][version] = "2.0-beta1"
+projects[zen][version] = "5.5"
+projects[cm_theme][version] = "2.0-beta1" 
 
 ;Libraries
 libraries[ckeditor][download][type] = get

@@ -3,31 +3,30 @@
 ; locally before committing to the drupal-org.make. 
 
 api = 2
-core = 7.30
+core = 7.32
 
 ; ====== CIVICRM RELATED =========
 
 libraries[civicrm][download][type] = get
-libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.4.6-starterkit.tgz"
+libraries[civicrm][download][url] = "http://downloads.civicrm.org/civicrm-4.4.7-starterkit.tgz"
 libraries[civicrm][destination] = modules
 libraries[civicrm][directory_name] = civicrm
 
-;PATCHES THAT CHANGED BETWEEN 4.3 and 4.4
-libraries[civicrm][patch][1978142] = http://drupal.org/files/2082713-pantheon-settings-4-4-2.patch
-;libraries[civicrm][patch][1978142] = http://drupal.org/files/1978142-pantheon-settings-12.patch
+;PANTHEON RELATED PATCHES
+libraries[civicrm][patch][2082713] = http://drupal.org/files/issues/2082713-pantheon-settings-4-4-3.patch
+libraries[civicrm][patch][2063371] = http://drupal.org/files/2063371-add-modulePath-var-4-4.patch
+libraries[civicrm][patch][1978796] = http://drupal.org/files/1978796-session.save-as_file.patch
+libraries[civicrm][patch][1978838] = http://drupal.org/files/issues/1978838-pre-populate-db-settings-2.patch
+libraries[civicrm][patch][2177647] = https://drupal.org/files/issues/2177647-sessions-fix.patch
+libraries[civicrm][patch][2347897] = https://drupal.org/files/issues/2347897-binding-fix-for-extensions.patch
 
 ;PATCHES THAT SHOULD BE ADDRESSED IN FUTURE CIVICRM RELEASES
-libraries[civicrm][patch][1844558] = https://www.drupal.org/files/issues/1844558-run-civicrm-from-profile-dir-config-3.patch
+libraries[civicrm][patch][1844558] = https://drupal.org/files/issues/1844558-run-civicrm-from-profile-dir-config-3.patch
 libraries[civicrm][patch][1940074] = http://drupal.org/files/1940074-openFlashChart_tpl_javascript-4.patch
 libraries[civicrm][patch][1967972] = http://drupal.org/files/1967972-bootsrap-fixes.patch
 libraries[civicrm][patch][2130213] = http://drupal.org/files/issues/2130213-ignore-timezone-on-install-2.patch
 libraries[civicrm][patch][2153441] = https://drupal.org/files/issues/2153441_formatresourceurl-4.patch
 libraries[civicrm][patch][] = https://drupal.org/files/issues/2153441_formatresourceurl-5.patch
-
-;PANTHEON RELATED PATCHES
-libraries[civicrm][patch][2063371] = http://drupal.org/files/2063371-add-modulePath-var-4-4.patch
-libraries[civicrm][patch][1978796] = http://drupal.org/files/1978796-session.save-as_file.patch
-libraries[civicrm][patch][1978838] = http://drupal.org/files/issues/1978838-pre-populate-db-settings-2.patch
 
 ;IMPROVING PROFILE INSTALL UX WHEN INSTALLING FROM A PROFILE
 libraries[civicrm][patch][1849424] = https://drupal.org/files/issues/1849424-use-vars-in-link-2.patch
@@ -349,7 +348,7 @@ projects[civicrm_cron][subdir] = "contrib"
 projects[civicrm_cron][version] = "2.0-beta2"
 
 projects[civicrm_multiday_event][subdir] = "contrib-cm"
-projects[civicrm_multiday_event][version] = "1.0-rc1"
+projects[civicrm_multiday_event][version] = "1.0-rc2"
 
 projects[civicrm_user_reference][subdir] = "contrib-cm"
 projects[civicrm_user_reference][version] = "1.x-dev"
@@ -397,6 +396,7 @@ projects[field_collection][version] = "1.0-beta7"
 
 projects[field_permissions][subdir] = "contrib"
 projects[field_permissions][version] = "1.0-beta2"
+projects[field_permissions][patch][1845798] = "https://www.drupal.org/files/issues/field_permissions.miscellaneous.1845798-11.patch"
 
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "3.5"
@@ -424,9 +424,9 @@ projects[views_accordion][version] = "1.0"
 
 ; ====== EASY ==========
 
-; Community Media Modules
+;Community Media Modules
 projects[cm_airing][subdir] = "contrib-cm"
-projects[cm_airing][version] = "3.0-alpha3"
+projects[cm_airing][version] = "3.0-alpha2"
 
 projects[cm_checklist][subdir] = "contrib-cm"
 projects[cm_checklist][version] = "1.x-dev"
@@ -435,21 +435,21 @@ projects[cm_header][subdir] = "contrib-cm"
 projects[cm_header][version] = "1.0-alpha1"
 
 projects[cm_show][subdir] = "contrib-cm"
-projects[cm_show][version] = "1.0-beta1"
+projects[cm_show][version] = "1.x-dev"
 
 projects[cm_show_vod][subdir] = "contrib-cm"
 projects[cm_show_vod][version] = "2.x-dev"
 
 projects[cm_slideshow][subdir] = "contrib-cm"
-projects[cm_slideshow][version] = "2.0-alpha1"
+projects[cm_slideshow][version] = "2.0-beta1"
 
 projects[cm_vod_feed][subdir] = "contrib-cm"
-projects[cm_vod_feed][version] = "2.0-beta1"
+projects[cm_vod_feed][version] = "2.0-beta2"
 
 projects[om_crew_connect][subdir] = "contrib-cm"
 projects[om_crew_connect][version] = "2.0-beta4"
 
-; Contribb Modules
+; Contrib Modules
 projects[backup_migrate][subdir] = "contrib"
 projects[backup_migrate][version] = "2.8"
 
@@ -469,7 +469,7 @@ projects[commentsblock][subdir] = "contrib"
 projects[commentsblock][version] = "2.2"
 
 projects[css_injector][subdir] = "contrib"
-projects[css_injector][version] = "1.8"
+projects[css_injector][version] = "2.x-dev"
 
 projects[ctools][subdir] = "contrib"
 projects[ctools][version] = "1.4"
@@ -481,7 +481,7 @@ projects[creativecommons][subdir] = "contrib"
 projects[creativecommons][version] = "2.x-dev"
 
 projects[date][subdir] = "contrib"
-projects[date][version] = "2.6"
+projects[date][version] = "2.8"
 
 projects[draggable_captcha][subdir] = "contrib"
 projects[draggable_captcha][version] = "1.2"
@@ -496,13 +496,13 @@ projects[entityreference][subdir] = "contrib"
 projects[entityreference][version] = "1.x-dev"
 
 projects[features][subdir] = "contrib"
-projects[features][version] = "2.0"
+projects[features][version] = "2.2"
 
 projects[feeds][subdir] = "contrib"
 projects[feeds][version] = "2.x-dev"
 
 projects[feeds_cablecast][subdir] = "contrib"
-projects[feeds_cablecast][version] = "1.x-dev"
+projects[feeds_cablecast][version] = "1.0-alpha1"
 
 projects[feeds_mediarss][subdir] = "contrib"
 projects[feeds_mediarss][version] = "1.x-dev"
@@ -554,6 +554,9 @@ projects[imce_wysiwyg][patch][1794930] = "http://drupal.org/files/imce_wysiwyg-a
 projects[job_scheduler][subdir] = "contrib"
 projects[job_scheduler][version] = "2.0-alpha3"
 
+projects[journal][subdir] = "contrib"
+projects[journal][version] = "1.0"
+
 projects[jquery_update][subdir] = "contrib"
 projects[jquery_update][version] = "2.3"
 
@@ -576,7 +579,7 @@ projects[media_bliptv][subdir] = "contrib"
 projects[media_bliptv][version] = "1.x-dev"
 
 projects[media_archive][subdir] = "contrib"
-projects[media_archive][version] = "1.x-dev"
+projects[media_archive][version] = "2.x-dev"
 
 projects[media_cloudcast][subdir] = "contrib"
 projects[media_cloudcast][version] = "2.0-beta1"
@@ -585,7 +588,7 @@ projects[menu_expanded][subdir] = "contrib"
 projects[menu_expanded][version] = "1.0-beta1"
 
 projects[module_filter][subdir] = "contrib"
-projects[module_filter][version] = "1.8"
+projects[module_filter][version] = "2.0-alpha2"
 
 projects[menu_attributes][subdir] = "contrib"
 projects[menu_attributes][version] = "1.0-rc2"
@@ -603,13 +606,13 @@ projects[pbcore][subdir] = "contrib"
 projects[pbcore][version] = "1.0-beta3"
 
 projects[picture][subdir] = "contrib"
-projects[picture][version] = "2.4"
+projects[picture][version] = "2.5"
 
 projects[profile2][subdir] = "contrib"
 projects[profile2][version] = "1.3"
 
 projects[profile_status_check][subdir] = "contrib"
-projects[profile_status_check][version] = "1.0-beta1"
+projects[profile_status_check][version] = "1.0-beta2"
 
 projects[profile_switcher][subdir] = "contrib"
 projects[profile_switcher][version] = "1.0-beta1"
@@ -636,15 +639,15 @@ projects[views_slideshow][subdir] = "contrib"
 projects[views_slideshow][version] = "3.1"
 
 projects[webform][subdir] = "contrib"
-projects[webform][version] = "4.0-beta2"
+projects[webform][version] = "4.0-rc5"
 
 projects[wysiwyg][subdir] = "contrib"
 projects[wysiwyg][version] = "2.2"
 
-; Themes
+;  Themes
 projects[omega][version] = "3.1"
-projects[zen][version] = "5.4"
-projects[cm_theme][version] = "2.0-beta1"
+projects[zen][version] = "5.5"
+projects[cm_theme][version] = "2.0-beta1" 
 
 ;Libraries
 libraries[ckeditor][download][type] = get
@@ -668,6 +671,6 @@ libraries[fitvids][destination] = libraries
 libraries[fitvids][directory_name] = fitvids
 
 libraries[fullcalendar][download][type] = get
-libraries[fullcalendar][download][url] = "http://arshaw.com/fullcalendar/downloads/fullcalendar-1.5.3.zip"
+libraries[fullcalendar][download][url] = "https://github.com/arshaw/fullcalendar/releases/download/v1.6.4/fullcalendar-1.6.4.zip"
 libraries[fullcalendar][destination] = libraries
 libraries[fullcalendar][directory_name] = fullcalendar-download

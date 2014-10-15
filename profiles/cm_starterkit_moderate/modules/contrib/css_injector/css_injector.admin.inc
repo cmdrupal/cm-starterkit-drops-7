@@ -67,7 +67,7 @@ function theme_css_injector_admin_form($variables) {
       $row = array();
       $rule = $form['rules'][$crid]['#rule'];
       $row[] = check_plain($rule['title']);
-      $row[] = _css_injector_rule_uri($rule['crid']);
+      $row[] = check_plain(_css_injector_rule_path($rule['crid']));
       $row[] = drupal_render($form['rules'][$crid]);
       $rows[] = $row;
     }
@@ -101,7 +101,7 @@ function css_injector_edit($form, $form_state, $crid = NULL) {
   if (isset($crid)) {
     $rule = _css_injector_load_rule($crid, TRUE);
 
-    $path = _css_injector_rule_uri($rule['crid']);
+    $path = _css_injector_rule_path($rule['crid']);
     if (file_exists($path)) {
       $rule['css_text'] = file_get_contents($path);
     }
@@ -112,7 +112,7 @@ function css_injector_edit($form, $form_state, $crid = NULL) {
   else {
     $rule = array(
       'title' => '',
-      'rule_type' => CSS_INJECTOR_PAGES_NOTLISTED,
+      'rule_type' => css_injector_PAGES_NOTLISTED,
       'rule_conditions' => '',
       'media' => 'all',
       'preprocess' => 1,
@@ -145,13 +145,13 @@ function css_injector_edit($form, $form_state, $crid = NULL) {
   // of code, really?
   $php_access = (user_access('use PHP for settings') && module_exists('php'));
   $options = array(
-    CSS_INJECTOR_PAGES_NOTLISTED => t('Add on every page except the listed pages.'),
-    CSS_INJECTOR_PAGES_LISTED => t('Add on only the listed pages.')
+    css_injector_PAGES_NOTLISTED => t('Add on every page except the listed pages.'),
+    css_injector_PAGES_LISTED => t('Add on only the listed pages.')
   );
   $description = t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>'));
 
   if ($php_access) {
-    $options[CSS_INJECTOR_PHP] = t('Add if the following PHP code outputs a nonzero value (PHP-mode, experts only).');
+    $options[css_injector_PHP] = t('Add if the following PHP code outputs a nonzero value (PHP-mode, experts only).');
     $description .= ' ' . t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
   }
   $form['conditional']['rule_type'] = array(

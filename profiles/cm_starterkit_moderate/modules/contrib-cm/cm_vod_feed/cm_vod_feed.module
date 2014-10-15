@@ -81,3 +81,4 @@ function _cm_vod_feed_insert_after_first_element(&$a, $element) {
     array_unshift($a, $first_element, $element);
   }
 }
+

@@ -13,7 +13,7 @@ function civicrm_multiday_event_types_install() {
 
 function civicrm_multiday_event_types_add_fields() {
 	// Create the 'field_airing_channel' field if it doesn't already exist.
-  if (!field_info_field('field_airing_channel')) {
+  if (!field_info_field('field_civicrm_multidayevent_type')) {
     $field = array(
       'active' => '1',
       'cardinality' => '1',

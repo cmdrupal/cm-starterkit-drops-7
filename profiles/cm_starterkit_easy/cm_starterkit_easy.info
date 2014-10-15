@@ -45,9 +45,9 @@ dependencies[] = update
 
 files[] = cm_starterkit_easy.profile
 
-; Information added by Drupal.org packaging script on 2014-07-25
-version = "7.x-2.0-beta6"
+; Information added by Drupal.org packaging script on 2014-10-15
+version = "7.x-2.0-beta7"
 core = "7.x"
 project = "cm_starterkit_easy"
-datestamp = "1406322778"
+datestamp = "1413393878"
 

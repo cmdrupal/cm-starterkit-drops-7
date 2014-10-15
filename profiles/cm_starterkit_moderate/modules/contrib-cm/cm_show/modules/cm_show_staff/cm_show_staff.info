@@ -12,8 +12,8 @@ configure = admin/config/communitymedia/show/staff
 
 
 ; Information added by Drupal.org packaging script on 2014-07-08
-version = "7.x-1.0-beta1"
+version = "7.x-1.0-beta1+0-dev"
 core = "7.x"
 project = "cm_show"
-datestamp = "1404854036"
+datestamp = "1404854028"
 

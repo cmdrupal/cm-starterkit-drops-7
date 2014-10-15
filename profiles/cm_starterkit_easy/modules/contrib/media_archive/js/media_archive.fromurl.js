@@ -1,23 +1,23 @@
 
 /**
  *  @file
- *  Create the 'Archive' tab for the WYSIWYG plugins.
+ *  Create the 'YouTube' tab for the WYSIWYG plugins.
  */
 
 // (function ($) {
 //   namespace('Drupal.media.browser.plugin');
 //
-//   Drupal.media.browser.plugin.media_archive = function(mediaBrowser, options) {
+//   Drupal.media.browser.plugin.media_youtube = function(mediaBrowser, options) {
 //     return {
 //       init: function() {
 //         tabset = mediaBrowser.getTabset();
-//         tabset.tabs('add', '#media_archive', 'Archive');
+//         tabset.tabs('add', '#media_youtube', 'YouTube');
 //         mediaBrowser.listen('tabs.show', function (e, id) {
-//           if (id == 'media_archive') {
+//           if (id == 'media_youtube') {
 //             // We only need to set this once.
 //             // We probably could set it upon load.
 //             if (mediaBrowser.getActivePanel().html() == '') {
-//               mediaBrowser.getActivePanel().html(options.media_archive);
+//               mediaBrowser.getActivePanel().html(options.media_youtube);
 //             }
 //           }
 //         });
@@ -29,22 +29,22 @@
 //   // Really though, we should be doing it via drupal_add_js and some settings
 //   // from the drupal variable.
 //   //@todo: needs a review.
-//   Drupal.media.browser.register('media_archive', Drupal.media.browser.plugin.media_archive, {});
+//   Drupal.media.browser.register('media_youtube', Drupal.media.browser.plugin.media_youtube, {});
 // })(jQuery);
 
 (function ($) {
   namespace('media.browser.plugin');
 
-  Drupal.media.browser.plugin.archive_library = function(mediaBrowser, options) {
+  Drupal.media.browser.plugin.youtube_library = function(mediaBrowser, options) {
 
     return {
       mediaFiles: [],
       init: function() {
         tabset = mediaBrowser.getTabset();
-        tabset.tabs('add', '#archive_library', 'Archive');
+        tabset.tabs('add', '#youtube_library', 'YouTube');
         var that = this;
         mediaBrowser.listen('tabs.show', function (e, id) {
-          if (id == 'archive_library') {
+          if (id == 'youtube_library') {
             // This is kinda rough, I'm not sure who should delegate what here.
             mediaBrowser.getActivePanel().addClass('throbber');
             mediaBrowser.getActivePanel().html('');
@@ -61,7 +61,7 @@
       },
 
       getStreams: function () {
-        return ['archive://'];
+        return ['youtube://'];
       },
 
       getConditions: function () {
@@ -123,5 +123,5 @@
   };
 };
 
-  Drupal.media.browser.register('archive_library', Drupal.media.browser.plugin.archive_library);
+  Drupal.media.browser.register('youtube_library', Drupal.media.browser.plugin.youtube_library);
 })(jQuery);
